@@ -47,6 +47,7 @@ $(function() {
 
   $("#floor").click(function() {
     $("#seatPopUp").hide();
+    $("#unseatPopUp").hide();
   });
 
   $("#seatTable").click(function() {
@@ -75,6 +76,22 @@ $(function() {
     var partySize = $(this).attr('party-size');
     $("#filterSize").val(partySize);
     $("#filterSize").change();
+  });
+
+  /* pan-zoom stuff taken from https://github.com/timmywil/jquery.panzoom/blob/master/demo/index.html */
+  var $section = $('#focal');
+  var $panzoom = $section.find('.panzoom').panzoom();
+  $panzoom.parent().on('mousewheel.focal', function( e ) {
+    $("#seatPopUp").hide();
+    $("#unseatPopUp").hide();
+    e.preventDefault();
+    var delta = e.delta || e.originalEvent.wheelDelta;
+    var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+    $panzoom.panzoom('zoom', zoomOut, {
+      increment: 0.1,
+      animate: false,
+      focal: e
+    });
   });
 
 });

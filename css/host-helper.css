@@ -42,3 +42,7 @@ footer {
 	border-width: 11px;
 	margin-left: -11px;
 }
+
+.restaurantTable:hover {
+	cursor: pointer;
+}

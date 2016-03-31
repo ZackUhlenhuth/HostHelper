@@ -45,22 +45,28 @@
           </div>
           <div class="row">
             <div class="col-md-12">
-              <svg width="100%" height="500" xmlns="http://www.w3.org/2000/svg">
-                <g>
-                  <rect id="floor" fill="#fff" id="canvas_background" height="100%" width="100%" y="-1" x="-1"/>
-                </g>
-                <g>
-                  <rect id="table1" class="restaurantTable" table-capacity="4" occupied="false" height="70" width="150" y="80" x="70" rx="10" ry="10" stroke-width="1" stroke="#000" fill="#cccccc"/>
-                  <rect id="table2" class="restaurantTable" table-capacity="6" occupied="false" height="70" width="150" y="190" x="70" rx="10" ry="10" stroke-width="1" stroke="#000" fill="#cccccc"/>
-                  <rect id="table3" class="restaurantTable" table-capacity="2" occupied="false" height="70" width="150" y="300" x="70" rx="10" ry="10" stroke-width="1" stroke="#000" fill="#cccccc"/>
-                  <ellipse id="table4" class="restaurantTable" table-capacity="8" occupied="false" ry="40" rx="40" cy="120" cx="320" stroke-width="1" stroke="#000" fill="#cccccc"/>
-                  <ellipse id="table5" class="restaurantTable" table-capacity="6" occupied="false" ry="40" rx="40" cy="230" cx="320" stroke-width="1" stroke="#000" fill="#cccccc"/>
-                  <ellipse id="table6" class="restaurantTable" table-capacity="4" occupied="false" ry="40" rx="40" cy="340" cx="320" stroke-width="1" stroke="#000" fill="#cccccc"/>
-                  <ellipse id="table7" class="restaurantTable" table-capacity="8" occupied="false" ry="40" rx="40" cy="120" cx="440" stroke-width="1" stroke="#000" fill="#cccccc"/>
-                  <ellipse id="table8" class="restaurantTable" table-capacity="10" occupied="false" ry="40" rx="40" cy="230" cx="440" stroke-width="1" stroke="#000" fill="#cccccc"/>
-                  <ellipse id="table9" class="restaurantTable" table-capacity="10" occupied="false" ry="40" rx="40" cy="340" cx="440" stroke-width="1" stroke="#000" fill="#cccccc"/>
-                </g>
-              </svg> 
+              <div id="focal">
+                <div class="parent">
+                  <div class="panzoom">
+                    <svg width="100%" height="500" xmlns="http://www.w3.org/2000/svg">
+                      <g>
+                        <rect id="floor" fill="#fff" id="canvas_background" height="100%" width="100%" y="-1" x="-1"/>
+                      </g>
+                      <g>
+                        <rect id="table1" class="restaurantTable" table-capacity="4" occupied="false" height="70" width="150" y="80" x="70" rx="10" ry="10" stroke-width="1" stroke="#000" fill="#cccccc"/>
+                        <rect id="table2" class="restaurantTable" table-capacity="6" occupied="false" height="70" width="150" y="190" x="70" rx="10" ry="10" stroke-width="1" stroke="#000" fill="#cccccc"/>
+                        <rect id="table3" class="restaurantTable" table-capacity="2" occupied="false" height="70" width="150" y="300" x="70" rx="10" ry="10" stroke-width="1" stroke="#000" fill="#cccccc"/>
+                        <ellipse id="table4" class="restaurantTable" table-capacity="8" occupied="false" ry="40" rx="40" cy="120" cx="320" stroke-width="1" stroke="#000" fill="#cccccc"/>
+                        <ellipse id="table5" class="restaurantTable" table-capacity="6" occupied="false" ry="40" rx="40" cy="230" cx="320" stroke-width="1" stroke="#000" fill="#cccccc"/>
+                        <ellipse id="table6" class="restaurantTable" table-capacity="4" occupied="false" ry="40" rx="40" cy="340" cx="320" stroke-width="1" stroke="#000" fill="#cccccc"/>
+                        <ellipse id="table7" class="restaurantTable" table-capacity="8" occupied="false" ry="40" rx="40" cy="120" cx="440" stroke-width="1" stroke="#000" fill="#cccccc"/>
+                        <ellipse id="table8" class="restaurantTable" table-capacity="10" occupied="false" ry="40" rx="40" cy="230" cx="440" stroke-width="1" stroke="#000" fill="#cccccc"/>
+                        <ellipse id="table9" class="restaurantTable" table-capacity="10" occupied="false" ry="40" rx="40" cy="340" cx="440" stroke-width="1" stroke="#000" fill="#cccccc"/>
+                      </g>
+                    </svg>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -196,6 +202,9 @@
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <!-- Plugins taken from github -->
+  <script src="js/jquery.mousewheel.js"></script>
+  <script src="js/jquery.panzoom.min.js"></script>
   <!-- Bootstrap: Latest compiled and minified JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <script src="js/main.js"></script>
