@@ -20,6 +20,24 @@ $(function() {
     $("#addPartyMenu").show();
   });
 
+  $("#addWaitlist").click(function(e) {
+    console.log($(this));
+    name = $("#inputPartyNameWaitlist").val();
+    partySize = $("#inputPartySizeWaitlist").val();
+    phone = $("inputPhoneNumberWaitlist").val();
+
+    newEntry = $("<a href='#' class='list-group-item'></a>");
+    newEntry.attr('party-name', name);
+    newEntry.attr('party-size', partySize);
+    newEntry.attr('party-phone', phone);
+    newEntry.html(name + " - " + partySize);  
+    $("#upcomingList").append(newEntry);
+    refreshUpcomingList();
+
+    $("#waitlistMenu").collapse('hide');
+    $("#addPartyMenu").show();
+  });
+
   //Citation: http://stackoverflow.com/questions/3642035/jquerys-append-not-working-with-svg-element
   function makeSVG(tag, attrs) {
     var e = document.createElementNS('http://www.w3.org/2000/svg', tag);
@@ -27,6 +45,21 @@ $(function() {
       e.setAttribute(k, attrs[k]);
     return e;
   }
+
+  //programatically add waiter labels to waiter zones
+  $(".waiterZone").after(function() {
+    var zoneId = $(this).attr('id');
+    var x = parseInt($(this).attr('x'), 10);
+    var y = parseInt($(this).attr('y'), 10);
+    //coordinates for label
+    var xCoord = x + 10; //hardcoded
+    var yCoord = y - 4;
+    var labelColor = $(this).attr('stroke');
+    var waiterName = $(this).attr('waiter-name');
+    var waiterLabel = makeSVG('text', {id: zoneId + 'Waiter', fill: labelColor, 'font-size': '14', 'font-family': 'Verdana', x: xCoord, y: yCoord});
+    waiterLabel.innerHTML = waiterName;
+    return waiterLabel;
+  });
 
   //programatically add id labels to tables
   $(".restaurantTable").after(function() {
@@ -152,15 +185,20 @@ $(function() {
     }
   });
 
+
   var $selectedParty;
-  $(".list-group a").click(function() {
-    $(this).parent().find("a").removeClass('active');
-    $(this).addClass('active');
-    var partySize = $(this).attr('party-size');
-    $("#filterSize").val(partySize);
-    $("#filterSize").change();
-    $selectedParty = $(this);
-  });
+  var refreshUpcomingList = function(){
+      $(".list-group a").click(function() {
+      $(this).parent().find("a").removeClass('active');
+      $(this).addClass('active');
+      var partySize = $(this).attr('party-size');
+      $("#filterSize").val(partySize);
+      $("#filterSize").change();
+      $selectedParty = $(this);
+    });
+  };
+  refreshUpcomingList();
+
 
   /* pan-zoom stuff taken from https://github.com/timmywil/jquery.panzoom/blob/master/demo/index.html */
   var $section = $('#focal');
