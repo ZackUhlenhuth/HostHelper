@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Host Helper</title>
+<!-- Bootstrap: Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<!-- Bootstrap: Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<!-- Custom CSS -->
+<link href="css/host-helper.css" rel="stylesheet">
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1"></button>
+        <a class="navbar-brand" href="#">Host Helper</a>
+      </div>
+      <div class="collapse navbar-collapse" id="navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li>
+            <a href="#">About</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Main Host Helper Content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="well">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="input-group">
+                <span class="input-group-addon">Filter Size</span>
+                <input id="filterSize" type="text" placeholder="Party Size"></input>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <svg width="100%" height="500" xmlns="http://www.w3.org/2000/svg">
+                <g>
+                  <rect id="floor" fill="#fff" id="canvas_background" height="100%" width="100%" y="-1" x="-1"/>
+                </g>
+                <g>
+                  <rect id="table1" class="restaurantTable" table-capacity="4" occupied="false" height="70" width="150" y="80" x="70" rx="10" ry="10" stroke-width="1" stroke="#000" fill="#cccccc"/>
+                  <rect id="table2" class="restaurantTable" table-capacity="6" occupied="false" height="70" width="150" y="190" x="70" rx="10" ry="10" stroke-width="1" stroke="#000" fill="#cccccc"/>
+                  <rect id="table3" class="restaurantTable" table-capacity="2" occupied="false" height="70" width="150" y="300" x="70" rx="10" ry="10" stroke-width="1" stroke="#000" fill="#cccccc"/>
+                  <ellipse id="table4" class="restaurantTable" table-capacity="8" occupied="false" ry="40" rx="40" cy="120" cx="320" stroke-width="1" stroke="#000" fill="#cccccc"/>
+                  <ellipse id="table5" class="restaurantTable" table-capacity="6" occupied="false" ry="40" rx="40" cy="230" cx="320" stroke-width="1" stroke="#000" fill="#cccccc"/>
+                  <ellipse id="table6" class="restaurantTable" table-capacity="4" occupied="false" ry="40" rx="40" cy="340" cx="320" stroke-width="1" stroke="#000" fill="#cccccc"/>
+                  <ellipse id="table7" class="restaurantTable" table-capacity="8" occupied="false" ry="40" rx="40" cy="120" cx="440" stroke-width="1" stroke="#000" fill="#cccccc"/>
+                  <ellipse id="table8" class="restaurantTable" table-capacity="10" occupied="false" ry="40" rx="40" cy="230" cx="440" stroke-width="1" stroke="#000" fill="#cccccc"/>
+                  <ellipse id="table9" class="restaurantTable" table-capacity="10" occupied="false" ry="40" rx="40" cy="340" cx="440" stroke-width="1" stroke="#000" fill="#cccccc"/>
+                </g>
+              </svg> 
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <!-- Upcoming Parties Table -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="well">
+              <h3>Upcoming</h3>
+              <div class="list-group">
+                <a href="#" class="list-group-item" party-size="4">Smith - 4</a>
+                <a href="#" class="list-group-item" party-size="6">Johnson - 6</a>
+                <a href="#" class="list-group-item" party-size="6">Sally - 6</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Add to Upcoming -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="well">
+              <!-- Add Party Menu -->
+              <div id="addPartyMenu">
+                <div class="btn-group-vertical">
+                  <button id="openReservationMenu" type="button" class="btn btn-default">Create Reservation</button>
+                  <button id="openWaitlistMenu" type="button" class="btn btn-default">Add to Wait List</button>
+                </div>
+              </div>
+              <!-- Reservation Menu -->
+              <div id="reservationMenu" class="collapse">
+                <h3>Create Reservation</h3>
+                <form class="form-horizontal">
+                  <div class="form-group">
+                    <label for="inputPartyName" class="col-sm-2 control-label">Name</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="inputPartyName" placeholder="Party Name">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputPartySizeReservation" class="col-sm-2 control-label">Size</label>
+                    <div class="col-sm-10">
+                      <input type="number" class="form-control" id="inputPartySizeReservation" placeholder="Party Size">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputPhoneNumber" class="col-sm-2 control-label">Phone</label>
+                    <div class="col-sm-10">
+                      <input type="tel" class="form-control" id="inputPhoneNumberReservation" placeholder="Phone Number">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputTime" class="col-sm-2 control-label">Time</label>
+                    <div class="col-sm-10">
+                      <input type="time" class="form-control" id="inputTimeReservation">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputDate" class="col-sm-2 control-label">Date</label>
+                    <div class="col-sm-10">
+                      <input type="date" class="form-control" id="inputDateReservation">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-12">
+                      <button id="addReservation" type="submit" class="btn btn-primary">Add</button>
+                      <button id="cancelReservation" type="reset" class="btn btn-danger">Cancel</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <!-- Waitlist Menu -->
+              <div id="waitlistMenu" class="collapse">
+                <h3>Add To Waitlist</h3>
+                <form class="form-horizontal">
+                  <div class="form-group">
+                    <label for="inputPartyNameWaitlist" class="col-sm-2 control-label">Name</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="inputPartyNameWaitlist" placeholder="Party Name">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputPartySizeWaitlist" class="col-sm-2 control-label">Size</label>
+                    <div class="col-sm-10">
+                      <input type="number" class="form-control" id="inputPartySizeWaitlist" placeholder="Party Size">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputPhoneNumber" class="col-sm-2 control-label">Phone</label>
+                    <div class="col-sm-10">
+                      <input type="tel" class="form-control" id="inputPhoneNumberWaitlist" placeholder="Phone Number">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-12">
+                      <button id="addWaitlist" type="submit" class="btn btn-primary">Add</button>
+                      <button id="cancelWaitlist" type="reset" class="btn btn-danger">Cancel</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Seat Pop-up -->
+    <div id="seatPopUp" class="img-rounded floorplan-tooltip" width="100" height="100">
+      <button id="seatTable" class="btn btn-primary">Seat!</button>
+    </div>
+
+    <!-- Seat Pop-up -->
+    <div id="unseatPopUp" class="img-rounded floorplan-tooltip" width="100" height="100">
+      <button id="unseatTable" class="btn btn-danger">Unseat!</button>
+    </div>
+
+  </div>
+  <!-- Footer -->
+  <div class="container">
+    <hr>
+    <footer>
+      <div class="row">
+        <div class="col-lg-12">
+          <p>Copyright &copy; Team Nueve 2016</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <!-- Bootstrap: Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,44 @@
+/***
+ * Main CSS for Host Helper
+ ***/
+
+body {
+    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+}
+
+footer {
+    margin: 50px 0;
+}
+
+
+/* Used http://www.cssarrowplease.com/ */
+.floorplan-tooltip {
+	position: absolute;
+	display: none; 
+	background: #efeff5;
+	border: 1px solid #c2e1f5;
+	padding: 10px;
+}
+.floorplan-tooltip:after, .floorplan-tooltip:before {
+	bottom: 100%;
+	left: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.floorplan-tooltip:after {
+	border-color: rgba(239, 239, 245, 0);
+	border-bottom-color: #efeff5;
+	border-width: 10px;
+	margin-left: -10px;
+}
+.floorplan-tooltip:before {
+	border-color: rgba(194, 225, 245, 0);
+	border-bottom-color: #c2e1f5;
+	border-width: 11px;
+	margin-left: -11px;
+}
