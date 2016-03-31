@@ -28,7 +28,7 @@ $(function() {
     return e;
   }
 
-  //programatically add labels to tables (format: id / capacity)
+  //programatically add id labels to tables
   $(".restaurantTable").after(function() {
     var tableId = $(this).attr('id');
     var width = parseInt($(this).attr('width'), 10);
@@ -40,11 +40,32 @@ $(function() {
       y= parseInt($(this).attr('cy'), 10) - parseInt($(this).attr('ry'), 10);
       width = parseInt($(this).attr('rx'), 10);
     }
-    var xCoord = x - 20;
+    var xCoord = x - 10;
     var yCoord = y + 20;
-    var tableLabel = makeSVG('text', {id: tableId + 'Label', fill: 'black', 'font-size': '14', 'font-family': 'Verdana', x: xCoord, y: yCoord});
-    tableLabel.innerHTML = parseInt(tableId.replace("table", "") , 10) + " / " + $(this).attr('table-capacity');
+    var hashtagIcon = "&#xf292";
+    var tableLabel = makeSVG('text', {id: tableId + 'Label', fill: 'black', 'font-size': '12', 'font-family': 'FontAwesome', x: xCoord, y: yCoord});
+    tableLabel.innerHTML = hashtagIcon + " " + parseInt($(this).attr('id').replace("table", ""), 10);
     return tableLabel;
+  });
+
+  //programatically add capacity labels to tables
+  $(".restaurantTable").after(function() {
+    var tableId = $(this).attr('id');
+    var width = parseInt($(this).attr('width'), 10);
+    var x = parseInt($(this).attr('x'), 10) + (width / 2.0);
+    var y = parseInt($(this).attr('y'), 10) + parseInt($(this).attr('height'), 10);
+    //if it is a circle (cx, cy, rx)
+    if (!x) {
+      x = parseInt($(this).attr('cx'), 10);
+      y= parseInt($(this).attr('cy'), 10) + parseInt($(this).attr('ry'), 10);
+      width = parseInt($(this).attr('rx'), 10);
+    }
+    var xCoord = x - 20;
+    var yCoord = y - 10;
+    var capacityIcon = "&#xf0c0";
+    var capacityLabel = makeSVG('text', {id: tableId + 'Capacity', fill: 'black', 'font-size': '12', 'font-family': 'FontAwesome', x: xCoord, y: yCoord});
+    capacityLabel.innerHTML = capacityIcon + " 0 / " + $(this).attr('table-capacity');
+    return capacityLabel;
   });
 
   $(".restaurantTable").hover(
@@ -93,7 +114,7 @@ $(function() {
     $selectedTable.attr("occupied", "true");
     //create party name label
     var tableId = $selectedTable.attr('id');
-    var xCoord = parseInt($("#" + tableId + "Label").attr('x'), 10) - 5;
+    var xCoord = parseInt($("#" + tableId + "Label").attr('x'), 10) - 10;
     var yCoord = parseInt($("#" + tableId + "Label").attr('y'), 10) + 20;
     var partyLabel = makeSVG('text', {id: tableId + 'PartyLabel', fill: 'black', 'font-size': '14', 'font-family': 'Verdana', x: xCoord, y: yCoord});
     if ($selectedParty) {
@@ -116,6 +137,7 @@ $(function() {
     $selectedTable.attr("occupied", "false");
     var tableId = $selectedTable.attr('id');
     $("#" + tableId + "PartyLabel").remove();
+    $("#filterSize").change();
     $("#unseatPopUp").hide();
   });
 

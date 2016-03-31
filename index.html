@@ -33,7 +33,7 @@
   <!-- Main Host Helper Content -->
   <div class="container">
     <div class="row">
-      <div class="col-md-8">
+      <div class="col-md-10">
         <div class="well">
           <div class="row">
             <div class="col-md-12">
@@ -63,6 +63,11 @@
                         <ellipse id="table8" class="restaurantTable" table-capacity="10" occupied="false" ry="40" rx="40" cy="230" cx="440" stroke-width="1" stroke="#000" fill="#cccccc"/>
                         <ellipse id="table9" class="restaurantTable" table-capacity="10" occupied="false" ry="40" rx="40" cy="340" cx="440" stroke-width="1" stroke="#000" fill="#cccccc"/>
                       </g>
+                      <g>
+                        <rect id="waiterZone1" class="waiterZone" waiter-name="Mike" height="380" width="480" x="30" y="40" rx="10" ry="10" stroke-width="2" stroke="#cc6600" fill="none"/>
+                        <!-- TODO Nick -->
+                        <text id="waiterZone1Label" class="waiterZoneLabel" waiter-name"Mike">Mike</text>
+                      </g>
                     </svg>
                   </div>
                 </div>
@@ -71,7 +76,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-2">
         <!-- Upcoming Parties Table -->
         <div class="row">
           <div class="col-md-12">
@@ -132,7 +137,7 @@
                   </div>
                   <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-12">
-                      <button id="addReservation" type="submit" class="btn btn-primary">Add</button>
+                      <button id="addReservation" type="button" class="btn btn-primary">Add</button>
                       <button id="cancelReservation" type="reset" class="btn btn-danger">Cancel</button>
                     </div>
                   </div>
@@ -162,7 +167,7 @@
                   </div>
                   <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-12">
-                      <button id="addWaitlist" type="submit" class="btn btn-primary">Add</button>
+                      <button id="addWaitlist" type="button" class="btn btn-primary">Add</button>
                       <button id="cancelWaitlist" type="reset" class="btn btn-danger">Cancel</button>
                     </div>
                   </div>
