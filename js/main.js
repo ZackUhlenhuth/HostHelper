@@ -20,6 +20,33 @@ $(function() {
     $("#addPartyMenu").show();
   });
 
+  //Citation: http://stackoverflow.com/questions/3642035/jquerys-append-not-working-with-svg-element
+  function makeSVG(tag, attrs) {
+    var e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for (var k in attrs)
+      e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  //programatically add labels to tables (format: id / capacity)
+  $(".restaurantTable").after(function() {
+    var tableId = $(this).attr('id');
+    var width = parseInt($(this).attr('width'), 10);
+    var x = parseInt($(this).attr('x'), 10) + (width / 2.0);
+    var y = parseInt($(this).attr('y'), 10);
+    //if it is a circle (cx, cy, rx)
+    if (!x) {
+      x = parseInt($(this).attr('cx'), 10);
+      y= parseInt($(this).attr('cy'), 10) - parseInt($(this).attr('ry'), 10);
+      width = parseInt($(this).attr('rx'), 10);
+    }
+    var xCoord = x - 20;
+    var yCoord = y + 20;
+    var tableLabel = makeSVG('text', {id: tableId + 'Label', fill: 'black', 'font-size': '14', 'font-family': 'Verdana', x: xCoord, y: yCoord});
+    tableLabel.innerHTML = parseInt(tableId.replace("table", "") , 10) + " / " + $(this).attr('table-capacity');
+    return tableLabel;
+  });
+
   $(".restaurantTable").hover(
     function() {
       $(this).attr("stroke-width","2");
@@ -28,18 +55,29 @@ $(function() {
     }
   );
 
-  var selectedTable;
+  var $selectedTable;
   $(".restaurantTable").click(function(e) {
-    selectedTable = $(this);
-    if (selectedTable.attr('occupied') == 'false') {
-      var halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
-      $("#seatPopUp").hide();
-      //add 15 to top to account for tooltip
-      $("#seatPopUp").slideDown("fast", "linear").css("top", e.pageY + 15).css("left", e.pageX - halfWidth);
+    $selectedTable = $(this);
+    $("#seatPopUp").hide();
+    $("#unseatPopUp").hide();
+    if ($selectedTable.attr('occupied') == 'false') {
+      //if there is a selected party, only show pop-up if it can fit
+      var validSelection = true;
+      if ($selectedParty) {
+        console.log('size' + $selectedParty.attr("party-size"));
+        console.log('capacity' + $selectedTable.attr('table-capacity'));
+      }
+      if ($selectedParty && parseInt($selectedParty.attr("party-size"), 10) > parseInt($selectedTable.attr('table-capacity'), 10)) { 
+        validSelection = false; 
+      };
+      if (validSelection) {
+        var halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
+        //add 15 to top to account for tooltip
+        $("#seatPopUp").slideDown("fast", "linear").css("top", e.pageY + 15).css("left", e.pageX - halfWidth);
+      }
     }
     else {
       var halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
-      $("#unseatPopUp").hide();
       //add 15 to top to account for tooltip
       $("#unseatPopUp").slideDown("fast", "linear").css("top", e.pageY + 15).css("left", e.pageX - halfWidth);
     }
@@ -51,31 +89,55 @@ $(function() {
   });
 
   $("#seatTable").click(function() {
-    selectedTable.attr("fill", "#cc9933");
-    selectedTable.attr("occupied", "true");
+    $selectedTable.attr("fill", "#cc9933");
+    $selectedTable.attr("occupied", "true");
+    //create party name label
+    var tableId = $selectedTable.attr('id');
+    var xCoord = parseInt($("#" + tableId + "Label").attr('x'), 10) - 5;
+    var yCoord = parseInt($("#" + tableId + "Label").attr('y'), 10) + 20;
+    var partyLabel = makeSVG('text', {id: tableId + 'PartyLabel', fill: 'black', 'font-size': '14', 'font-family': 'Verdana', x: xCoord, y: yCoord});
+    if ($selectedParty) {
+      partyLabel.innerHTML = $selectedParty.attr('party-name');
+      $selectedTable.after(partyLabel);
+      $selectedParty.remove();
+      $selectedParty = null;
+    }
+    else {
+      partyLabel.innerHTML = "Walk-in";
+      $selectedTable.after(partyLabel);
+    }
     $("#filterSize").val("");
     $("#filterSize").change();
     $("#seatPopUp").hide();
   });
 
   $("#unseatTable").click(function() {
-    selectedTable.attr("fill", "#cccccc");
-    selectedTable.attr("occupied", "false");
+    $selectedTable.attr("fill", "#cccccc");
+    $selectedTable.attr("occupied", "false");
+    var tableId = $selectedTable.attr('id');
+    $("#" + tableId + "PartyLabel").remove();
     $("#unseatPopUp").hide();
   });
 
   $("#filterSize").on('change input', function() {
     var partySize = $(this).val();
     $(".restaurantTable[occupied=false]").attr("fill", "#cccccc");
-    $(".restaurantTable[occupied=false][table-capacity='" + partySize + "']").attr("fill", "#ccff99");
+    //if there is a partySize in the filter, highlight valid tables
+    if (partySize !== "") {
+      $(".restaurantTable[occupied=false]").filter(function() {
+        return partySize <= parseInt($(this).attr('table-capacity'), 10);
+      }).attr("fill", "#ccff99");
+    }
   });
 
+  var $selectedParty;
   $(".list-group a").click(function() {
     $(this).parent().find("a").removeClass('active');
     $(this).addClass('active');
     var partySize = $(this).attr('party-size');
     $("#filterSize").val(partySize);
     $("#filterSize").change();
+    $selectedParty = $(this);
   });
 
   /* pan-zoom stuff taken from https://github.com/timmywil/jquery.panzoom/blob/master/demo/index.html */
