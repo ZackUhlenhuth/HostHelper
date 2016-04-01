@@ -81,6 +81,7 @@ $(function() {
     return tableLabel;
   });
 
+  var capacityIcon = "&#xf0c0";
   //programatically add capacity labels to tables
   $(".restaurantTable").after(function() {
     var tableId = $(this).attr('id');
@@ -95,9 +96,9 @@ $(function() {
     }
     var xCoord = x - 20;
     var yCoord = y - 10;
-    var capacityIcon = "&#xf0c0";
-    var capacityLabel = makeSVG('text', {id: tableId + 'Capacity', fill: 'black', 'font-size': '12', 'font-family': 'FontAwesome', x: xCoord, y: yCoord});
-    capacityLabel.innerHTML = capacityIcon + " 0 / " + $(this).attr('table-capacity');
+    var capacity = $(this).attr('table-capacity');
+    var capacityLabel = makeSVG('text', {id: tableId + 'Capacity', 'table-capacity': capacity, fill: 'black', 'font-size': '12', 'font-family': 'FontAwesome', x: xCoord, y: yCoord});
+    capacityLabel.innerHTML = capacityIcon + " 0 / " + capacity;
     return capacityLabel;
   });
 
@@ -117,10 +118,6 @@ $(function() {
     if ($selectedTable.attr('occupied') == 'false') {
       //if there is a selected party, only show pop-up if it can fit
       var validSelection = true;
-      if ($selectedParty) {
-        console.log('size' + $selectedParty.attr("party-size"));
-        console.log('capacity' + $selectedTable.attr('table-capacity'));
-      }
       if ($selectedParty && parseInt($selectedParty.attr("party-size"), 10) > parseInt($selectedTable.attr('table-capacity'), 10)) { 
         validSelection = false; 
       };
@@ -137,6 +134,7 @@ $(function() {
     }
   });
 
+  //hide popups when you click the floor TODO: should make this happen on any click but table
   $("#floor").click(function() {
     $("#seatPopUp").hide();
     $("#unseatPopUp").hide();
@@ -151,6 +149,10 @@ $(function() {
     var yCoord = parseInt($("#" + tableId + "Label").attr('y'), 10) + 20;
     var partyLabel = makeSVG('text', {id: tableId + 'PartyLabel', fill: 'black', 'font-size': '14', 'font-family': 'Verdana', x: xCoord, y: yCoord});
     if ($selectedParty) {
+      //update capacity label
+      $("#" + tableId + "Capacity").html(function() {
+        return capacityIcon + " " + $selectedParty.attr('party-size') + " / " + $(this).attr('table-capacity');
+      });
       partyLabel.innerHTML = $selectedParty.attr('party-name');
       $selectedTable.after(partyLabel);
       $selectedParty.remove();
