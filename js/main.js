@@ -157,8 +157,21 @@ $(function() {
       $selectedTable.after(partyLabel);
       $selectedParty.remove();
       $selectedParty = null;
+      $("#inputWalkInPartySize").show();
+      $("#seatPartySize").html("");
+      $("#seatPartyName").html("Walk-In");
     }
-    else {
+    else { //Walk-In
+      var partySize = $("#inputWalkInPartySize").val();
+      //if partySize is specified
+      if (partySize) {
+        //if party can fit at table
+        if (partySize <= $("#" + tableId).attr('table-capacity')) {
+          $("#" + tableId + "Capacity").html(function() {
+            return capacityIcon + " " + $("#inputWalkInPartySize").val() + " / " + $(this).attr('table-capacity');
+          });
+        }
+      }
       partyLabel.innerHTML = "Walk-in";
       $selectedTable.after(partyLabel);
     }
@@ -172,6 +185,9 @@ $(function() {
     $selectedTable.attr("occupied", "false");
     var tableId = $selectedTable.attr('id');
     $("#" + tableId + "PartyLabel").remove();
+    $("#" + tableId + "Capacity").html(function() {
+      return capacityIcon + " 0 " + " / " + $(this).attr('table-capacity');
+    });
     $("#filterSize").change();
     $("#unseatPopUp").hide();
   });
@@ -184,19 +200,24 @@ $(function() {
       $(".restaurantTable[occupied=false]").filter(function() {
         return partySize <= parseInt($(this).attr('table-capacity'), 10);
       }).attr("fill", "#ccff99");
+      $("#inputWalkInPartySize").val(partySize);
     }
   });
 
 
   var $selectedParty;
   var refreshUpcomingList = function(){
-      $(".list-group a").click(function() {
+    $(".list-group a").click(function() {
       $(this).parent().find("a").removeClass('active');
       $(this).addClass('active');
       var partySize = $(this).attr('party-size');
+      var partyName = $(this).attr('party-name');
       $("#filterSize").val(partySize);
       $("#filterSize").change();
       $selectedParty = $(this);
+      $("#inputWalkInPartySize").hide();
+      $("#seatPartySize").html(partySize);
+      $("#seatPartyName").html(partyName);
     });
   };
   refreshUpcomingList();

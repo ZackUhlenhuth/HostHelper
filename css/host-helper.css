@@ -13,6 +13,7 @@ footer {
 
 /* Used http://www.cssarrowplease.com/ */
 .floorplan-tooltip {
+	width: 150px;
 	position: absolute;
 	display: none; 
 	background: #efeff5;
@@ -46,7 +47,14 @@ footer {
 .restaurantTable:hover {
 	cursor: pointer;
 }
-
+.floorplan-tooltip label {
+	display: inline-block;
+	font-weight: 700;
+}
+#inputWalkInPartySize {
+	display: inline-block;
+	width: 50px;
+}
 /*
 @media (min-width: 1800px) {
   .container {

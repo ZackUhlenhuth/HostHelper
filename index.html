@@ -180,7 +180,18 @@
 
     <!-- Seat Pop-up -->
     <div id="seatPopUp" class="img-rounded floorplan-tooltip" width="100" height="100">
-      <button id="seatTable" class="btn btn-primary">Seat!</button>
+      <form class="form">
+        <div id="walkInOptions" class="form-group">
+          <label for="inputWalkInPartySize">Name:</label>
+          <span id="seatPartyName">Walk-In</span>
+        </div>
+        <div id="walkInOptions" class="form-group">
+          <label for="inputWalkInPartySize">Size:</label>
+          <input type="text" class="form-control" id="inputWalkInPartySize" placeholder="0">
+          <span id="seatPartySize"></span>
+        </div>
+        <button id="seatTable" type="reset" class="btn btn-primary">Seat!</button>
+      </form>
     </div>
 
     <!-- Seat Pop-up -->
