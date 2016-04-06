@@ -149,12 +149,21 @@ $(function() {
         var halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
         // add 15 to top to account for tooltip
         $("#seatPopUp").slideDown("fast", "linear").css("top", e.pageY + 15).css("left", e.pageX - halfWidth);
+        $("#inputWalkInPartySize").focus();
       }
     }
     else {
       var halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
       // add 15 to top to account for tooltip
       $("#unseatPopUp").slideDown("fast", "linear").css("top", e.pageY + 15).css("left", e.pageX - halfWidth);
+    }
+  });
+
+  //make enter key submit table seating
+  $("#seatPopUp").keypress(function (e) {
+    if (e.which == 13) {
+      $('#seatTable').click();
+      return false;    //<---- Add this line
     }
   });
 
@@ -190,7 +199,7 @@ $(function() {
       //if partySize is specified
       if (partySize) {
         //if party can fit at table
-        if (partySize <= $("#" + tableId).attr('table-capacity')) {
+        if (parseInt(partySize, 10) <= parseInt($("#" + tableId).attr('table-capacity'), 10)) {
           $("#" + tableId + "Capacity").html(function() {
             return capacityIcon + " " + $("#inputWalkInPartySize").val() + " / " + $(this).attr('table-capacity');
           });
