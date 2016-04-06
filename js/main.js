@@ -1,5 +1,6 @@
 // Modified from "Cut & Paste Live Clock using forms" by George Chiang,
 // http://javascriptkit.com/script/cut2.shtml
+/**
 function show(){
   var Digital=new Date()
   var hours=Digital.getHours()
@@ -19,6 +20,7 @@ function show(){
   setTimeout("show()",1000)
 }
 show();
+**/
 
 $(function() {
 

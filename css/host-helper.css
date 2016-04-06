@@ -1,24 +1,9 @@
 /* Main CSS */
 body {
-    padding-top:70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+  padding-top:40px;
 }
 .container {
 	width:80%;
-}
-footer {
-    margin:50px 0;
-}
-
-/* Navbar Clock */
-#navbar-clock {
-  float:right;
-  font-size:18px;
-  margin:-40px 0 0 0;
-}
-#navbar-clock > input {
-  border-radius:4px;
-  width:110px;
-  text-align:center;
 }
 
 /* Floorplan */
