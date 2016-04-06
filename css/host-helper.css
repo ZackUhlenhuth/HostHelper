@@ -1,7 +1,4 @@
-/***
- * Main CSS for Host Helper
- ***/
-
+/* Main CSS */
 body {
     padding-top:70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
 }
@@ -12,7 +9,7 @@ footer {
     margin:50px 0;
 }
 
-
+/* Navbar Clock */
 #navbar-clock {
   float:right;
   font-size:18px;
@@ -24,7 +21,7 @@ footer {
   text-align:center;
 }
 
-
+/* Floorplan */
 /* Used http://www.cssarrowplease.com/ */
 .floorplan-tooltip {
 	width:150px;
@@ -44,7 +41,6 @@ footer {
 	position:absolute;
 	pointer-events:none;
 }
-
 .floorplan-tooltip:after {
 	border-color:rgba(239, 239, 245, 0);
 	border-bottom-color:#efeff5;
@@ -57,7 +53,6 @@ footer {
 	border-width:11px;
 	margin-left:-11px;
 }
-
 .restaurantTable:hover {
 	cursor:pointer;
 }
@@ -76,6 +71,12 @@ footer {
   }
 }
 */
+
+/* Upcoming interface */
+#openReservationMenu,#openWaitlistMenu {
+  margin:5px;
+  width:150px;
+}
 
 
 

@@ -25,11 +25,13 @@ $(function() {
 	$("#openReservationMenu").click(function() {
 		$("#addPartyMenu").hide();
     $("#reservationMenu").collapse('show');
+    $("#inputPartyName").focus();
   });
 
   $("#openWaitlistMenu").click(function() {
     $("#addPartyMenu").hide();
     $("#waitlistMenu").collapse('show');
+    $("#inputPartyNameWaitlist").focus();
   });
 
   $("#cancelReservation").click(function() {

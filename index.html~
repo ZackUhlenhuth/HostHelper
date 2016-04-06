@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Host Helper</title>
-<!-- Bootstrap: Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<!-- Bootstrap: Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-<!-- Custom CSS -->
-<link href="css/host-helper.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Host Helper</title>
+  <!-- Bootstrap: Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <!-- Bootstrap: Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- Custom CSS -->
+  <link href="css/host-helper.css" rel="stylesheet">
 </head>
-
 <body>
   <!-- Navigation -->
   <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -28,7 +27,7 @@
           </li>
         </ul>
       </div>
-      <form name="Tick" id="navbar-clock">
+      <form name="Tick" id="navbar-clock" class="nav navbar-nav">
         <input type="text" name="Clock">
       </form>
     </div>
@@ -97,7 +96,7 @@
             <div class="well">
               <!-- Add Party Menu -->
               <div id="addPartyMenu">
-                <div class="btn-group-vertical">
+                <div>
                   <button id="openReservationMenu" type="button" class="btn btn-default">Create Reservation</button>
                   <button id="openWaitlistMenu" type="button" class="btn btn-default">Add to Wait List</button>
                 </div>
@@ -177,7 +176,6 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -226,5 +224,4 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <script src="js/main.js"></script>
 </body>
-
 </html>

@@ -4,7 +4,6 @@ function show(){
   var Digital=new Date()
   var hours=Digital.getHours()
   var minutes=Digital.getMinutes()
-  var seconds=Digital.getSeconds()
   var dn="PM"
   
   if (hours>12){
@@ -15,8 +14,6 @@ function show(){
     hours=12
   if (minutes<=9)
     minutes="0"+minutes
-  if (seconds<=9)
-    seconds="0"+seconds
     
   document.Tick.Clock.value=hours+":"+minutes+" "+dn
   setTimeout("show()",1000)
@@ -28,6 +25,7 @@ $(function() {
 	$("#openReservationMenu").click(function() {
 		$("#addPartyMenu").hide();
     $("#reservationMenu").collapse('show');
+    $("#inputPartyName").focus();
   });
 
   $("#openWaitlistMenu").click(function() {
