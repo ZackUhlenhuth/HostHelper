@@ -22,23 +22,21 @@ show();
 
 $(function() {
 
+  // Waitlist and Reservation Menus
 	$("#openReservationMenu").click(function() {
 		$("#addPartyMenu").hide();
     $("#reservationMenu").collapse('show');
     $("#inputPartyName").focus();
   });
-
   $("#openWaitlistMenu").click(function() {
     $("#addPartyMenu").hide();
     $("#waitlistMenu").collapse('show');
-    $("#inputPartyNameWaitlist").focus();
+    $("#inputPartyNameWaitlist").focus()
   });
-
   $("#cancelReservation").click(function() {
     $("#reservationMenu").collapse('hide');
     $("#addPartyMenu").show();
   });
-
   $("#cancelWaitlist").click(function() {
     $("#waitlistMenu").collapse('hide');
     $("#addPartyMenu").show();
@@ -61,8 +59,10 @@ $(function() {
     $("#waitlistMenu").collapse('hide');
     $("#addPartyMenu").show();
   });
+  
+  $("#inputDateReservation").datepicker().datepicker("setDate", new Date());
 
-  //Citation: http://stackoverflow.com/questions/3642035/jquerys-append-not-working-with-svg-element
+  // Citation: http://stackoverflow.com/questions/3642035/jquerys-append-not-working-with-svg-element
   function makeSVG(tag, attrs) {
     var e = document.createElementNS('http://www.w3.org/2000/svg', tag);
     for (var k in attrs)
@@ -70,12 +70,12 @@ $(function() {
     return e;
   }
 
-  //programatically add waiter labels to waiter zones
+  // programatically add waiter labels to waiter zones
   $(".waiterZone").after(function() {
     var zoneId = $(this).attr('id');
     var x = parseInt($(this).attr('x'), 10);
     var y = parseInt($(this).attr('y'), 10);
-    //coordinates for label
+    // coordinates for label
     var xCoord = x + 10; //hardcoded
     var yCoord = y - 4;
     var labelColor = $(this).attr('stroke');
@@ -85,13 +85,13 @@ $(function() {
     return waiterLabel;
   });
 
-  //programatically add id labels to tables
+  // programatically add id labels to tables
   $(".restaurantTable").after(function() {
     var tableId = $(this).attr('id');
     var width = parseInt($(this).attr('width'), 10);
     var x = parseInt($(this).attr('x'), 10) + (width / 2.0);
     var y = parseInt($(this).attr('y'), 10);
-    //if it is a circle (cx, cy, rx)
+    // if it is a circle (cx, cy, rx)
     if (!x) {
       x = parseInt($(this).attr('cx'), 10);
       y= parseInt($(this).attr('cy'), 10) - parseInt($(this).attr('ry'), 10);
@@ -106,13 +106,13 @@ $(function() {
   });
 
   var capacityIcon = "&#xf0c0";
-  //programatically add capacity labels to tables
+  // programatically add capacity labels to tables
   $(".restaurantTable").after(function() {
     var tableId = $(this).attr('id');
     var width = parseInt($(this).attr('width'), 10);
     var x = parseInt($(this).attr('x'), 10) + (width / 2.0);
     var y = parseInt($(this).attr('y'), 10) + parseInt($(this).attr('height'), 10);
-    //if it is a circle (cx, cy, rx)
+    // if it is a circle (cx, cy, rx)
     if (!x) {
       x = parseInt($(this).attr('cx'), 10);
       y= parseInt($(this).attr('cy'), 10) + parseInt($(this).attr('ry'), 10);
@@ -140,20 +140,20 @@ $(function() {
     $("#seatPopUp").hide();
     $("#unseatPopUp").hide();
     if ($selectedTable.attr('occupied') == 'false') {
-      //if there is a selected party, only show pop-up if it can fit
+      // if there is a selected party, only show pop-up if it can fit
       var validSelection = true;
       if ($selectedParty && parseInt($selectedParty.attr("party-size"), 10) > parseInt($selectedTable.attr('table-capacity'), 10)) { 
         validSelection = false; 
       };
       if (validSelection) {
         var halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
-        //add 15 to top to account for tooltip
+        // add 15 to top to account for tooltip
         $("#seatPopUp").slideDown("fast", "linear").css("top", e.pageY + 15).css("left", e.pageX - halfWidth);
       }
     }
     else {
       var halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
-      //add 15 to top to account for tooltip
+      // add 15 to top to account for tooltip
       $("#unseatPopUp").slideDown("fast", "linear").css("top", e.pageY + 15).css("left", e.pageX - halfWidth);
     }
   });
