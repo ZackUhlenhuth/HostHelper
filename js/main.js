@@ -1,26 +1,24 @@
 // Modified from "Cut & Paste Live Clock using forms" by George Chiang,
 // http://javascriptkit.com/script/cut2.shtml
-/**
 function show(){
-  var Digital=new Date()
-  var hours=Digital.getHours()
-  var minutes=Digital.getMinutes()
-  var dn="PM"
+  var Digital=new Date();
+  var hours=Digital.getHours();
+  var minutes=Digital.getMinutes();
+  var dn="PM";
   
   if (hours>12){
-    dn="PM"
-    hours=hours-12
+    dn="PM";
+    hours=hours-12;
   }
   if (hours==0)
-    hours=12
+    hours=12;
   if (minutes<=9)
-    minutes="0"+minutes
+    minutes="0"+minutes;
     
-  document.Tick.Clock.value=hours+":"+minutes+" "+dn
-  setTimeout("show()",1000)
+  $("#clock").html(hours+":"+minutes+" "+dn);
+  setTimeout("show()",1000);
 }
 show();
-**/
 
 $(function() {
 

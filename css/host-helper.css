@@ -5,6 +5,20 @@ body {
 .container {
 	width:80%;
 }
+h3 {
+  font-size:2em;
+}
+
+/* Clock */
+#clock {
+  background:#fff;
+  border:1px solid #dcdcdc;
+  border-radius:4px;
+  font-size:2em;
+  padding:5px;
+  text-align:center;
+  width:100%;
+}
 
 /* Floorplan */
 /* Used http://www.cssarrowplease.com/ */
