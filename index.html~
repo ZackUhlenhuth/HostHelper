@@ -28,7 +28,7 @@
           </li>
         </ul>
       </div>
-      <form name="Tick" id="navbar-clock" class="nav navbar-nav">
+      <form name="Tick" id="navbar-clock">
         <input type="text" name="Clock">
       </form>
     </div>
