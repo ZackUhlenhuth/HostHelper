@@ -123,3 +123,10 @@ h3 {
 	font-family: FontAwesome;
 	pointer-events: none;
 }
+
+.partyLabel {
+	fill: black;
+	font-size: 14px;
+	font-family: Verdana;
+	pointer-events: none;
+}

@@ -180,7 +180,7 @@ $(function() {
     var tableId = $selectedTable.attr('id');
     var xCoord = parseInt($("#" + tableId + "Label").attr('x'), 10) - 10;
     var yCoord = parseInt($("#" + tableId + "Label").attr('y'), 10) + 20;
-    var partyLabel = makeSVG('text', {id: tableId + 'PartyLabel', fill: 'black', 'font-size': '14', 'font-family': 'Verdana', x: xCoord, y: yCoord});
+    var partyLabel = makeSVG('text', {id: tableId + 'PartyLabel', class: "partyLabel", x: xCoord, y: yCoord});
     if ($selectedParty) {
       //update capacity label
       $("#" + tableId + "Capacity").html(function() {
