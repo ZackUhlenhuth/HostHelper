@@ -78,7 +78,7 @@ $(function() {
     // coordinates for label
     var xCoord = x + 10; //hardcoded
     var yCoord = y - 4;
-    var labelColor = $(this).attr('stroke');
+    var labelColor = $(this).css('stroke');
     var waiterName = $(this).attr('waiter-name');
     var waiterLabel = makeSVG('text', {id: zoneId + 'Waiter', fill: labelColor, 'font-size': '14', 'font-family': 'Verdana', x: xCoord, y: yCoord});
     waiterLabel.innerHTML = waiterName;
@@ -100,7 +100,7 @@ $(function() {
     var xCoord = x - 10;
     var yCoord = y + 20;
     var hashtagIcon = "&#xf292";
-    var tableLabel = makeSVG('text', {id: tableId + 'Label', fill: 'black', 'font-size': '12', 'font-family': 'FontAwesome', x: xCoord, y: yCoord});
+    var tableLabel = makeSVG('text', {id: tableId + 'Label', class: 'infoLabel', x: xCoord, y: yCoord});
     tableLabel.innerHTML = hashtagIcon + " " + parseInt($(this).attr('id').replace("table", ""), 10);
     return tableLabel;
   });
@@ -121,16 +121,16 @@ $(function() {
     var xCoord = x - 20;
     var yCoord = y - 10;
     var capacity = $(this).attr('table-capacity');
-    var capacityLabel = makeSVG('text', {id: tableId + 'Capacity', 'table-capacity': capacity, fill: 'black', 'font-size': '12', 'font-family': 'FontAwesome', x: xCoord, y: yCoord});
+    var capacityLabel = makeSVG('text', {id: tableId + 'Capacity', class: 'infoLabel', 'table-capacity': capacity, x: xCoord, y: yCoord});
     capacityLabel.innerHTML = capacityIcon + " 0 / " + capacity;
     return capacityLabel;
   });
 
   $(".restaurantTable").hover(
     function() {
-      $(this).attr("stroke-width","2");
+      $(this).css("stroke-width","2");
     }, function() {
-      $(this).attr("stroke-width","1");
+      $(this).css("stroke-width","1");
     }
   );
 
@@ -174,7 +174,7 @@ $(function() {
   });
 
   $("#seatTable").click(function() {
-    $selectedTable.attr("fill", "#cc9933");
+    $selectedTable.css("fill", "#cc9933");
     $selectedTable.attr("occupied", "true");
     //create party name label
     var tableId = $selectedTable.attr('id');

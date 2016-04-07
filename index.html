@@ -43,23 +43,29 @@
               <div id="focal">
                 <div class="parent">
                   <div class="panzoom">
-                    <svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="1400" height="800" xmlns="http://www.w3.org/2000/svg">
                       <g>
-                        <rect id="floor" fill="#fff" id="canvas_background" height="100%" width="100%" y="-1" x="-1"/>
+                        <rect id="floor" fill="#fff" height="100%" width="100%" y="-1" x="-1"/>
                       </g>
                       <g>
-                        <rect id="table1" class="restaurantTable" table-capacity="4" occupied="false" height="70" width="150" y="80" x="70" rx="10" ry="10" stroke-width="1" stroke="#000" fill="#cccccc"/>
-                        <rect id="table2" class="restaurantTable" table-capacity="6" occupied="false" height="70" width="150" y="190" x="70" rx="10" ry="10" stroke-width="1" stroke="#000" fill="#cccccc"/>
-                        <rect id="table3" class="restaurantTable" table-capacity="2" occupied="false" height="70" width="150" y="300" x="70" rx="10" ry="10" stroke-width="1" stroke="#000" fill="#cccccc"/>
-                        <ellipse id="table4" class="restaurantTable" table-capacity="8" occupied="false" ry="40" rx="40" cy="120" cx="320" stroke-width="1" stroke="#000" fill="#cccccc"/>
-                        <ellipse id="table5" class="restaurantTable" table-capacity="6" occupied="false" ry="40" rx="40" cy="230" cx="320" stroke-width="1" stroke="#000" fill="#cccccc"/>
-                        <ellipse id="table6" class="restaurantTable" table-capacity="4" occupied="false" ry="40" rx="40" cy="340" cx="320" stroke-width="1" stroke="#000" fill="#cccccc"/>
-                        <ellipse id="table7" class="restaurantTable" table-capacity="8" occupied="false" ry="40" rx="40" cy="120" cx="440" stroke-width="1" stroke="#000" fill="#cccccc"/>
-                        <ellipse id="table8" class="restaurantTable" table-capacity="10" occupied="false" ry="40" rx="40" cy="230" cx="440" stroke-width="1" stroke="#000" fill="#cccccc"/>
-                        <ellipse id="table9" class="restaurantTable" table-capacity="10" occupied="false" ry="40" rx="40" cy="340" cx="440" stroke-width="1" stroke="#000" fill="#cccccc"/>
+                        <rect id="wall1" class="restaurantWall" x="1000" y="0" width="40" height="100"/>
+                        <rect id="wall2" class="restaurantWall" x="1000" y="200" width="40" height="340"/>
+                        <rect id="wall3" class="restaurantWall" x="0" y="500" width="200" height="40"/>
+                        <rect id="wall4" class="restaurantWall" x="300" y="500" width="600" height="40"/>
                       </g>
                       <g>
-                        <rect id="waiterZone1" class="waiterZone" waiter-name="Mike" height="380" width="480" x="30" y="40" rx="10" ry="10" stroke-width="2" stroke="#cc6600" fill="none"/>
+                        <rect id="table1" class="restaurantTable" table-capacity="4" occupied="false" height="70" width="150" y="80" x="70" rx="10" ry="10"/>
+                        <rect id="table2" class="restaurantTable" table-capacity="6" occupied="false" height="70" width="150" y="190" x="70" rx="10" ry="10"/>
+                        <rect id="table3" class="restaurantTable" table-capacity="2" occupied="false" height="70" width="150" y="300" x="70" rx="10" ry="10"/>
+                        <ellipse id="table4" class="restaurantTable" table-capacity="8" occupied="false" ry="40" rx="40" cy="120" cx="320"/>
+                        <ellipse id="table5" class="restaurantTable" table-capacity="6" occupied="false" ry="40" rx="40" cy="230" cx="320"/>
+                        <ellipse id="table6" class="restaurantTable" table-capacity="4" occupied="false" ry="40" rx="40" cy="340" cx="320"/>
+                        <ellipse id="table7" class="restaurantTable" table-capacity="8" occupied="false" ry="40" rx="40" cy="120" cx="440"/>
+                        <ellipse id="table8" class="restaurantTable" table-capacity="10" occupied="false" ry="40" rx="40" cy="230" cx="440"/>
+                        <ellipse id="table9" class="restaurantTable" table-capacity="10" occupied="false" ry="40" rx="40" cy="340" cx="440"/>
+                      </g>
+                      <g>
+                        <rect id="waiterZone1" class="waiterZone" waiter-name="Mike" height="380" width="480" x="30" y="40" rx="10" ry="10"/>
                       </g>
                     </svg>
                   </div>

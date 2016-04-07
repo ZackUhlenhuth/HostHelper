@@ -95,5 +95,31 @@ h3 {
 }
 
 
+/* svg elements (floorplan) */
+.restaurantTable {
+	stroke-width: 1;
+	stroke: #000;
+	fill: #cccccc;
+}
 
+.restaurantWall {
+	stroke-width: 3;
+	stroke: #382F2B;
+	fill: #2C3539;
+}
 
+.waiterZone {
+	stroke-width: 2;
+	fill: none;
+}
+
+#waiterZone1 {
+	stroke: #cc6600;
+}
+
+.infoLabel {
+	fill: black;
+	font-size: 12px;
+	font-family: FontAwesome;
+	pointer-events: none;
+}
