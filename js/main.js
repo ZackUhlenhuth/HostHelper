@@ -43,7 +43,6 @@ $(function() {
   });
 
   $("#addWaitlist").click(function(e) {
-    console.log($(this));
     name = $("#inputPartyNameWaitlist").val();
     partySize = $("#inputPartySizeWaitlist").val();
     phone = $("inputPhoneNumberWaitlist").val();
@@ -214,7 +213,7 @@ $(function() {
   });
 
   $("#unseatTable").click(function() {
-    $selectedTable.attr("fill", "#cccccc");
+    $selectedTable.css("fill", "#cccccc");
     $selectedTable.attr("occupied", "false");
     var tableId = $selectedTable.attr('id');
     $("#" + tableId + "PartyLabel").remove();
@@ -227,12 +226,12 @@ $(function() {
 
   $("#filterSize").on('change input', function() {
     var partySize = $(this).val();
-    $(".restaurantTable[occupied=false]").attr("fill", "#cccccc");
+    $(".restaurantTable[occupied=false]").css("fill", "#cccccc");
     //if there is a partySize in the filter, highlight valid tables
     if (partySize !== "") {
       $(".restaurantTable[occupied=false]").filter(function() {
         return partySize <= parseInt($(this).attr('table-capacity'), 10);
-      }).attr("fill", "#ccff99");
+      }).css("fill", "#ccff99");
       $("#inputWalkInPartySize").val(partySize);
     }
   });

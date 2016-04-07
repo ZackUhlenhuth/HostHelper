@@ -49,9 +49,12 @@
                       </g>
                       <g>
                         <rect id="wall1" class="restaurantWall" x="1000" y="0" width="40" height="100"/>
+                        <rect id="door1" class="restaurantDoor" x="1040" y="100" width="5" height="100" transform="rotate(-20 1040 100)"/>
                         <rect id="wall2" class="restaurantWall" x="1000" y="200" width="40" height="340"/>
                         <rect id="wall3" class="restaurantWall" x="0" y="500" width="200" height="40"/>
+                        <rect id="door2" class="restaurantDoor" x="200" y="540" width="100" height="5" transform="rotate(20 200 540)"/>
                         <rect id="wall4" class="restaurantWall" x="300" y="500" width="600" height="40"/>
+                        <rect id="door3" class="restaurantDoor" x="900" y="540" width="100" height="5" transform="rotate(20 900 540)"/>
                       </g>
                       <g>
                         <rect id="table1" class="restaurantTable" table-capacity="4" occupied="false" height="70" width="150" y="80" x="70" rx="10" ry="10"/>
@@ -108,37 +111,37 @@
                 <h3>Create Reservation</h3>
                 <form class="form-horizontal">
                   <div class="form-group">
-                    <label for="inputPartyName" class="col-sm-2 control-label">Name</label>
-                    <div class="col-sm-10">
+                    <label for="inputPartyName" class="col-sm-3 control-label">Name</label>
+                    <div class="col-sm-9">
                       <input type="text" class="form-control" id="inputPartyName" placeholder="Party Name">
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="inputPartySizeReservation" class="col-sm-2 control-label">Size</label>
-                    <div class="col-sm-10">
+                    <label for="inputPartySizeReservation" class="col-sm-3 control-label">Size</label>
+                    <div class="col-sm-9">
                       <input type="number" class="form-control" id="inputPartySizeReservation" placeholder="Party Size">
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="inputPhoneNumber" class="col-sm-2 control-label">Phone</label>
-                    <div class="col-sm-10">
+                    <label for="inputPhoneNumber" class="col-sm-3 control-label">Phone</label>
+                    <div class="col-sm-9">
                       <input type="tel" class="form-control" id="inputPhoneNumberReservation" placeholder="Phone Number">
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="inputTime" class="col-sm-2 control-label">Time</label>
-                    <div class="col-sm-10">
+                    <label for="inputTime" class="col-sm-3 control-label">Time</label>
+                    <div class="col-sm-9">
                       <input type="time" class="form-control" id="inputTimeReservation">
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="inputDate" class="col-sm-2 control-label">Date</label>
-                    <div class="col-sm-10">
+                    <label for="inputDate" class="col-sm-3 control-label">Date</label>
+                    <div class="col-sm-9">
                       <input class="form-control" type="text" id="inputDateReservation">
                     </div>
                   </div>
                   <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-12">
+                    <div class="col-sm-offset-3 col-sm-12">
                       <button id="addReservation" type="button" class="btn btn-primary">Add</button>
                       <button id="cancelReservation" type="reset" class="btn btn-danger">Cancel</button>
                     </div>
@@ -150,25 +153,25 @@
                 <h3>Add To Waitlist</h3>
                 <form name='waitlistForm' class="form-horizontal">
                   <div class="form-group">
-                    <label for="inputPartyNameWaitlist" class="col-sm-2 control-label">Name</label>
-                    <div class="col-sm-10">
+                    <label for="inputPartyNameWaitlist" class="col-sm-3 control-label">Name</label>
+                    <div class="col-sm-9">
                       <input type="text" class="form-control" id="inputPartyNameWaitlist" placeholder="Party Name">
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="inputPartySizeWaitlist" class="col-sm-2 control-label">Size</label>
-                    <div class="col-sm-10">
+                    <label for="inputPartySizeWaitlist" class="col-sm-3 control-label">Size</label>
+                    <div class="col-sm-9">
                       <input type="number" class="form-control" id="inputPartySizeWaitlist" placeholder="Party Size">
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="inputPhoneNumber" class="col-sm-2 control-label">Phone</label>
-                    <div class="col-sm-10">
+                    <label for="inputPhoneNumber" class="col-sm-3 control-label">Phone</label>
+                    <div class="col-sm-9">
                       <input type="tel" class="form-control" id="inputPhoneNumberWaitlist" placeholder="Phone Number">
                     </div>
                   </div>
                   <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-12">
+                    <div class="col-sm-offset-3 col-sm-12">
                       <button id="addWaitlist" type="button" class="btn btn-primary">Add</button>
                       <button id="cancelWaitlist" type="reset" class="btn btn-danger">Cancel</button>
                     </div>
