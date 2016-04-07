@@ -21,6 +21,8 @@ function show(){
 show();
 
 $(function() {
+  //start partyId's at 4, since 3 exist at time of initialization
+  var uniquePartyId = 4;
 
   // Waitlist and Reservation Menus
 	$("#openReservationMenu").click(function() {
@@ -51,9 +53,12 @@ $(function() {
     newEntry.attr('party-name', name);
     newEntry.attr('party-size', partySize);
     newEntry.attr('party-phone', phone);
+    newEntry.attr('party-phone', phone);
+    newEntry.attr('id', 'party' + uniquePartyId);
+    uniquePartyId++;
     newEntry.html(name + " - " + partySize);  
     $("#upcomingList").append(newEntry);
-    refreshUpcomingList();
+    //refreshUpcomingList();
 
     $("#waitlistMenu").collapse('hide');
     $("#addPartyMenu").show();
@@ -233,14 +238,27 @@ $(function() {
         return partySize <= parseInt($(this).attr('table-capacity'), 10);
       }).css("fill", "#ccff99");
       $("#inputWalkInPartySize").val(partySize);
+    } else {
+      $("#inputWalkInPartySize").val(null);
     }
   });
 
-
   var $selectedParty;
-  var refreshUpcomingList = function(){
-    $(".list-group a").click(function() {
-      $(this).parent().find("a").removeClass('active');
+  //upon clicking items in Upcoming List
+  $(document).on('click', ".list-group a", function() {
+    console.log('hi');
+    $(this).parent().find("a").removeClass('active');
+    //if already selected, unselect
+    if ($selectedParty && $selectedParty.attr('id') === $(this).attr('id')) {
+      $("#inputWalkInPartySize").show();
+      $("#filterSize").val(null);
+      $("#filterSize").change();
+      $selectedParty = null;
+      $("#seatPartySize").html(null);
+      $("#seatPartyName").html("Walk-In");
+    }
+    //otherwise, select
+    else {
       $(this).addClass('active');
       var partySize = $(this).attr('party-size');
       var partyName = $(this).attr('party-name');
@@ -250,10 +268,8 @@ $(function() {
       $("#inputWalkInPartySize").hide();
       $("#seatPartySize").html(partySize);
       $("#seatPartyName").html(partyName);
-    });
-  };
-  refreshUpcomingList();
-
+    }
+  });
 
   /* pan-zoom stuff taken from https://github.com/timmywil/jquery.panzoom/blob/master/demo/index.html */
   var $section = $('#focal');
