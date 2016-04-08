@@ -358,4 +358,11 @@ $(function() {
     });
   });
 
+  setMinScale = function() {
+    minScale = $(".parent").width() / $(".panzoom").width();
+    $panzoom.panzoom('option', 'minScale', minScale);
+  }
+  $(window).resize(setMinScale);
+  setMinScale()
 });
+
