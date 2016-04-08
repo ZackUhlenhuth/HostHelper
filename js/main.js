@@ -44,11 +44,12 @@ $(function() {
     $("#addPartyMenu").show();
   });
 
-  var editButtons = $("<span class='pull-right'>" + 
+
+  $("#addWaitlist").click(function(e) {
+    var editButtons = $("<span class='pull-right'>" + 
                         "<button class='btn btn-xs btn-warning edit-upcoming-party'><span class='glyphicon glyphicon-pencil'></span></button>" +
                         "<button class='btn btn-xs btn-danger remove-upcoming-party'><span class='glyphicon glyphicon-remove'></span></button>" +
                         "</span>");
-  $("#addWaitlist").click(function(e) {
     name = $("#inputPartyNameWaitlist").val();
     partySize = $("#inputPartySizeWaitlist").val();
     phone = $("inputPhoneNumberWaitlist").val();
@@ -57,15 +58,48 @@ $(function() {
     newEntry.attr('party-name', name);
     newEntry.attr('party-size', partySize);
     newEntry.attr('party-phone', phone);
-    newEntry.attr('party-phone', phone);
     newEntry.attr('id', 'party' + uniquePartyId);
     uniquePartyId++;
     newEntry.html(name + " - " + partySize);
     newEntry.append(editButtons);
     $("#upcomingList").append(newEntry);
-    //refreshUpcomingList();
+
+    //reset the input fields
+    $('#waitlistForm').trigger('reset');
 
     $("#waitlistMenu").collapse('hide');
+    $("#addPartyMenu").show();
+  });
+
+    $("#addReservation").click(function(e) {
+      var editButtons = $("<span class='pull-right'>" + 
+                        "<button class='btn btn-xs btn-warning edit-upcoming-party'><span class='glyphicon glyphicon-pencil'></span></button>" +
+                        "<button class='btn btn-xs btn-danger remove-upcoming-party'><span class='glyphicon glyphicon-remove'></span></button>" +
+                        "</span>");
+    name = $("#inputPartyName").val();
+    partySize = $("#inputPartySizeReservation").val();
+    phone = $("inputPhoneNumber").val();
+    time = $("inputTime").val();
+    date = $('inputDate').val();
+
+
+    newEntry = $("<a href='#' class='list-group-item clearfix upcoming-party'></a>");
+    newEntry.attr('party-name', name);
+    newEntry.attr('party-size', partySize);
+    newEntry.attr('party-phone', phone);
+    newEntry.attr('id', 'party' + uniquePartyId);
+    uniquePartyId++;
+    newEntry.attr('time', time);
+    newEntry.attr('date', date);
+    newEntry.html(name + " - " + partySize);
+    newEntry.append(editButtons);
+    $("#upcomingList").append(newEntry);
+
+    //reset the input fields
+    $('#reservationForm').trigger('reset');
+    $("#inputDateReservation").datepicker().datepicker("setDate", new Date()); //default date to current date
+
+    $("#reservationMenu").collapse('hide');
     $("#addPartyMenu").show();
   });
   
@@ -91,6 +125,7 @@ $(function() {
     var waiterName = $(this).attr('waiter-name');
     var waiterLabel = makeSVG('text', {id: zoneId + 'Waiter', fill: labelColor, 'font-size': '14', 'font-family': 'Verdana', x: xCoord, y: yCoord});
     waiterLabel.innerHTML = waiterName;
+    console.log(waiterName);
     return waiterLabel;
   });
 
@@ -158,6 +193,10 @@ $(function() {
         var halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
         // add 15 to top to account for tooltip
         $("#seatPopUp").slideDown("fast", "linear").css("top", e.pageY + 15).css("left", e.pageX - halfWidth);
+        //update waiter name
+        var waiterName = $selectedTable.attr('waiter');
+        $("#tableWaiter").html(waiterName);
+        
         $("#inputWalkInPartySize").focus();
       }
     }

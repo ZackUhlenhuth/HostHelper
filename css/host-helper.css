@@ -117,6 +117,10 @@ h3 {
 	stroke: #cc6600;
 }
 
+#waiterZone2 {
+	stroke: #0052cc;
+}
+
 .infoLabel {
 	fill: black;
 	font-size: 12px;

@@ -57,18 +57,23 @@
                         <rect id="door3" class="restaurantDoor" x="900" y="540" width="100" height="5" transform="rotate(20 900 540)"/>
                       </g>
                       <g>
-                        <rect id="table1" class="restaurantTable" table-capacity="4" occupied="false" height="70" width="150" y="80" x="70" rx="10" ry="10"/>
-                        <rect id="table2" class="restaurantTable" table-capacity="6" occupied="false" height="70" width="150" y="190" x="70" rx="10" ry="10"/>
-                        <rect id="table3" class="restaurantTable" table-capacity="2" occupied="false" height="70" width="150" y="300" x="70" rx="10" ry="10"/>
-                        <ellipse id="table4" class="restaurantTable" table-capacity="8" occupied="false" ry="40" rx="40" cy="120" cx="320"/>
-                        <ellipse id="table5" class="restaurantTable" table-capacity="6" occupied="false" ry="40" rx="40" cy="230" cx="320"/>
-                        <ellipse id="table6" class="restaurantTable" table-capacity="4" occupied="false" ry="40" rx="40" cy="340" cx="320"/>
-                        <ellipse id="table7" class="restaurantTable" table-capacity="8" occupied="false" ry="40" rx="40" cy="120" cx="440"/>
-                        <ellipse id="table8" class="restaurantTable" table-capacity="10" occupied="false" ry="40" rx="40" cy="230" cx="440"/>
-                        <ellipse id="table9" class="restaurantTable" table-capacity="10" occupied="false" ry="40" rx="40" cy="340" cx="440"/>
+                        <rect id="table1" class="restaurantTable" waiter="Mike" table-capacity="4" occupied="false" height="70" width="150" y="80" x="70" rx="10" ry="10"/>
+                        <rect id="table2" class="restaurantTable" waiter="Mike" table-capacity="6" occupied="false" height="70" width="150" y="190" x="70" rx="10" ry="10"/>
+                        <rect id="table3" class="restaurantTable" waiter="Mike" table-capacity="2" occupied="false" height="70" width="150" y="300" x="70" rx="10" ry="10"/>
+                        <ellipse id="table4" class="restaurantTable" waiter="Mike" table-capacity="8" occupied="false" ry="40" rx="40" cy="120" cx="320"/>
+                        <ellipse id="table5" class="restaurantTable" waiter="Mike" table-capacity="6" occupied="false" ry="40" rx="40" cy="230" cx="320"/>
+                        <ellipse id="table6" class="restaurantTable" waiter="Mike" table-capacity="4" occupied="false" ry="40" rx="40" cy="340" cx="320"/>
+                        <ellipse id="table7" class="restaurantTable" waiter="Sarah" table-capacity="8" occupied="false" ry="40" rx="40" cy="120" cx="440"/>
+                        <ellipse id="table8" class="restaurantTable" waiter="Sarah" table-capacity="10" occupied="false" ry="40" rx="40" cy="230" cx="440"/>
+                        <ellipse id="table9" class="restaurantTable" waiter="Sarah" table-capacity="10" occupied="false" ry="40" rx="40" cy="340" cx="440"/>
                       </g>
+                      <!-- Mike's Waiter zone -->
                       <g>
-                        <rect id="waiterZone1" class="waiterZone" waiter-name="Mike" height="380" width="480" x="30" y="40" rx="10" ry="10"/>
+                        <rect id="waiterZone1" class="waiterZone" waiter-name="Mike" height="380" width="348" x="30" y="40" rx="10" ry="10"/>
+                      </g>
+                      <!-- Sarah's Waiter zone -->
+                      <g>
+                        <rect id="waiterZone2" class="waiterZone" waiter-name="Sarah" height="380" width="116" x="382" y="40" rx="10" ry="10"/>
                       </g>
                     </svg>
                   </div>
@@ -127,7 +132,7 @@
               <!-- Reservation Menu -->
               <div id="reservationMenu" class="collapse">
                 <h3>Create Reservation</h3>
-                <form class="form-horizontal">
+                <form id=reservationForm class="form-horizontal">
                   <div class="form-group">
                     <label for="inputPartyName" class="col-sm-3 control-label">Name</label>
                     <div class="col-sm-9">
@@ -169,7 +174,7 @@
               <!-- Waitlist Menu -->
               <div id="waitlistMenu" class="collapse">
                 <h3>Add To Waitlist</h3>
-                <form name='waitlistForm' class="form-horizontal">
+                <form id='waitlistForm' class="form-horizontal">
                   <div class="form-group">
                     <label for="inputPartyNameWaitlist" class="col-sm-3 control-label">Name</label>
                     <div class="col-sm-9">
@@ -208,6 +213,10 @@
         <div id="walkInOptions" class="form-group">
           <label for="inputWalkInPartySize">Name:</label>
           <span id="seatPartyName">Walk-In</span>
+        </div>
+        <div>
+          <label for="inputWalkInPartySize" class="form-group">Waiter:</label>
+          <span id="tableWaiter">Waiter1</span>
         </div>
         <div id="walkInOptions" class="form-group">
           <label for="inputWalkInPartySize">Size:</label>
