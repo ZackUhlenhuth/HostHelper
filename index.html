@@ -33,7 +33,7 @@
                 </div>
                 <div class="input-group">
                   <span class="input-group-addon">Server</span>
-                  <input id="filterSize" type="text" placeholder="All" class="form-control"></input>
+                  <input id="filterServer" type="text" placeholder="None" class="form-control"></input>
                 </div>
               </div>
             </div>
@@ -88,9 +88,27 @@
             <div class="well">
               <h3>Upcoming</h3>
               <div id="upcomingList" class="list-group">
-                <a href="#" id="party1" class="list-group-item" party-name="Smith" party-size="4">Smith - 4</a>
-                <a href="#" id="party2" class="list-group-item" party-name="Johnson" party-size="6">Johnson - 6</a>
-                <a href="#" id="party3" class="list-group-item" party-name="Sally" party-size="6">Sally - 6</a>
+                <a href="#" id="party1" class="list-group-item clearfix upcoming-party" party-name="Smith" party-size="4">
+                  Smith - 4
+                  <span class="pull-right">
+                    <button class="btn btn-xs btn-warning edit-upcoming-party"><span class="glyphicon glyphicon-pencil"></span></button>
+                    <button class="btn btn-xs btn-danger remove-upcoming-party"><span class="glyphicon glyphicon-remove"></span></button>
+                  </span>
+                </a>
+                <a href="#" id="party2" class="list-group-item clearfix upcoming-party" party-name="Johnson" party-size="6">
+                  Johnson - 6
+                  <span class="pull-right">
+                    <button class="btn btn-xs btn-warning edit-upcoming-party"><span class="glyphicon glyphicon-pencil"></span></button>
+                    <button class="btn btn-xs btn-danger remove-upcoming-party"><span class="glyphicon glyphicon-remove"></span></button>
+                  </span>
+                </a>
+                <a href="#" id="party3" class="list-group-item clearfix upcoming-party" party-name="Sally" party-size="6">
+                  Sally - 6
+                  <span class="pull-right">
+                    <button class="btn btn-xs btn-warning edit-upcoming-party"><span class="glyphicon glyphicon-pencil"></span></button>
+                    <button class="btn btn-xs btn-danger remove-upcoming-party"><span class="glyphicon glyphicon-remove"></span></button>
+                  </span>
+                </a>
               </div>
             </div>
           </div>

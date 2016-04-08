@@ -44,19 +44,24 @@ $(function() {
     $("#addPartyMenu").show();
   });
 
+  var editButtons = $("<span class='pull-right'>" + 
+                        "<button class='btn btn-xs btn-warning edit-upcoming-party'><span class='glyphicon glyphicon-pencil'></span></button>" +
+                        "<button class='btn btn-xs btn-danger remove-upcoming-party'><span class='glyphicon glyphicon-remove'></span></button>" +
+                        "</span>");
   $("#addWaitlist").click(function(e) {
     name = $("#inputPartyNameWaitlist").val();
     partySize = $("#inputPartySizeWaitlist").val();
     phone = $("inputPhoneNumberWaitlist").val();
 
-    newEntry = $("<a href='#' class='list-group-item'></a>");
+    newEntry = $("<a href='#' class='list-group-item clearfix upcoming-party'></a>");
     newEntry.attr('party-name', name);
     newEntry.attr('party-size', partySize);
     newEntry.attr('party-phone', phone);
     newEntry.attr('party-phone', phone);
     newEntry.attr('id', 'party' + uniquePartyId);
     uniquePartyId++;
-    newEntry.html(name + " - " + partySize);  
+    newEntry.html(name + " - " + partySize);
+    newEntry.append(editButtons);
     $("#upcomingList").append(newEntry);
     //refreshUpcomingList();
 
@@ -245,8 +250,7 @@ $(function() {
 
   var $selectedParty;
   //upon clicking items in Upcoming List
-  $(document).on('click', ".list-group a", function() {
-    console.log('hi');
+  $(document).on('click', ".upcoming-party", function(e) {
     $(this).parent().find("a").removeClass('active');
     //if already selected, unselect
     if ($selectedParty && $selectedParty.attr('id') === $(this).attr('id')) {
@@ -269,6 +273,28 @@ $(function() {
       $("#seatPartySize").html(partySize);
       $("#seatPartyName").html(partyName);
     }
+  });
+
+  $(document).on('click', ".remove-upcoming-party", function(e) {
+    //stop propagation so parents click method not called
+    e.stopPropagation();
+    //remove the upcoming party (the grandparent)
+    $correspondingParty = $(this).parent().parent();
+    //if party was selected, reset tooltip
+    if ($selectedParty && $selectedParty.attr('id') === $correspondingParty.attr('id')) {
+      $("#inputWalkInPartySize").show();
+      $("#filterSize").val(null);
+      $("#filterSize").change();
+      $selectedParty = null;
+      $("#seatPartySize").html(null);
+      $("#seatPartyName").html("Walk-In");
+    }
+    $(this).parent().parent().remove();
+  });
+
+  $(document).on('click', ".edit-upcoming-party", function(e) {
+    //stop propagation so parents click method not called
+    e.stopPropagation();
   });
 
   /* pan-zoom stuff taken from https://github.com/timmywil/jquery.panzoom/blob/master/demo/index.html */
