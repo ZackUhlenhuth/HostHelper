@@ -215,11 +215,16 @@ $(function() {
     }
   });
 
+  // Hide popups. Called when closed button in popup or floor clicked.
+  function hidePopups() {
+      $("#seatPopUp").hide();
+      $("#unseatPopUp").hide();
+  }
+
   //hide popups when you click the floor TODO: should make this happen on any click but table
-  $("#floor").click(function() {
-    $("#seatPopUp").hide();
-    $("#unseatPopUp").hide();
-  });
+  $("#floor").click(hidePopups);
+  // Hide popups when close button in popup clicked.
+  $(".close").click(hidePopups);
 
   $("#seatTable").click(function() {
     $selectedTable.css("fill", "#cc9933");
