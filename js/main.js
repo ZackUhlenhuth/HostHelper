@@ -343,7 +343,8 @@ $(function() {
 
   /* pan-zoom stuff taken from https://github.com/timmywil/jquery.panzoom/blob/master/demo/index.html */
   var $section = $('#focal');
-  var $panzoom = $section.find('.panzoom').panzoom();
+  var $panzoom = $section.find('.panzoom').panzoom({ 
+    contain: 'invert' });
   $panzoom.parent().on('mousewheel.focal', function( e ) {
     $("#seatPopUp").hide();
     $("#unseatPopUp").hide();
