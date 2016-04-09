@@ -237,7 +237,7 @@ $(function() {
   }
 
   function showSeatPopup(tipPoint) {
-    //resetTooltip();
+    resetTooltip();
 
     $.each(upcomingList.getUpcomingListEntries(), function(index, entry){
       var partyOption = $('<option></option>');
