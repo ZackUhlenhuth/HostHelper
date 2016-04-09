@@ -220,20 +220,22 @@ $(function() {
     var walkInOption = $('<option value="walk-in" id="walk-in">Walk-In</option>');
     $("#seatPartySelector").html(walkInOption)
 
+    $("#inputWalkInPartySize").show();
+  }
+
+  function showSeatPopup(tipPoint) {
+    resetTooltip();
+
     $.each(upcomingList.getUpcomingListEntries(), function(index, entry){
       var partyOption = $('<option></option>');
       partyOption.attr("id", "party" + entry.id);
       partyOption.attr("value", "party" + entry.id);
       partyOption.html(entry.name);
 
-      $("#seatPartySelector").append(partyOption);     
+      if ($($selectedTable[0]).attr("table-capacity") >= entry.partySize){
+        $("#seatPartySelector").append(partyOption); 
+      }
     });
-
-    $("#inputWalkInPartySize").show();
-  }
-
-  function showSeatPopup(tipPoint) {
-    resetTooltip();
 
     if ($selectedParty) {
       $("#seatPartySelector").val($selectedParty[0].id);
@@ -254,6 +256,7 @@ $(function() {
   function selectSeatParty(partyID) {
     if (partyID == "walk-in") {
       $("#inputWalkInPartySize").show();
+      $("#seatPartySize").html(null);
     } else {
       $("#inputWalkInPartySize").hide();
 
