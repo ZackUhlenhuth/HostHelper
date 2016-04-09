@@ -96,13 +96,17 @@ $(function() {
     timeAndDate = new Date(date + " " + time);
     upcomingList.addEntry(new Reservation(name, partySize, phone, timeAndDate))
     $('#reservationForm').trigger('reset');
-    $("#inputDateReservation").datepicker().datepicker("setDate", new Date()); //default date to current date
+    $("#inputDateReservation").datepicker().datepicker("setDate", new Date()); ///Default date/time
+    $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date());
+
     $("#reservationMenu").collapse('hide');
     $("#addPartyMenu").show();
   });
-  
-  //Upon loading, default reservation date to the current date
+
+  //Default date/time upon load
   $("#inputDateReservation").datepicker().datepicker("setDate", new Date());
+  $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date());
+
 
   // Citation: http://stackoverflow.com/questions/3642035/jquerys-append-not-working-with-svg-element
   function makeSVG(tag, attrs) {
@@ -241,7 +245,7 @@ $(function() {
       partyOption.attr("value", "party" + entry.id);
       partyOption.html(entry.name);
 
-      if ($($selectedTable[0]).attr("table-capacity") >= entry.partySize){
+      if (parseInt($($selectedTable[0]).attr("table-capacity"), 10) >= parseInt(entry.partySize, 10)) {
         $("#seatPartySelector").append(partyOption); 
       }
     });
@@ -299,8 +303,6 @@ $(function() {
       $("#" + tableId + "Capacity").html(function() {
         return capacityIcon + " " + selectedEntry.partySize + " / " + $(this).attr('table-capacity');
       });
-
-      console.log(selectedEntry.name);
       partyLabel.innerHTML = selectedEntry.name;
       $selectedTable.after(partyLabel);
 
@@ -365,7 +367,7 @@ $(function() {
     partySize = $("#filterSize").val();
     if (partySize != "") {
       matchingList = matchingList.filter(function() {
-        return partySize <= parseInt($(this).attr('table-capacity'), 10);
+        return parseInt(partySize, 10) <= parseInt($(this).attr('table-capacity'), 10);
       });
     }
 

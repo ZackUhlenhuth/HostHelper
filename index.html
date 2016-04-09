@@ -13,7 +13,9 @@
   <link rel="stylesheet" href="css/jquery-ui.min.css">
   <!-- Custom CSS -->
   <link href="css/host-helper.css" rel="stylesheet">
-
+  <!-- JQuery TimePicker
+   from https://github.com/jonthornton/jquery-timepicker/ -->
+  <link rel="stylesheet" href="css/jquery.timepicker.css">
   <!-- Plugin to make Select boxes match Bootstrap
    from https://silviomoreto.github.io/bootstrap-select/ -->
   <link rel="stylesheet" href="css/bootstrap-select.min.css">
@@ -133,21 +135,21 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="inputTimeReservation" class="col-md-3 control-label">Time: </label>
-                    <div class="col-md-8 col-md-offset-1">
-                      <input type="time" class="form-control" id="inputTimeReservation">
+                    <div class="col-md-12">
+                      <input type="text" class="form-control" id="inputTimeReservation">
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="inputDateReservation" class="col-md-3 control-label">Date: </label>
-                    <div class="col-md-8 col-md-offset-1">
+                    <div class="col-md-12">
                       <input class="form-control" type="text" id="inputDateReservation">
                     </div>
                   </div>
                   <div class="form-group">
-                    <div class="col-md-offset-3 col-md-12">
-                      <button id="addReservation" type="button" class="btn btn-primary">Add</button>
-                      <button id="cancelReservation" type="reset" class="btn btn-danger">Cancel</button>
+                    <div class="col-md-12">
+                      <span class="pull-right">
+                        <button id="addReservation" type="button" class="btn btn-primary">Add</button>
+                        <button id="cancelReservation" type="button" class="btn btn-danger">Cancel</button>
+                      </span>
                     </div>
                   </div>
                 </form>
@@ -172,9 +174,11 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <div class="col-md-offset-3 col-md-12">
-                      <button id="addWaitlist" type="button" class="btn btn-primary">Add</button>
-                      <button id="cancelWaitlist" type="reset" class="btn btn-danger">Cancel</button>
+                    <div class="col-md-12">
+                      <span class="pull-right">
+                        <button id="addWaitlist" type="button" class="btn btn-primary">Add</button>
+                        <button id="cancelWaitlist" type="button" class="btn btn-danger">Cancel</button>
+                      </span>
                     </div>
                   </div>
                 </form>
@@ -227,6 +231,9 @@
   <!-- Plugin to make Select boxes match Bootstrap
    from https://silviomoreto.github.io/bootstrap-select/ -->
   <script src="js/bootstrap-select.min.js"></script>
+  <!-- JQuery TimePicker
+   from https://github.com/jonthornton/jquery-timepicker/ -->
+  <script src="js/jquery.timepicker.min.js"></script>
   <!-- Bootstrap: Latest compiled and minified JavaScript -->
   <script src="js/bootstrap.min.js"></script>
   <script src="js/upcominglist.js"></script>
