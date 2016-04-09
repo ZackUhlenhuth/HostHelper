@@ -22,6 +22,8 @@ show();
 
 $(function() {
   var upcomingList = new UpcomingList();
+  var $selectedParty;
+  var $selectedTable;
 
   upcomingList.registerListener("add", function(event){
     var editButtons = $("<span class='pull-right'>" + 
@@ -38,8 +40,6 @@ $(function() {
     newEntry.append(editButtons);
     $("#upcomingList").append(newEntry);
   });
-
-
 
   // Initialize our upcoming list entries.
   upcomingList.addEntry(new WaitlistEntry("Smith", 4, "None"));
@@ -175,7 +175,6 @@ $(function() {
     }
   );
 
-  var $selectedTable;
   $(".restaurantTable").click(function(e) {
     $selectedTable = $(this);
     $("#seatPopUp").hide();
@@ -187,14 +186,7 @@ $(function() {
         validSelection = false; 
       };
       if (validSelection) {
-        var halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
-        // add 15 to top to account for tooltip
-        $("#seatPopUp").slideDown("fast", "linear").css("top", e.pageY + 15).css("left", e.pageX - halfWidth);
-        //update waiter name
-        var waiterName = $selectedTable.attr('waiter');
-        $("#tableWaiter").html(waiterName);
-        
-        $("#inputWalkInPartySize").focus();
+        showSeatPopup({x: e.pageX, y: e.pageY});
       }
     }
     else {
@@ -218,6 +210,62 @@ $(function() {
       $("#unseatPopUp").hide();
   }
 
+  // Reset the tooltip to prepare for a walk-in.
+  function resetTooltip() {
+    $("#inputWalkInPartySize").show();
+    $("#filterSize").val(null);
+    $("#filterSize").change();
+    $("#seatPartySize").html(null);
+
+    var walkInOption = $('<option value="walk-in" id="walk-in">Walk-In</option>');
+    $("#seatPartySelector").html(walkInOption)
+
+    $.each(upcomingList.getUpcomingListEntries(), function(index, entry){
+      var partyOption = $('<option></option>');
+      partyOption.attr("id", "party" + entry.id);
+      partyOption.attr("value", "party" + entry.id);
+      partyOption.html(entry.name);
+
+      $("#seatPartySelector").append(partyOption);     
+    });
+
+    $("#inputWalkInPartySize").show();
+  }
+
+  function showSeatPopup(tipPoint) {
+    resetTooltip();
+
+    if ($selectedParty) {
+      $("#seatPartySelector").val($selectedParty[0].id);
+    }
+
+    var halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
+    // add 15 to top to account for tooltip
+    $("#seatPopUp").slideDown("fast", "linear").css("top", tipPoint.y + 15).css("left", tipPoint.x - halfWidth);
+    //update waiter name
+    var waiterName = $selectedTable.attr('waiter');
+    $("#tableWaiter").html(waiterName);
+
+    selectSeatParty($("#seatPartySelector").val());
+      
+    $("#inputWalkInPartySize").focus();
+  }
+
+  function selectSeatParty(partyID) {
+    if (partyID == "walk-in") {
+      $("#inputWalkInPartySize").show();
+    } else {
+      $("#inputWalkInPartySize").hide();
+
+      entry = upcomingList.getEntryWithID(partyID);
+      $("#seatPartySize").html(entry.partySize);
+    }
+  }
+
+  $("#seatPartySelector").change(function(event) {
+    selectSeatParty(event.target.value);
+  })
+
   //hide popups when you click the floor TODO: should make this happen on any click but table
   $("#floor").click(hidePopups);
   // Hide popups when close button in popup clicked.
@@ -231,18 +279,21 @@ $(function() {
     var xCoord = parseInt($("#" + tableId + "Label").attr('x'), 10) - 10;
     var yCoord = parseInt($("#" + tableId + "Label").attr('y'), 10) + 20;
     var partyLabel = makeSVG('text', {id: tableId + 'PartyLabel', class: "partyLabel", x: xCoord, y: yCoord});
-    if ($selectedParty) {
+    selectedEntry = upcomingList.getEntryWithID($("#seatPartySelector").val());
+
+    if (selectedEntry) {
       //update capacity label
       $("#" + tableId + "Capacity").html(function() {
-        return capacityIcon + " " + $selectedParty.attr('party-size') + " / " + $(this).attr('table-capacity');
+        return capacityIcon + " " + selectedEntry.partySize + " / " + $(this).attr('table-capacity');
       });
-      partyLabel.innerHTML = $selectedParty.attr('party-name');
+
+      console.log(selectedEntry.name);
+      partyLabel.innerHTML = selectedEntry.name;
       $selectedTable.after(partyLabel);
-      $selectedParty.remove();
-      $selectedParty = null;
-      $("#inputWalkInPartySize").show();
-      $("#seatPartySize").html("");
-      $("#seatPartyName").html("Walk-In");
+
+      resetTooltip();
+
+      upcomingList.removeEntryWithID(entry.id);
     }
     else { //Walk-In
       var partySize = $("#inputWalkInPartySize").val();
@@ -289,46 +340,32 @@ $(function() {
     }
   });
 
-  var $selectedParty;
   //upon clicking items in Upcoming List
   $(document).on('click', ".upcoming-party", function(e) {
     $(this).parent().find("a").removeClass('active');
     //if already selected, unselect
     if ($selectedParty && $selectedParty.attr('id') === $(this).attr('id')) {
-      $("#inputWalkInPartySize").show();
       $("#filterSize").val(null);
       $("#filterSize").change();
       $selectedParty = null;
-      $("#seatPartySize").html(null);
-      $("#seatPartyName").html("Walk-In");
+
+      resetTooltip();
     }
     //otherwise, select
     else {
       $(this).addClass('active');
       var partySize = $(this).attr('party-size');
-      var partyName = $(this).attr('party-name');
       $("#filterSize").val(partySize);
       $("#filterSize").change();
       $selectedParty = $(this);
-      $("#inputWalkInPartySize").hide();
-      $("#seatPartySize").html(partySize);
-      $("#seatPartyName").html(partyName);
     }
   });
-
-  function resetTooltip() {
-      $("#inputWalkInPartySize").show();
-      $("#filterSize").val(null);
-      $("#filterSize").change();
-      $selectedParty = null;
-      $("#seatPartySize").html(null);
-      $("#seatPartyName").html("Walk-In");
-  }
 
   upcomingList.registerListener("remove", function(event){
     //if party was selected, reset tooltip
     if ($selectedParty && $selectedParty.attr('id') === "party" + event.entry.id) {
       resetTooltip();
+      $selectedParty = null;
     }
 
     $("#party" + event.entry.id).remove()
@@ -341,7 +378,7 @@ $(function() {
     //remove the upcoming party (the grandparent)
     $correspondingParty = $(this).parent().parent();
 
-    partyID = parseInt($correspondingParty[0].id.substring("party".length));
+    partyID = $correspondingParty[0].id;
     upcomingList.removeEntryWithID(partyID);
   });
 
