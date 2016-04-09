@@ -39,6 +39,8 @@ $(function() {
     $("#upcomingList").append(newEntry);
   });
 
+
+
   // Initialize our upcoming list entries.
   upcomingList.addEntry(new WaitlistEntry("Smith", 4, "None"));
   upcomingList.addEntry(new WaitlistEntry("Johnson", 6, "None"));
@@ -314,21 +316,33 @@ $(function() {
     }
   });
 
-  $(document).on('click', ".remove-upcoming-party", function(e) {
-    //stop propagation so parents click method not called
-    e.stopPropagation();
-    //remove the upcoming party (the grandparent)
-    $correspondingParty = $(this).parent().parent();
-    //if party was selected, reset tooltip
-    if ($selectedParty && $selectedParty.attr('id') === $correspondingParty.attr('id')) {
+  function resetTooltip() {
       $("#inputWalkInPartySize").show();
       $("#filterSize").val(null);
       $("#filterSize").change();
       $selectedParty = null;
       $("#seatPartySize").html(null);
       $("#seatPartyName").html("Walk-In");
+  }
+
+  upcomingList.registerListener("remove", function(event){
+    //if party was selected, reset tooltip
+    if ($selectedParty && $selectedParty.attr('id') === "party" + event.entry.id) {
+      resetTooltip();
     }
-    $(this).parent().parent().remove();
+
+    $("#party" + event.entry.id).remove()
+  })
+
+  $(document).on('click', ".remove-upcoming-party", function(e) {
+    //stop propagation so parents click method not called
+    e.stopPropagation();
+
+    //remove the upcoming party (the grandparent)
+    $correspondingParty = $(this).parent().parent();
+
+    partyID = parseInt($correspondingParty[0].id.substring("party".length));
+    upcomingList.removeEntryWithID(partyID);
   });
 
   $(document).on('click', ".edit-upcoming-party", function(e) {

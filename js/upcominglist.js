@@ -10,6 +10,21 @@ class UpcomingList {
 		this.notifyListeners("add", entry);
 	}
 
+	removeEntryWithID(entryID) {
+		var indexToSplice = 0;
+		$.each(this.list, function(index, entry){
+			if (entry.id == entryID) {
+				indexToSplice = index;
+			}
+		});
+
+		var removedEntry = this.list[indexToSplice];
+		this.list.splice(indexToSplice, 1)
+		if (removedEntry) {
+			this.notifyListeners("remove", removedEntry)
+		}
+	}
+
 	/** 
 	 * There are currently the following events:
 	 *   add
