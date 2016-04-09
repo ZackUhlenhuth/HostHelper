@@ -341,15 +341,45 @@ $(function() {
     var partySize = $(this).val();
     $(".restaurantTable[occupied=false]").css("fill", "#cccccc");
     //if there is a partySize in the filter, highlight valid tables
+    applyFilters();
+
     if (partySize !== "") {
-      $(".restaurantTable[occupied=false]").filter(function() {
-        return partySize <= parseInt($(this).attr('table-capacity'), 10);
-      }).css("fill", "#ccff99");
       $("#inputWalkInPartySize").val(partySize);
     } else {
       $("#inputWalkInPartySize").val(null);
     }
   });
+
+  $("#filterServer").on('change', function() {
+    $(".restaurantTable[occupied=false]").css("fill", "#cccccc");
+
+    applyFilters();
+  });
+
+  function applyFilters() {
+    matchingList = $(".restaurantTable[occupied=false]");
+
+    partySize = $("#filterSize").val();
+    if (partySize != "") {
+      matchingList = matchingList.filter(function() {
+        return partySize <= parseInt($(this).attr('table-capacity'), 10);
+      });
+    }
+
+    server = $("#filterServer").val();
+
+    if (server != "none"){
+      matchingList = matchingList.filter(function() {
+        return server == $(this).attr("waiter");
+      });
+    }
+
+    if (server == "none" && partySize == "") {
+      matchingList = $([]);
+    }
+
+    matchingList.css("fill", "#ccff99");
+  }
 
   //upon clicking items in Upcoming List
   $(document).on('click', ".upcoming-party", function(e) {

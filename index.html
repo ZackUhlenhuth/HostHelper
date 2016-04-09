@@ -13,6 +13,10 @@
   <link rel="stylesheet" href="css/jquery-ui.min.css">
   <!-- Custom CSS -->
   <link href="css/host-helper.css" rel="stylesheet">
+
+  <!-- Plugin to make Select boxes match Bootstrap
+   from https://silviomoreto.github.io/bootstrap-select/ -->
+  <link rel="stylesheet" href="css/bootstrap-select.min.css">
 </head>
 
 <body>
@@ -32,8 +36,11 @@
                   <input id="filterSize" type="text" placeholder="None" class="form-control"></input>
                 </div>
                 <div class="input-group">
-                  <span class="input-group-addon">Server</span>
-                  <input id="filterServer" type="text" placeholder="None" class="form-control"></input>
+                  <span class="input-group-addon">Server</span><select id="filterServer" class="selectpicker">
+                    <option value="none">None</option>
+                    <option>Mike</option>
+                    <option>Sarah</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -217,6 +224,9 @@
   <!-- Plugins taken from github -->
   <script src="js/jquery.mousewheel.js"></script>
   <script src="js/jquery.panzoom.min.js"></script>
+  <!-- Plugin to make Select boxes match Bootstrap
+   from https://silviomoreto.github.io/bootstrap-select/ -->
+  <script src="js/bootstrap-select.min.js"></script>
   <!-- Bootstrap: Latest compiled and minified JavaScript -->
   <script src="js/bootstrap.min.js"></script>
   <script src="js/upcominglist.js"></script>
