@@ -221,23 +221,25 @@ $(function() {
   function hidePopupsAndReset() {
       hidePopups();
       resetTooltip();
+      $('#upcomingList').find("a").removeClass('active');
+      $selectedParty = null;
   }
 
-  // Reset the tooltip to prepare for a walk-in.
+  function resetPartySelector() {
+    var walkInOption = $('<option value="walk-in" id="walk-in">Walk-In</option>');
+    $("#seatPartySelector").html(walkInOption)
+  }
+
+  // Reset the tooltip to clear filter.
   function resetTooltip() {
     $("#inputWalkInPartySize").show();
     $("#filterSize").val(null);
     $("#filterSize").change();
     $("#seatPartySize").html(null);
-
-    var walkInOption = $('<option value="walk-in" id="walk-in">Walk-In</option>');
-    $("#seatPartySelector").html(walkInOption)
-
-    $("#inputWalkInPartySize").show();
   }
 
   function showSeatPopup(tipPoint) {
-    resetTooltip();
+    resetPartySelector();
 
     $.each(upcomingList.getUpcomingListEntries(), function(index, entry){
       var partyOption = $('<option></option>');
@@ -305,8 +307,6 @@ $(function() {
       });
       partyLabel.innerHTML = selectedEntry.name;
       $selectedTable.after(partyLabel);
-
-      resetTooltip();
 
       upcomingList.removeEntryWithID(entry.id);
     }
@@ -391,10 +391,7 @@ $(function() {
     $(this).parent().find("a").removeClass('active');
     //if already selected, unselect
     if ($selectedParty && $selectedParty.attr('id') === $(this).attr('id')) {
-      $("#filterSize").val(null);
-      $("#filterSize").change();
       $selectedParty = null;
-
       resetTooltip();
     }
     //otherwise, select
