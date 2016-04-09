@@ -7,6 +7,8 @@ class UpcomingList {
 	constructor() {
 		this.list = []
 		this.eventListeners = [];
+
+		setInterval(this.tick, 60 * 1000, this);
 	}
 
 	addEntry(entry) {
@@ -56,7 +58,7 @@ class UpcomingList {
 
 	/** 
 	 * There are currently the following events:
-	 *   add, remove
+	 *   add, remove, update
 	 *
 	 * When an event happens, the handler is called with a paramter event.
 	 * The event parameter contains the type of the event and the entry effected.
@@ -77,6 +79,18 @@ class UpcomingList {
 			}
 		});
 	}
+
+	tick(upcomingList) {
+		// This is just some mock code for our wait prediction algorithm.
+		$.each(upcomingList.getUpcomingListEntries(), function(index, entry){
+			if (entry.estimatedWaitInMins) {
+				if (entry.estimatedWaitInMins > 0){
+					entry.estimatedWaitInMins -= 1;
+					upcomingList.notifyListeners("update", entry)
+				}
+			}
+		});
+	}
 }
 
 class UpcomingListEntry {
@@ -89,6 +103,14 @@ class UpcomingListEntry {
 }
 
 class WaitlistEntry extends UpcomingListEntry {
+	constructor(name, size, phone, estimatedWaitInMins){
+		super(name, size, phone)
+		this.estimatedWaitInMins = estimatedWaitInMins;
+	}
+
+	getCountdownString() {
+		return this.estimatedWaitInMins + " mins";
+	}
 
 }
 
@@ -96,6 +118,15 @@ class Reservation extends UpcomingListEntry {
 	constructor(name, size, phoneNumber, time) {
 		super(name, size, phoneNumber)
 		this.time = time;
+	}
+
+	getCountdownString() {
+		var hours = "0" + this.time.getHours();
+		hours = hours.substring(0, 2);
+
+		var minutes = "0" + this.time.getMinutes();
+		minutes = minutes.substring(0, 2);
+		return hours + ":" + minutes
 	}
 }
 

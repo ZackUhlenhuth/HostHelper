@@ -25,6 +25,9 @@ $(function() {
   var $selectedParty;
   var $selectedTable;
 
+  function makeUpcomingListString(entry) {
+    return entry.name + " (" + entry.partySize + ")  - <span class='countdown-string'>" + entry.getCountdownString() + "</span>";
+  }
   upcomingList.registerListener("add", function(event){
     var editButtons = $("<span class='pull-right'>" + 
                   "<button class='btn btn-xs btn-warning edit-upcoming-party'><span class='glyphicon glyphicon-pencil'></span></button>" +
@@ -36,15 +39,20 @@ $(function() {
     newEntry.attr('party-size', event.entry.partySize);
     newEntry.attr('party-phone', event.entry.phone);
     newEntry.attr('id', 'party' + event.entry.id);
-    newEntry.html(event.entry.name + " - " + event.entry.partySize);
+    newEntry.html(makeUpcomingListString(event.entry));
     newEntry.append(editButtons);
     $("#upcomingList").append(newEntry);
   });
 
+  upcomingList.registerListener("update", function(event) {
+    console.log(event);
+    $("#party" + event.entry.id + " .countdown-string").html(event.entry.getCountdownString())
+  })
+
   // Initialize our upcoming list entries.
-  upcomingList.addEntry(new WaitlistEntry("Smith", 4, "None"));
-  upcomingList.addEntry(new WaitlistEntry("Johnson", 6, "None"));
-  upcomingList.addEntry(new WaitlistEntry("Sally", 6, "None"));
+  upcomingList.addEntry(new WaitlistEntry("Smith", 4, "None", 10));
+  upcomingList.addEntry(new WaitlistEntry("Johnson", 6, "None", 40));
+  upcomingList.addEntry(new Reservation("Sally", 6, "None", new Date(Date.now() + 500000000)));
 
   // Waitlist and Reservation Menus
 	$("#openReservationMenu").click(function() {
@@ -75,7 +83,7 @@ $(function() {
     //reset the input fields
     $('#waitlistForm').trigger('reset');
 
-    upcomingList.addEntry(new WaitlistEntry(name, partySize, phone));
+    upcomingList.addEntry(new WaitlistEntry(name, partySize, phone, 60));
 
     $("#waitlistMenu").collapse('hide');
     $("#addPartyMenu").show();
@@ -85,8 +93,8 @@ $(function() {
     name = $("#inputPartyName").val();
     partySize = $("#inputPartySizeReservation").val();
     phone = $("inputPhoneNumber").val();
-    time = $("inputTime").val();
-    date = $('inputDate').val();
+    time = $("#inputTimeReservation").val();
+    date = $('#inputDateReservation').val();
 
     timeAndDate = new Date(date + " " + time);
 
