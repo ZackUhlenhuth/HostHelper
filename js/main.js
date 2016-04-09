@@ -75,39 +75,33 @@ $(function() {
   });
 
 
+  //add a Walk-in to Upcoming
   $("#addWaitlist").click(function(e) {
     name = $("#inputPartyNameWaitlist").val();
     partySize = $("#inputPartySizeWaitlist").val();
     phone = $("inputPhoneNumberWaitlist").val();
-
-    //reset the input fields
     $('#waitlistForm').trigger('reset');
-
     upcomingList.addEntry(new WaitlistEntry(name, partySize, phone, 60));
-
     $("#waitlistMenu").collapse('hide');
     $("#addPartyMenu").show();
   });
 
+  //add a Reservation to Upcoming
   $("#addReservation").click(function(e) {
     name = $("#inputPartyName").val();
     partySize = $("#inputPartySizeReservation").val();
     phone = $("inputPhoneNumber").val();
     time = $("#inputTimeReservation").val();
     date = $('#inputDateReservation').val();
-
     timeAndDate = new Date(date + " " + time);
-
     upcomingList.addEntry(new Reservation(name, partySize, phone, timeAndDate))
-
-    //reset the input fields
     $('#reservationForm').trigger('reset');
     $("#inputDateReservation").datepicker().datepicker("setDate", new Date()); //default date to current date
-
     $("#reservationMenu").collapse('hide');
     $("#addPartyMenu").show();
   });
   
+  //Upon loading, default reservation date to the current date
   $("#inputDateReservation").datepicker().datepicker("setDate", new Date());
 
   // Citation: http://stackoverflow.com/questions/3642035/jquerys-append-not-working-with-svg-element
@@ -175,6 +169,7 @@ $(function() {
     return capacityLabel;
   });
 
+  //Add 'click' affordance upon hovering a table
   $(".restaurantTable").hover(
     function() {
       $(this).css("stroke-width","2");
@@ -212,10 +207,16 @@ $(function() {
     }
   });
 
-  // Hide popups. Called when closed button in popup or floor clicked.
+  // Hid popups. Called when 'close' button in popup is clicked. Does not reset tooltip
   function hidePopups() {
       $("#seatPopUp").hide();
       $("#unseatPopUp").hide();
+  }
+
+  // Hide popups. Called when floor clicked. This also resets the tooltip.
+  function hidePopupsAndReset() {
+      hidePopups();
+      resetTooltip();
   }
 
   // Reset the tooltip to prepare for a walk-in.
@@ -232,7 +233,7 @@ $(function() {
   }
 
   function showSeatPopup(tipPoint) {
-    resetTooltip();
+    //resetTooltip();
 
     $.each(upcomingList.getUpcomingListEntries(), function(index, entry){
       var partyOption = $('<option></option>');
@@ -262,6 +263,7 @@ $(function() {
   }
 
   function selectSeatParty(partyID) {
+    console.log("partyID " + partyID);
     if (partyID == "walk-in") {
       $("#inputWalkInPartySize").show();
       $("#seatPartySize").html(null);
@@ -277,8 +279,8 @@ $(function() {
     selectSeatParty(event.target.value);
   })
 
-  //hide popups when you click the floor TODO: should make this happen on any click but table
-  $("#floor").click(hidePopups);
+  //hide popups and reset filters when you click the floor
+  $("#floor").click(hidePopupsAndReset);
   // Hide popups when close button in popup clicked.
   $(".close").click(hidePopups);
 
@@ -322,6 +324,7 @@ $(function() {
     }
     $("#filterSize").val("");
     $("#filterSize").change();
+    resetTooltip();
     $("#seatPopUp").hide();
   });
 
