@@ -242,7 +242,7 @@ $(function() {
       partyOption.attr("value", "party" + entry.id);
       partyOption.html(entry.name);
 
-      if ($($selectedTable[0]).attr("table-capacity") >= entry.partySize){
+      if (parseInt($($selectedTable[0]).attr("table-capacity"), 10) >= parseInt(entry.partySize, 10)) {
         $("#seatPartySelector").append(partyOption); 
       }
     });
@@ -299,8 +299,6 @@ $(function() {
       $("#" + tableId + "Capacity").html(function() {
         return capacityIcon + " " + selectedEntry.partySize + " / " + $(this).attr('table-capacity');
       });
-
-      console.log(selectedEntry.name);
       partyLabel.innerHTML = selectedEntry.name;
       $selectedTable.after(partyLabel);
 
