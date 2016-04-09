@@ -21,8 +21,28 @@ function show(){
 show();
 
 $(function() {
-  //start partyId's at 4, since 3 exist at time of initialization
-  var uniquePartyId = 4;
+  var upcomingList = new UpcomingList();
+
+  upcomingList.registerListener("add", function(event){
+    var editButtons = $("<span class='pull-right'>" + 
+                  "<button class='btn btn-xs btn-warning edit-upcoming-party'><span class='glyphicon glyphicon-pencil'></span></button>" +
+                  "<button class='btn btn-xs btn-danger remove-upcoming-party'><span class='glyphicon glyphicon-remove'></span></button>" +
+                  "</span>");
+
+    newEntry = $("<a href='#' class='list-group-item clearfix upcoming-party'></a>");
+    newEntry.attr('party-name', event.entry.name);
+    newEntry.attr('party-size', event.entry.partySize);
+    newEntry.attr('party-phone', event.entry.phone);
+    newEntry.attr('id', 'party' + event.entry.id);
+    newEntry.html(event.entry.name + " - " + event.entry.partySize);
+    newEntry.append(editButtons);
+    $("#upcomingList").append(newEntry);
+  });
+
+  // Initialize our upcoming list entries.
+  upcomingList.addEntry(new WaitlistEntry("Smith", 4, "None"));
+  upcomingList.addEntry(new WaitlistEntry("Johnson", 6, "None"));
+  upcomingList.addEntry(new WaitlistEntry("Sally", 6, "None"));
 
   // Waitlist and Reservation Menus
 	$("#openReservationMenu").click(function() {
@@ -46,54 +66,29 @@ $(function() {
 
 
   $("#addWaitlist").click(function(e) {
-    var editButtons = $("<span class='pull-right'>" + 
-                        "<button class='btn btn-xs btn-warning edit-upcoming-party'><span class='glyphicon glyphicon-pencil'></span></button>" +
-                        "<button class='btn btn-xs btn-danger remove-upcoming-party'><span class='glyphicon glyphicon-remove'></span></button>" +
-                        "</span>");
     name = $("#inputPartyNameWaitlist").val();
     partySize = $("#inputPartySizeWaitlist").val();
     phone = $("inputPhoneNumberWaitlist").val();
 
-    newEntry = $("<a href='#' class='list-group-item clearfix upcoming-party'></a>");
-    newEntry.attr('party-name', name);
-    newEntry.attr('party-size', partySize);
-    newEntry.attr('party-phone', phone);
-    newEntry.attr('id', 'party' + uniquePartyId);
-    uniquePartyId++;
-    newEntry.html(name + " - " + partySize);
-    newEntry.append(editButtons);
-    $("#upcomingList").append(newEntry);
-
     //reset the input fields
     $('#waitlistForm').trigger('reset');
+
+    upcomingList.addEntry(new WaitlistEntry(name, partySize, phone));
 
     $("#waitlistMenu").collapse('hide');
     $("#addPartyMenu").show();
   });
 
-    $("#addReservation").click(function(e) {
-      var editButtons = $("<span class='pull-right'>" + 
-                        "<button class='btn btn-xs btn-warning edit-upcoming-party'><span class='glyphicon glyphicon-pencil'></span></button>" +
-                        "<button class='btn btn-xs btn-danger remove-upcoming-party'><span class='glyphicon glyphicon-remove'></span></button>" +
-                        "</span>");
+  $("#addReservation").click(function(e) {
     name = $("#inputPartyName").val();
     partySize = $("#inputPartySizeReservation").val();
     phone = $("inputPhoneNumber").val();
     time = $("inputTime").val();
     date = $('inputDate').val();
 
+    timeAndDate = new Date(date + " " + time);
 
-    newEntry = $("<a href='#' class='list-group-item clearfix upcoming-party'></a>");
-    newEntry.attr('party-name', name);
-    newEntry.attr('party-size', partySize);
-    newEntry.attr('party-phone', phone);
-    newEntry.attr('id', 'party' + uniquePartyId);
-    uniquePartyId++;
-    newEntry.attr('time', time);
-    newEntry.attr('date', date);
-    newEntry.html(name + " - " + partySize);
-    newEntry.append(editButtons);
-    $("#upcomingList").append(newEntry);
+    upcomingList.addEntry(new Reservation(name, partySize, phone, timeAndDate))
 
     //reset the input fields
     $('#reservationForm').trigger('reset');

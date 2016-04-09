@@ -36,10 +36,11 @@ class UpcomingList {
 }
 
 class UpcomingListEntry {
-	constructor(name, size, phoneNumber) {
+	constructor(name, size, phone) {
+		this.id = Math.round(Math.random() * 10000000);
 		this.name = name;
 		this.partySize = size;
-		this.phoneNumber = phoneNumber;
+		this.phone = phone;
 	}
 }
 
