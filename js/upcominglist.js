@@ -121,12 +121,27 @@ class Reservation extends UpcomingListEntry {
 	}
 
 	getCountdownString() {
-		var hours = "0" + this.time.getHours();
-		hours = hours.substring(0, 2);
+		console.log(this.time);
 
-		var minutes = "0" + this.time.getMinutes();
-		minutes = minutes.substring(0, 2);
-		return hours + ":" + minutes
+		var hours = "";
+		var AMPM = "AM"
+		if (this.time.getHours() > 11) {
+			hours += (this.time.getHours() - 12);
+			AMPM = "PM";
+		} else {
+			hours += (this.time.getHours());
+		}
+
+		if (hours.length < 2) {
+			hours = "0" + hours;
+		}
+
+		var minutes = "" + this.time.getMinutes();
+		if (minutes.length < 2){
+			minutes = "0" + minutes;
+		}
+
+		return hours + ":" + minutes + " " + AMPM
 	}
 }
 
