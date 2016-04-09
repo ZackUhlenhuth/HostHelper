@@ -103,12 +103,14 @@ $(function() {
     //reset the input fields
     $('#reservationForm').trigger('reset');
     $("#inputDateReservation").datepicker().datepicker("setDate", new Date()); //default date to current date
+    $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date());
 
     $("#reservationMenu").collapse('hide');
     $("#addPartyMenu").show();
   });
-  
   $("#inputDateReservation").datepicker().datepicker("setDate", new Date());
+  $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date());
+
 
   // Citation: http://stackoverflow.com/questions/3642035/jquerys-append-not-working-with-svg-element
   function makeSVG(tag, attrs) {
@@ -362,7 +364,7 @@ $(function() {
     partySize = $("#filterSize").val();
     if (partySize != "") {
       matchingList = matchingList.filter(function() {
-        return partySize <= parseInt($(this).attr('table-capacity'), 10);
+        return parseInt(partySize, 10) <= parseInt($(this).attr('table-capacity'), 10);
       });
     }
 
