@@ -1,61 +1,107 @@
 // Modified from "Cut & Paste Live Clock using forms" by George Chiang,
 // http://javascriptkit.com/script/cut2.shtml
-function show(){
-  var Digital=new Date();
-  var hours=Digital.getHours();
-  var minutes=Digital.getMinutes();
-  var dn="PM";
+function refreshClock(){
+  var hours= new Date().getHours();
+  var minutes= new Date().getMinutes();
+  var dn="AM";
   
-  if (hours>12){
+  if (hours>12) {
     dn="PM";
     hours=hours-12;
   }
-  if (hours==0)
-    hours=12;
-  if (minutes<=9)
-    minutes="0"+minutes;
+  if (hours == 0) hours=12;
+  if (minutes<=9) minutes="0"+minutes;
     
-  $("#clock").html(hours+":"+minutes+" "+dn);
-  setTimeout("show()",1000);
+  $("#clock").html(hours + ":" + minutes + " " + dn);
 }
-show();
+setInterval("refreshClock()",1000);
 
 $(function() {
   var upcomingList = new UpcomingList();
-  var $selectedParty;
-  var $selectedTable;
+  var seatMap = new SeatMap();
 
-  function makeUpcomingListString(entry) {
-    return entry.name + " (" + entry.partySize + ")  - <span class='countdown-string'>" + entry.getCountdownString() + "</span>";
-  }
+  var selectedParty = null;
+  var selectedTable = null;
+
   upcomingList.registerListener("add", function(event){
-    var editButtons = $("<span class='pull-right'>" + 
-                  "<button class='btn btn-xs btn-warning edit-upcoming-party'><span class='glyphicon glyphicon-pencil'></span></button>" +
-                  "<button class='btn btn-xs btn-danger remove-upcoming-party'><span class='glyphicon glyphicon-remove'></span></button>" +
-                  "</span>");
-
-    newEntry = $("<a href='#' class='list-group-item clearfix upcoming-party'></a>");
-    newEntry.attr('party-name', event.entry.name);
-    newEntry.attr('party-size', event.entry.partySize);
-    newEntry.attr('party-phone', event.entry.phone);
-    newEntry.attr('id', 'party' + event.entry.id);
-    newEntry.html(makeUpcomingListString(event.entry));
-    newEntry.append(editButtons);
-    $("#upcomingList").append(newEntry);
+    $("#upcomingList").append(drawUpcomingListEntry(event.entry));
   });
 
   upcomingList.registerListener("update", function(event) {
-    console.log(event);
     $("#party" + event.entry.id + " .countdown-string").html(event.entry.getCountdownString())
   })
 
-  // Initialize our upcoming list entries.
+  upcomingList.registerListener("remove", function(event){
+    //if party was selected, reset tooltip
+    if (selectedParty && selectedParty.id == event.entry.id) {
+      resetTooltip();
+      selectedParty = null;
+    }
+
+    $("#party" + event.entry.id).remove()
+  })
+
+  seatMap.registerListener("addTable", function(event) {
+  	addedTable = event.item;
+  	tableView = drawTableView(addedTable);
+
+  	$("#tablesArea").append(tableView);
+
+  	tableLabel = drawTableIDLabel(tableView, addedTable);
+  	capacityLabel = drawTableCapacityLabel(tableView, addedTable);
+    
+    tableView.after(capacityLabel);
+    tableView.after(tableLabel);
+  });
+
+  seatMap.registerListener("updateTable", function(event) {
+  	updatedTable = event.item;
+  	tableView = $("#table" + updatedTable.id);
+
+  	if (updatedTable.assignedParty) {
+  		// A party was assigned to a table.
+  		tableView.after(drawPartyLabel(tableView, updatedTable));
+  		$("#table" + updatedTable.id).css("fill", "#cc9933");
+  		capacityText = capacityIcon + " " + updatedTable.assignedParty.partySize + " / " + updatedTable.capacity;
+  		$("#table" + updatedTable.id + "Capacity").html(capacityText);
+  	} else {
+  		// A party was removed from a table.
+  		tableView.css("fill", "#cccccc");
+  		$("#table" + updatedTable.id + "PartyLabel").remove();
+  		$("#table" + updatedTable.id + "Capacity").html(capacityIcon + " 0  / " + updatedTable.capacity);	
+  	}
+  })
+
+  seatMap.registerListener("addWaiterZone", function(event) {
+    waiterZoneView = drawWaiterZone(event.item);
+  	$("#waiterZones").append(waiterZoneView);
+  	waiterZoneView.after(drawWaiterZoneLabel(event.item))
+  });
+
+  // Initialize our interface with filler data.
   upcomingList.addEntry(new WaitlistEntry("Smith", 4, "None", 10));
   upcomingList.addEntry(new WaitlistEntry("Johnson", 6, "None", 40));
   upcomingList.addEntry(new Reservation("Sally", 6, "None", new Date(Date.now() + 500000000)));
 
+  mikeZone = new WaiterZone("Mike", 380, 348, 30, 40, "#cc6600");
+  sarahZone = new WaiterZone("Sarah", 380, 116, 382, 40, "#0052cc");
+
+  seatMap.addTable(new Table(1, 4, 70, 80, "rect", mikeZone, true));
+  seatMap.addTable(new Table(2, 6, 70, 190, "rect", mikeZone, true));
+  seatMap.addTable(new Table(3, 2, 70, 300, "rect", mikeZone, true));
+
+  seatMap.addTable(new Table(4, 8, 320, 120, "ellipse", mikeZone, true));
+  seatMap.addTable(new Table(5, 6, 320, 230, "ellipse", mikeZone, true));
+  seatMap.addTable(new Table(6, 4, 320, 340, "ellipse", mikeZone, true));
+  seatMap.addTable(new Table(7, 8, 440, 120, "ellipse", sarahZone, true));
+  seatMap.addTable(new Table(8, 10, 440, 230, "ellipse", sarahZone, true));
+  seatMap.addTable(new Table(9, 10, 440, 340, "ellipse", sarahZone, true));
+
+  seatMap.addWaiterZone(mikeZone);
+  seatMap.addWaiterZone(sarahZone)
+
   // Waitlist and Reservation Menus
-	$("#openReservationMenu").click(function() {
+ 	$("#openReservationMenu").click(function() {
 		$("#addPartyMenu").hide();
     $("#reservationMenu").collapse('show');
     $("#inputPartyName").focus();
@@ -88,13 +134,11 @@ $(function() {
 
   //add a Reservation to Upcoming
   $("#addReservation").click(function(e) {
-    name = $("#inputPartyName").val();
-    partySize = $("#inputPartySizeReservation").val();
-    phone = $("inputPhoneNumber").val();
-    time = $("#inputTimeReservation").val();
-    date = $('#inputDateReservation').val();
-    timeAndDate = new Date(date + " " + time);
-    upcomingList.addEntry(new Reservation(name, partySize, phone, timeAndDate))
+    timeAndDate = new Date($('#inputDateReservation').val() + " " + $("#inputTimeReservation").val());
+    upcomingList.addEntry(new Reservation($("#inputPartyName").val(),
+    		$("#inputPartySizeReservation").val(),
+    		$("inputPhoneNumber").val(),
+    		timeAndDate))
     $('#reservationForm').trigger('reset');
     $("#inputDateReservation").datepicker().datepicker("setDate", new Date()); ///Default date/time
     $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date());
@@ -107,72 +151,6 @@ $(function() {
   $("#inputDateReservation").datepicker().datepicker("setDate", new Date());
   $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date());
 
-
-  // Citation: http://stackoverflow.com/questions/3642035/jquerys-append-not-working-with-svg-element
-  function makeSVG(tag, attrs) {
-    var e = document.createElementNS('http://www.w3.org/2000/svg', tag);
-    for (var k in attrs)
-      e.setAttribute(k, attrs[k]);
-    return e;
-  }
-
-  // programatically add waiter labels to waiter zones
-  $(".waiterZone").after(function() {
-    var zoneId = $(this).attr('id');
-    var x = parseInt($(this).attr('x'), 10);
-    var y = parseInt($(this).attr('y'), 10);
-    // coordinates for label
-    var xCoord = x + 10; //hardcoded
-    var yCoord = y - 4;
-    var labelColor = $(this).css('stroke');
-    var waiterName = $(this).attr('waiter-name');
-    var waiterLabel = makeSVG('text', {id: zoneId + 'Waiter', fill: labelColor, 'font-size': '14', 'font-family': 'Verdana', x: xCoord, y: yCoord});
-    waiterLabel.innerHTML = waiterName;
-    console.log(waiterName);
-    return waiterLabel;
-  });
-
-  // programatically add id labels to tables
-  $(".restaurantTable").after(function() {
-    var tableId = $(this).attr('id');
-    var width = parseInt($(this).attr('width'), 10);
-    var x = parseInt($(this).attr('x'), 10) + (width / 2.0);
-    var y = parseInt($(this).attr('y'), 10);
-    // if it is a circle (cx, cy, rx)
-    if (!x) {
-      x = parseInt($(this).attr('cx'), 10);
-      y= parseInt($(this).attr('cy'), 10) - parseInt($(this).attr('ry'), 10);
-      width = parseInt($(this).attr('rx'), 10);
-    }
-    var xCoord = x - 10;
-    var yCoord = y + 20;
-    var hashtagIcon = "&#xf292";
-    var tableLabel = makeSVG('text', {id: tableId + 'Label', class: 'infoLabel', x: xCoord, y: yCoord});
-    tableLabel.innerHTML = hashtagIcon + " " + parseInt($(this).attr('id').replace("table", ""), 10);
-    return tableLabel;
-  });
-
-  var capacityIcon = "&#xf0c0";
-  // programatically add capacity labels to tables
-  $(".restaurantTable").after(function() {
-    var tableId = $(this).attr('id');
-    var width = parseInt($(this).attr('width'), 10);
-    var x = parseInt($(this).attr('x'), 10) + (width / 2.0);
-    var y = parseInt($(this).attr('y'), 10) + parseInt($(this).attr('height'), 10);
-    // if it is a circle (cx, cy, rx)
-    if (!x) {
-      x = parseInt($(this).attr('cx'), 10);
-      y= parseInt($(this).attr('cy'), 10) + parseInt($(this).attr('ry'), 10);
-      width = parseInt($(this).attr('rx'), 10);
-    }
-    var xCoord = x - 20;
-    var yCoord = y - 10;
-    var capacity = $(this).attr('table-capacity');
-    var capacityLabel = makeSVG('text', {id: tableId + 'Capacity', class: 'infoLabel', 'table-capacity': capacity, x: xCoord, y: yCoord});
-    capacityLabel.innerHTML = capacityIcon + " 0 / " + capacity;
-    return capacityLabel;
-  });
-
   //Add 'click' affordance upon hovering a table
   $(".restaurantTable").hover(
     function() {
@@ -183,23 +161,16 @@ $(function() {
   );
 
   $(".restaurantTable").click(function(e) {
-    $selectedTable = $(this);
-    $("#seatPopUp").hide();
-    $("#unseatPopUp").hide();
-    if ($selectedTable.attr('occupied') == 'false') {
-      // if there is a selected party, only show pop-up if it can fit
-      var validSelection = true;
-      if ($selectedParty && parseInt($selectedParty.attr("party-size"), 10) > parseInt($selectedTable.attr('table-capacity'), 10)) { 
-        validSelection = false; 
-      };
-      if (validSelection) {
-        showSeatPopup({x: e.pageX, y: e.pageY});
-      }
-    }
-    else {
-      var halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
-      // add 15 to top to account for tooltip
-      $("#unseatPopUp").slideDown("fast", "linear").css("top", e.pageY + 15).css("left", e.pageX - halfWidth);
+    selectedTable = seatMap.getTableWithID($(this).attr("id"));
+    
+    hidePopups();
+    if (selectedTable.isOccupied()) { // If the table is occupied, show the unseat popup, if it's open, show the seat popup.
+    	halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
+    	// add 15 to top to account for tooltip
+    	$("#unseatPopUp").slideDown("fast", "linear").css("top", e.pageY + 15).css("left", e.pageX - halfWidth);
+    } else {
+    	// Show seat popup unless the selected party won't fit at that table.
+    	if (!(selectedParty && selectedParty.partySize > selectedTable.capacity)) showSeatPopup({x: e.pageX, y: e.pageY});
     }
   });
 
@@ -222,7 +193,7 @@ $(function() {
       hidePopups();
       resetTooltip();
       $('#upcomingList').find("a").removeClass('active');
-      $selectedParty = null;
+      selectedParty = null;
   }
 
   function resetPartySelector() {
@@ -240,28 +211,14 @@ $(function() {
 
   function showSeatPopup(tipPoint) {
     resetPartySelector();
-
-    $.each(upcomingList.getUpcomingListEntries(), function(index, entry){
-      var partyOption = $('<option></option>');
-      partyOption.attr("id", "party" + entry.id);
-      partyOption.attr("value", "party" + entry.id);
-      partyOption.html(entry.name);
-
-      if (parseInt($($selectedTable[0]).attr("table-capacity"), 10) >= parseInt(entry.partySize, 10)) {
-        $("#seatPartySelector").append(partyOption); 
-      }
-    });
-
-    if ($selectedParty) {
-      $("#seatPartySelector").val($selectedParty[0].id);
-    }
+    $("#seatPartySelector").append(upcomingList.getUpcomingListEntries().filter(selectedTable.canPartyFit, selectedTable).map(drawPartyOption))
+    if (selectedParty) $("#seatPartySelector").val("party" + selectedParty.id);
 
     var halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
     // add 15 to top to account for tooltip
     $("#seatPopUp").slideDown("fast", "linear").css("top", tipPoint.y + 15).css("left", tipPoint.x - halfWidth);
     //update waiter name
-    var waiterName = $selectedTable.attr('waiter');
-    $("#tableWaiter").html(waiterName);
+    $("#tableWaiter").html(selectedTable.waiterZone.waiterName);
 
     selectSeatParty($("#seatPartySelector").val());
       
@@ -269,16 +226,31 @@ $(function() {
   }
 
   function selectSeatParty(partyID) {
-    console.log("partyID " + partyID);
     if (partyID == "walk-in") {
       $("#inputWalkInPartySize").show();
       $("#seatPartySize").html(null);
     } else {
       $("#inputWalkInPartySize").hide();
-
-      entry = upcomingList.getEntryWithID(partyID);
-      $("#seatPartySize").html(entry.partySize);
+      console.log(partyID);
+      $("#seatPartySize").html(upcomingList.getEntryWithID(partyID).partySize);
     }
+  }
+
+  function applyFilters() {
+  	seatMap.getOpenTables().map(getViewForTable).map(function(element) {element.css("fill", "#cccccc")});
+
+    partySizeText = $("#filterSize").val();
+    serverText = $("#filterServer").val();
+
+    partySize = null;
+    server = null;
+
+    if (partySizeText != "") partySize = parseInt(partySizeText, 10); 
+    if (serverText != "none") server = serverText; 
+
+    matchingList = seatMap.getOpenTablesMatchingFilters(partySize, server);
+
+    matchingList.map(getViewForTable).map(function(element) {element.css("fill", "#ccff99")});
   }
 
   $("#seatPartySelector").change(function(event) {
@@ -291,39 +263,24 @@ $(function() {
   $(".close").click(hidePopups);
 
   $("#seatTable").click(function() {
-    $selectedTable.css("fill", "#cc9933");
-    $selectedTable.attr("occupied", "true");
-    //create party name label
-    var tableId = $selectedTable.attr('id');
-    var xCoord = parseInt($("#" + tableId + "Label").attr('x'), 10) - 10;
-    var yCoord = parseInt($("#" + tableId + "Label").attr('y'), 10) + 20;
-    var partyLabel = makeSVG('text', {id: tableId + 'PartyLabel', class: "partyLabel", x: xCoord, y: yCoord});
-    selectedEntry = upcomingList.getEntryWithID($("#seatPartySelector").val());
+  	partyToSeatID = $("#seatPartySelector").val();
+  	if (partyToSeatID == "walk-in") {
+  		partySize = $("#inputWalkInPartySize").val();
+  		partyToSeat = new UpcomingListEntry("Walk-In", partySize);
+  		console.log(partyToSeat)
+  		if (!selectedTable.canPartyFit(partyToSeat)) {
+  			alert("That group has too many members to sit at that table.");
+  			return;
+  		}
+  	} else {
+  		partyToSeat = upcomingList.getEntryWithID(partyToSeatID)
+  		upcomingList.removeEntryWithID(partyToSeat.id);
+  	}
 
-    if (selectedEntry) {
-      //update capacity label
-      $("#" + tableId + "Capacity").html(function() {
-        return capacityIcon + " " + selectedEntry.partySize + " / " + $(this).attr('table-capacity');
-      });
-      partyLabel.innerHTML = selectedEntry.name;
-      $selectedTable.after(partyLabel);
+  	selectedTable.assignedParty = partyToSeat;
 
-      upcomingList.removeEntryWithID(entry.id);
-    }
-    else { //Walk-In
-      var partySize = $("#inputWalkInPartySize").val();
-      //if partySize is specified
-      if (partySize) {
-        //if party can fit at table
-        if (parseInt(partySize, 10) <= parseInt($("#" + tableId).attr('table-capacity'), 10)) {
-          $("#" + tableId + "Capacity").html(function() {
-            return capacityIcon + " " + $("#inputWalkInPartySize").val() + " / " + $(this).attr('table-capacity');
-          });
-        }
-      }
-      partyLabel.innerHTML = "Walk-in";
-      $selectedTable.after(partyLabel);
-    }
+  	seatMap.updateTable(selectedTable);
+
     $("#filterSize").val("");
     $("#filterSize").change();
     resetTooltip();
@@ -331,96 +288,44 @@ $(function() {
   });
 
   $("#unseatTable").click(function() {
-    $selectedTable.css("fill", "#cccccc");
-    $selectedTable.attr("occupied", "false");
-    var tableId = $selectedTable.attr('id');
-    $("#" + tableId + "PartyLabel").remove();
-    $("#" + tableId + "Capacity").html(function() {
-      return capacityIcon + " 0 " + " / " + $(this).attr('table-capacity');
-    });
+  	selectedTable.assignedParty = null;
+  	seatMap.updateTable(selectedTable);
+  	selectedTable = null;
     $("#filterSize").change();
     $("#unseatPopUp").hide();
   });
 
   $("#filterSize").on('change input', function() {
-    var partySize = $(this).val();
-    $(".restaurantTable[occupied=false]").css("fill", "#cccccc");
     //if there is a partySize in the filter, highlight valid tables
     applyFilters();
-
-    if (partySize !== "") {
-      $("#inputWalkInPartySize").val(partySize);
-    } else {
-      $("#inputWalkInPartySize").val(null);
-    }
+    $("#inputWalkInPartySize").val($(this).val());
   });
 
-  $("#filterServer").on('change', function() {
-    $(".restaurantTable[occupied=false]").css("fill", "#cccccc");
-
-    applyFilters();
-  });
-
-  function applyFilters() {
-    matchingList = $(".restaurantTable[occupied=false]");
-
-    partySize = $("#filterSize").val();
-    if (partySize != "") {
-      matchingList = matchingList.filter(function() {
-        return parseInt(partySize, 10) <= parseInt($(this).attr('table-capacity'), 10);
-      });
-    }
-
-    server = $("#filterServer").val();
-
-    if (server != "none"){
-      matchingList = matchingList.filter(function() {
-        return server == $(this).attr("waiter");
-      });
-    }
-
-    if (server == "none" && partySize == "") {
-      matchingList = $([]);
-    }
-
-    matchingList.css("fill", "#ccff99");
-  }
+  $("#filterServer").on('change', applyFilters);
 
   //upon clicking items in Upcoming List
   $(document).on('click', ".upcoming-party", function(e) {
     $(this).parent().find("a").removeClass('active');
+    thisParty = upcomingList.getEntryWithID($(this).attr('id'));
     //if already selected, unselect
-    if ($selectedParty && $selectedParty.attr('id') === $(this).attr('id')) {
-      $selectedParty = null;
+    if (selectedParty && selectedParty.id == thisParty.id) {
+      selectedParty = null;
       resetTooltip();
     }
     //otherwise, select
     else {
       $(this).addClass('active');
-      var partySize = $(this).attr('party-size');
-      $("#filterSize").val(partySize);
+      $("#filterSize").val(thisParty.partySize);
       $("#filterSize").change();
-      $selectedParty = $(this);
+      selectedParty = thisParty;
     }
   });
-
-  upcomingList.registerListener("remove", function(event){
-    //if party was selected, reset tooltip
-    if ($selectedParty && $selectedParty.attr('id') === "party" + event.entry.id) {
-      resetTooltip();
-      $selectedParty = null;
-    }
-
-    $("#party" + event.entry.id).remove()
-  })
 
   $(document).on('click', ".remove-upcoming-party", function(e) {
     //stop propagation so parents click method not called
     e.stopPropagation();
 
-    //remove the upcoming party (the grandparent)
-    $correspondingParty = $(this).parent().parent();
-
+    $correspondingParty = $(this).parent().parent(); // The party element is the grandparent.
     partyID = $correspondingParty[0].id;
     upcomingList.removeEntryWithID(partyID);
   });
@@ -455,4 +360,3 @@ $(function() {
   $(window).resize(setMinScale);
   setMinScale()
 });
-
