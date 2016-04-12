@@ -53,7 +53,7 @@ function drawTableCapacityLabel(tableView, table) {
 
 function drawPartyLabel(tableView, table) {
     labelCoords = getLabelCoords(tableView, table);
-    var partyLabel = makeSVG('text', {id: table.id + 'PartyLabel', class: "partyLabel", x: labelCoords['x'] - 20, y: labelCoords['y'] + 40});
+    var partyLabel = makeSVG('text', {id: 'table' + table.id + 'PartyLabel', class: "partyLabel", x: labelCoords['x'] - 20, y: labelCoords['y'] + 40});
     partyLabel.innerHTML = table.assignedParty.name;
     return partyLabel;
 }
