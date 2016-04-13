@@ -85,7 +85,9 @@ $(function() {
   upcomingList.addEntry(new Reservation("Sally", 6, null, new Date(Date.now() + 500000000)));
 
   mikeZone = new WaiterZone("Mike", 380, 348, 30, 40, "#cc6600");
-  sarahZone = new WaiterZone("Sarah", 380, 116, 382, 40, "#0052cc");
+  sarahZone = new WaiterZone("Sarah", 380, 116, 400, 40, "#0052cc");
+  jackZone = new WaiterZone("Jack", 380, 400, 548, 40, "green");
+  donZone = new WaiterZone("Don", 125, 850, 30, 650, "red");
 
   seatMap.addTable(new Table(1, 4, 70, 80, "rect", mikeZone, true));
   seatMap.addTable(new Table(2, 6, 70, 190, "rect", mikeZone, true));
@@ -94,12 +96,31 @@ $(function() {
   seatMap.addTable(new Table(4, 8, 320, 120, "ellipse", mikeZone, true));
   seatMap.addTable(new Table(5, 6, 320, 230, "ellipse", mikeZone, true));
   seatMap.addTable(new Table(6, 4, 320, 340, "ellipse", mikeZone, true));
-  seatMap.addTable(new Table(7, 8, 440, 120, "ellipse", sarahZone, true));
-  seatMap.addTable(new Table(8, 10, 440, 230, "ellipse", sarahZone, true));
-  seatMap.addTable(new Table(9, 10, 440, 340, "ellipse", sarahZone, true));
+
+  seatMap.addTable(new Table(7, 8, 460, 120, "ellipse", sarahZone, true));
+  seatMap.addTable(new Table(8, 10, 460, 230, "ellipse", sarahZone, true));
+  seatMap.addTable(new Table(9, 10, 460, 340, "ellipse", sarahZone, true));
+
+  seatMap.addTable(new Table(10, 6, 580, 80, "rect", jackZone, true));
+  seatMap.addTable(new Table(11, 6, 580, 200, "rect", jackZone, true));
+  seatMap.addTable(new Table(12, 6, 580, 320, "rect", jackZone, true));
+  seatMap.addTable(new Table(16, 4, 760, 80, "rect", jackZone, true));
+  seatMap.addTable(new Table(17, 4, 760, 200, "rect", jackZone, true));
+  seatMap.addTable(new Table(18, 4, 760, 320, "rect", jackZone, true));
+
+  seatMap.addTable(new Table(19, 8, 100, 710, "ellipse", donZone, true));
+  seatMap.addTable(new Table(20, 10, 220, 710, "ellipse", donZone, true));
+  seatMap.addTable(new Table(21, 10, 340, 710, "ellipse", donZone, true));
+  seatMap.addTable(new Table(22, 8, 460, 710, "ellipse", donZone, true));
+  seatMap.addTable(new Table(23, 10, 580, 710, "ellipse", donZone, true));
+  seatMap.addTable(new Table(24, 10, 700, 710, "ellipse", donZone, true));
+  seatMap.addTable(new Table(25, 8, 820, 710, "ellipse", donZone, true));
+
 
   seatMap.addWaiterZone(mikeZone);
-  seatMap.addWaiterZone(sarahZone)
+  seatMap.addWaiterZone(sarahZone);
+  seatMap.addWaiterZone(jackZone);
+  seatMap.addWaiterZone(donZone);
 
   // Waitlist and Reservation Menus
  	$("#openReservationMenu").click(function() {
