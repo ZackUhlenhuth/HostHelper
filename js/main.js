@@ -28,7 +28,8 @@ $(function() {
   });
 
   upcomingList.registerListener("update", function(event) {
-    $("#party" + event.entry.id + " .countdown-string").html(event.entry.getCountdownString())
+  	console.log("update", event);
+    $("#party" + event.entry.id).replaceWith(drawUpcomingListEntry(event.entry));
   })
 
   upcomingList.registerListener("remove", function(event){
@@ -79,9 +80,9 @@ $(function() {
   });
 
   // Initialize our interface with filler data.
-  upcomingList.addEntry(new WaitlistEntry("Smith", 4, "None", 10));
-  upcomingList.addEntry(new WaitlistEntry("Johnson", 6, "None", 40));
-  upcomingList.addEntry(new Reservation("Sally", 6, "None", new Date(Date.now() + 500000000)));
+  upcomingList.addEntry(new WaitlistEntry("Smith", 4, null, 10));
+  upcomingList.addEntry(new WaitlistEntry("Johnson", 6, null, 40));
+  upcomingList.addEntry(new Reservation("Sally", 6, null, new Date(Date.now() + 500000000)));
 
   mikeZone = new WaiterZone("Mike", 380, 348, 30, 40, "#cc6600");
   sarahZone = new WaiterZone("Sarah", 380, 116, 382, 40, "#0052cc");
@@ -120,6 +121,11 @@ $(function() {
     $("#addPartyMenu").show();
   });
 
+  $("#cancelWaitlistEdit").click(function() {
+    $("#waitlistEditMenu").collapse('hide');
+    $("#addPartyMenu").show();
+  });
+
 
   //add a Walk-in to Upcoming
   $("#addWaitlist").click(function(e) {
@@ -145,6 +151,20 @@ $(function() {
 
     $("#reservationMenu").collapse('hide');
     $("#addPartyMenu").show();
+  });
+
+  $("#editWaitlist").click(function(e) {
+  	editedEventID = parseInt($("#inputPartyIDWaitlistEdit").val(), 10);
+  	editedEvent = upcomingList.getEntryWithID(editedEventID);
+
+  	editedEvent.name = $("#inputPartyNameWaitlistEdit").val();
+  	editedEvent.partySize = parseInt($("#inputPartySizeWaitlistEdit").val(), 10);
+  	editedEvent.phone = $("#inputPhoneNumberWaitlistEdit").val();
+
+  	upcomingList.updateEntry(editedEvent);
+
+  	$("#waitlistEditMenu").collapse("hide");
+  	$("#addPartyMenu").show();
   });
 
   //Default date/time upon load
@@ -323,16 +343,29 @@ $(function() {
 
   $(document).on('click', ".remove-upcoming-party", function(e) {
     //stop propagation so parents click method not called
+
     e.stopPropagation();
 
-    $correspondingParty = $(this).parent().parent(); // The party element is the grandparent.
-    partyID = $correspondingParty[0].id;
-    upcomingList.removeEntryWithID(partyID);
+    correspondingPartyView = $(this).parents(".upcoming-party").first();
+    upcomingList.removeEntryWithID(correspondingPartyView.id);
   });
 
   $(document).on('click', ".edit-upcoming-party", function(e) {
     //stop propagation so parents click method not called
     e.stopPropagation();
+
+    correspondingPartyView = $(this).parents(".upcoming-party")[0];
+    correspondingParty = upcomingList.getEntryWithID(correspondingPartyView.id);
+    
+    //Show the edit waitlist menu.
+    $("#addPartyMenu").hide();
+    $("#waitlistEditMenu").collapse('show');
+    $("#inputPartyNameWaitlistEdit").focus()
+
+    $("#inputPartyNameWaitlistEdit").val(correspondingParty.name);
+    $("#inputPartyIDWaitlistEdit").val(correspondingParty.id);
+    $("#inputPartySizeWaitlistEdit").val(correspondingParty.partySize);
+    $("#inputPhoneNumberWaitlistEdit").val(correspondingParty.phone);
   });
 
   /* pan-zoom stuff taken from https://github.com/timmywil/jquery.panzoom/blob/master/demo/index.html */

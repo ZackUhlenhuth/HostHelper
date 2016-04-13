@@ -139,7 +139,7 @@
                   </div>
                 </form>
               </div>
-              <!-- Waitlist Menu -->
+              <!-- Add to Waitlist Menu -->
               <div id="waitlistMenu" class="collapse">
                 <h3>Add To Waitlist</h3>
                 <form id='waitlistForm' class="form-horizontal">
@@ -163,6 +163,36 @@
                       <span class="pull-right">
                         <button id="addWaitlist" type="button" class="btn btn-primary">Add</button>
                         <button id="cancelWaitlist" type="button" class="btn btn-danger">Cancel</button>
+                      </span>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <!-- Edit Waitlist Menu -->
+              <div id="waitlistEditMenu" class="collapse">
+                <h3>Edit Waitlist</h3>
+                <form id='waitlistForm' class="form-horizontal">
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <input type="text" class="form-control" id="inputPartyNameWaitlistEdit" placeholder="Party Name">
+                      <input type="hidden" id="inputPartyIDWaitlistEdit">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <input type="number" class="form-control" id="inputPartySizeWaitlistEdit" placeholder="Party Size">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <input type="tel" class="form-control" id="inputPhoneNumberWaitlistEdit" placeholder="Phone Number">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <span class="pull-right">
+                        <button id="editWaitlist" type="button" class="btn btn-primary">Update</button>
+                        <button id="cancelWaitlistEdit" type="button" class="btn btn-danger">Cancel</button>
                       </span>
                     </div>
                   </div>

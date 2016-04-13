@@ -36,6 +36,15 @@ class UpcomingList {
 		}
 	}
 
+	updateEntry(entry) {
+		for (var i = 0; i < this.list.length; i++) {
+			if (this.list[i].id == entry.id) {
+				this.list[i] = entry;
+				this.notifyListeners("update", entry);
+			}
+		}
+	}
+
 	getUpcomingListEntries() {
 		return this.list.slice(); // Gaurd against rep. exposure here.
 	}
