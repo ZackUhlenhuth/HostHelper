@@ -194,7 +194,7 @@ $(function() {
 
   //Default date/time upon load
   $("#inputDateReservation").datepicker().datepicker("setDate", new Date());
-  $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date());
+  $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date(new Date().getTime() + 15*60000));
 
   //Add 'click' affordance upon hovering a table
   $(".restaurantTable").hover(
