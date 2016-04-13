@@ -141,15 +141,6 @@ class Reservation extends UpcomingListEntry {
 			hours += (this.time.getHours());
 		}
 
-		if (hours.length < 2) {
-			hours = "0" + hours;
-		}
-
-		var minutes = "" + this.time.getMinutes();
-		if (minutes.length < 2){
-			minutes = "0" + minutes;
-		}
-
 		return hours + ":" + minutes + " " + AMPM
 	}
 }
