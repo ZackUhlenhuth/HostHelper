@@ -99,7 +99,14 @@ h3 {
 #openReservationMenu {
   margin-bottom:10px;
 }
-
+.remove-upcoming-party, .edit-upcoming-party {
+  float:right;
+  margin-left:5px;
+}
+.countdown-string {
+  float:right;
+  margin-right:5px;
+}
 
 /* svg elements (floorplan) */
 .restaurantTable {

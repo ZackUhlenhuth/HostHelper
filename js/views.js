@@ -7,7 +7,7 @@ function makeSVG(tag, attrs) {
 }
 
 function makeUpcomingListString(entry) {
-  return entry.name + " (" + entry.partySize + ")  - <span class='countdown-string'>" + entry.getCountdownString() + "</span>";
+  return entry.name + " (" + entry.partySize + ")<span class='countdown-string'>" + entry.getCountdownString() + "</span>";
 }
 
 function getViewForTable(table) {
@@ -120,7 +120,7 @@ function drawUpcomingListEntry(entry) {
     newEntry.attr('party-phone', entry.phone);
     newEntry.attr('id', 'party' + entry.id);
     newEntry.html(makeUpcomingListString(entry));
-    newEntry.append(editButtons);
+    newEntry.prepend(editButtons);
 
     return newEntry;
 }
