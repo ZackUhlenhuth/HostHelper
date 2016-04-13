@@ -105,13 +105,14 @@ class SeatMap {
 
 class Table {
 	// Valid styles: ellipse, rect
-	constructor(id, capacity, x, y, style, waiterZone, addSelfToWaiterZone) {
+	constructor(id, capacity, x, y, style, orientation, waiterZone, addSelfToWaiterZone) {
 		this.id = id;
 
 		this.capacity = capacity;
 		this.x = x;
 		this.y = y;
 		this.style = style;
+		this.orientation = orientation;
 		this.waiterZone = waiterZone;
 
 		this.assignedParty = null;

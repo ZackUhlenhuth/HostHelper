@@ -65,15 +65,21 @@ function drawTableView(table) {
 	if (table.style == "rect") {
 		svgAttributes["x"] = table.x;
 		svgAttributes["y"] = table.y;
-		svgAttributes["width"] = 150;
-		svgAttributes["height"] = 70;
+		if (table.orientation == "horizontal") {
+		  svgAttributes["width"] = table.capacity * 25;
+		  svgAttributes["height"] = 70;
+		}
+		else {
+		  svgAttributes["width"] = 70;
+		  svgAttributes["height"] = table.capacity * 25;
+	  }
 		svgAttributes["rx"] = 10;
 		svgAttributes["ry"] = 10;
 	} else if (table.style == "ellipse") {
 		svgAttributes["cx"] = table.x;
 		svgAttributes["cy"] = table.y;
-		svgAttributes["rx"] = 40;
-		svgAttributes["ry"] = 40;
+		svgAttributes["rx"] = Math.sqrt(table.capacity/1.5) * 30;
+		svgAttributes["ry"] = Math.sqrt(table.capacity/1.5) * 30;
 	}
 
 	tableView = $(makeSVG(table.style, svgAttributes));
