@@ -103,7 +103,7 @@ function drawWaiterZoneLabel(waiterZone) {
   var yCoord = waiterZone.y - 4;
   var labelColor = waiterZone.color;
   var waiterLabel = makeSVG('text', {id: waiterZone.id + 'Waiter', fill: labelColor, 'font-size': '14', 'font-family': 'Verdana', x: xCoord, y: yCoord});
-  waiterLabel.innerHTML = waiterZone.waiterName;
+  waiterLabel.innerHTML = waiterZone.waiterName + " " + waiterZone.getCurrentTablesOccupied() + "/" + waiterZone.getCurrentNumTables();
 
   return waiterLabel;
 }

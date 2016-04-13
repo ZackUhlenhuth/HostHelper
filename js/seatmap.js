@@ -146,14 +146,14 @@ class WaiterZone {
 		this.tables.push(table);
 	}
 
-	getCurrentNumTable() {
+	getCurrentNumTables() {
 		return this.tables.length;
 	}
 
 	getCurrentTablesOccupied() {
 		return this.tables.reduce(function(previousValue, currentElement) {
-			return currentElement.isOccupied ? previousValue + 1 : previousValue;
-		});
+			return currentElement.isOccupied() ? previousValue + 1 : previousValue;
+		}, 0);
 	}
 }
 

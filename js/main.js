@@ -79,6 +79,11 @@ $(function() {
   	waiterZoneView.after(drawWaiterZoneLabel(event.item))
   });
 
+  seatMap.registerListener("updateWaiterZone", function(event) {
+    $("#waiterZone" + event.item.id).replaceWith(drawWaiterZone(event.item));
+    $("#" + event.item.id + "Waiter").replaceWith(drawWaiterZoneLabel(event.item));
+  })
+
   // Initialize our interface with filler data.
   upcomingList.addEntry(new WaitlistEntry("Smith", 4, null, 10));
   upcomingList.addEntry(new WaitlistEntry("Johnson", 6, null, 40));
