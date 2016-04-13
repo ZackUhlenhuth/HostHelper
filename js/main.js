@@ -91,7 +91,7 @@ $(function() {
 
   mikeZone = new WaiterZone("Mike", 380, 348, 30, 40, "#cc6600");
   sarahZone = new WaiterZone("Sarah", 380, 116, 400, 40, "#0052cc");
-  jackZone = new WaiterZone("Jack", 380, 400, 548, 40, "green");
+  adamZone = new WaiterZone("Adam", 380, 400, 548, 40, "green");
   donZone = new WaiterZone("Don", 125, 850, 30, 650, "red");
 
   seatMap.addTable(new Table(1, 4, 70, 80, "rect", mikeZone, true));
@@ -106,12 +106,12 @@ $(function() {
   seatMap.addTable(new Table(8, 10, 460, 230, "ellipse", sarahZone, true));
   seatMap.addTable(new Table(9, 10, 460, 340, "ellipse", sarahZone, true));
 
-  seatMap.addTable(new Table(10, 6, 580, 80, "rect", jackZone, true));
-  seatMap.addTable(new Table(11, 6, 580, 200, "rect", jackZone, true));
-  seatMap.addTable(new Table(12, 6, 580, 320, "rect", jackZone, true));
-  seatMap.addTable(new Table(16, 4, 760, 80, "rect", jackZone, true));
-  seatMap.addTable(new Table(17, 4, 760, 200, "rect", jackZone, true));
-  seatMap.addTable(new Table(18, 4, 760, 320, "rect", jackZone, true));
+  seatMap.addTable(new Table(10, 6, 580, 80, "rect", adamZone, true));
+  seatMap.addTable(new Table(11, 6, 580, 200, "rect", adamZone, true));
+  seatMap.addTable(new Table(12, 6, 580, 320, "rect", adamZone, true));
+  seatMap.addTable(new Table(16, 4, 760, 80, "rect", adamZone, true));
+  seatMap.addTable(new Table(17, 4, 760, 200, "rect", adamZone, true));
+  seatMap.addTable(new Table(18, 4, 760, 320, "rect", adamZone, true));
 
   seatMap.addTable(new Table(19, 8, 100, 710, "ellipse", donZone, true));
   seatMap.addTable(new Table(20, 10, 220, 710, "ellipse", donZone, true));
@@ -124,7 +124,7 @@ $(function() {
 
   seatMap.addWaiterZone(mikeZone);
   seatMap.addWaiterZone(sarahZone);
-  seatMap.addWaiterZone(jackZone);
+  seatMap.addWaiterZone(adamZone);
   seatMap.addWaiterZone(donZone);
 
   // Waitlist and Reservation Menus
