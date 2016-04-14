@@ -14,6 +14,7 @@ function refreshClock(){
     
   $("#clock").html(hours + ":" + minutes + " " + dn);
 }
+refreshClock();
 setInterval("refreshClock()",1000);
 
 $(function() {
@@ -86,8 +87,12 @@ $(function() {
 
   // Initialize our interface with filler data.
   upcomingList.addEntry(new WaitlistEntry("Smith", 4, null, 10));
-  upcomingList.addEntry(new WaitlistEntry("Johnson", 6, null, 40));
-  upcomingList.addEntry(new Reservation("Sally", 6, null, new Date(Date.now() + 500000000)));
+  upcomingList.addEntry(new WaitlistEntry("Johnson", 2, null, 40));
+  //round time up to next hour
+  roundedDate = new Date(Date.now() + 60 * 60000);
+  roundedDate.setMinutes(0);
+  roundedDate.setSeconds(0);
+  upcomingList.addEntry(new Reservation("Sally", 6, null, roundedDate));
 
   mikeZone = new WaiterZone("Mike", 380, 348, 30, 40, "#cc6600");
   sarahZone = new WaiterZone("Sarah", 380, 180, 400, 40, "#0052cc");
