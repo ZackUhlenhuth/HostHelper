@@ -25,6 +25,7 @@ $(function() {
   var selectedTable = null;
 
   upcomingList.registerListener("add", function(event){
+    console.log(event.entry);
     $("#upcomingList").append(drawUpcomingListEntry(event.entry));
   });
 
@@ -85,14 +86,38 @@ $(function() {
     $("#" + event.item.id + "Waiter").replaceWith(drawWaiterZoneLabel(event.item));
   })
 
-  // Initialize our interface with filler data.
-  upcomingList.addEntry(new WaitlistEntry("Smith", 4, null, 10));
-  upcomingList.addEntry(new WaitlistEntry("Johnson", 2, null, 40));
-  //round time up to next hour
-  roundedDate = new Date(Date.now() + 60 * 60000);
-  roundedDate.setMinutes(0);
-  roundedDate.setSeconds(0);
-  upcomingList.addEntry(new Reservation("Sally", 6, null, roundedDate));
+  var retrievedList = localStorage.getItem('upcomingList');
+  if (retrievedList !== null) {
+    retrievedList = JSON.parse(retrievedList);
+    console.log('hi');
+    console.log(retrievedList);
+    for (var i = 0; i < retrievedList.length; i++) {
+      currItem = retrievedList[i];
+      // if Waitlist
+      if (currItem.estimatedWaitInMins !== undefined) {
+        upcomingList.addEntry(new WaitlistEntry(currItem.name, currItem.partySize, currItem.phone, currItem.estimatedWaitInMins));
+      }
+      // if Reservation
+      else {
+        upcomingList.addEntry(new Reservation(currItem.name, currItem.partySize, currItem.phone, new Date(currItem.time)));
+      }
+    }
+  }
+  else {
+    // Initialize our interface with filler data.
+    upcomingList.addEntry(new WaitlistEntry("Smith", 4, null, 10));
+    upcomingList.addEntry(new WaitlistEntry("Johnson", 2, null, 40));
+    //round time up to next hour
+    roundedDate = new Date(Date.now() + 60 * 60000);
+    roundedDate.setMinutes(0);
+    roundedDate.setSeconds(0);
+    upcomingList.addEntry(new Reservation("Sally", 6, null, roundedDate));
+  }
+
+  //takes in waitlist object, converts to WaitListEntry or Reservation depending on fields
+  var makeListEnry = function() {
+
+  }
 
   mikeZone = new WaiterZone("Mike", 380, 348, 30, 40, "#cc6600");
   sarahZone = new WaiterZone("Sarah", 380, 180, 400, 40, "#0052cc");
@@ -161,7 +186,7 @@ $(function() {
   $("#addWaitlist").click(function(e) {
     name = $("#inputPartyNameWaitlist").val();
     partySize = $("#inputPartySizeWaitlist").val();
-    phone = $("inputPhoneNumberWaitlist").val();
+    phone = $("#inputPhoneNumberWaitlist").val();
     $('#waitlistForm').trigger('reset');
     upcomingList.addEntry(new WaitlistEntry(name, partySize, phone, 60));
     $("#waitlistMenu").collapse('hide');
@@ -171,9 +196,9 @@ $(function() {
   //add a Reservation to Upcoming
   $("#addReservation").click(function(e) {
     timeAndDate = new Date($('#inputDateReservation').val() + " " + $("#inputTimeReservation").val());
-    upcomingList.addEntry(new Reservation($("#inputPartyName").val(),
+    upcomingList.addEntry(new Reservation($("#inputPartyNameReservation").val(),
     		$("#inputPartySizeReservation").val(),
-    		$("inputPhoneNumber").val(),
+    		$("#inputPhoneNumberReservation").val(),
     		timeAndDate))
     $('#reservationForm').trigger('reset');
     $("#inputDateReservation").datepicker().datepicker("setDate", new Date()); ///Default date/time

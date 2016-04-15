@@ -4,10 +4,9 @@
 // But it does open up the possibility for rep. exposure bugs.
 // This class should protect its internal list from exposure, however.
 class UpcomingList {
-	constructor() {
-		this.list = []
+	constructor(list, eventListeners) {
+		this.list = [];
 		this.eventListeners = [];
-
 		setInterval(this.tick, 60 * 1000, this);
 	}
 
@@ -77,6 +76,7 @@ class UpcomingList {
 	}
 
 	notifyListeners(eventType, entry){
+	    localStorage.setItem('upcomingList', JSON.stringify(this.list));
 		$.each(this.eventListeners, function(index, eventListener){
 			if (eventListener.eventType == eventType) {
 				event = {
