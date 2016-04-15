@@ -114,16 +114,17 @@ $(function() {
     upcomingList.addEntry(new Reservation("Sally", 6, null, roundedDate));
   }
 
-  //takes in waitlist object, converts to WaitListEntry or Reservation depending on fields
-  var makeListEnry = function() {
-
-  }
-
   mikeZone = new WaiterZone("Mike", 380, 348, 30, 40, "#cc6600");
   sarahZone = new WaiterZone("Sarah", 380, 180, 400, 40, "#0052cc");
   adamZone = new WaiterZone("Adam", 380, 300, 593, 40, "green");
   donZone = new WaiterZone("Don", 125, 850, 30, 650, "red");
 
+
+  var retrievedTables = localStorage.getItem('seatmapTables');
+  if (retrievedTables !== null) {
+    retrievedTables = JSON.parse(retrievedTables);
+    console.log(retrievedTables);
+  }
   seatMap.addTable(new Table(1, 6, 70, 80, "rect", "horizontal", mikeZone, true));
   seatMap.addTable(new Table(2, 6, 70, 190, "rect", "horizontal", mikeZone, true));
   seatMap.addTable(new Table(3, 6, 70, 300, "rect", "horizontal", mikeZone, true));

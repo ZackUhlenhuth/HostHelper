@@ -90,6 +90,7 @@ class SeatMap {
 	}
 
 	notifyListeners(eventType, table){
+		localStorage.setItem('seatmapTables', JSON.stringify(this.tables));
 		$.each(this.eventListeners, function(index, eventListener){
 			if (eventListener.eventType == eventType) {
 				event = {
@@ -117,7 +118,7 @@ class Table {
 
 		this.assignedParty = null;
 
-		if (addSelfToWaiterZone) this.waiterZone.addTable(this);
+		//if (addSelfToWaiterZone) this.waiterZone.addTable(this);
 	}
 
 	isOccupied() {
