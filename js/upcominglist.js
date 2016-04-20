@@ -103,8 +103,13 @@ class UpcomingList {
 }
 
 class UpcomingListEntry {
-	constructor(name, size, phone) {
-		this.id = Math.round(Math.random() * 10000000);
+	constructor(name, size, phone, id) {
+		if (id == null) {
+			this.id = Math.round(Math.random() * 10000000);
+		}
+		else {
+			this.id = id;
+		}
 		this.name = name;
 		this.partySize = size;
 		this.phone = phone;
@@ -112,8 +117,8 @@ class UpcomingListEntry {
 }
 
 class WaitlistEntry extends UpcomingListEntry {
-	constructor(name, size, phone, estimatedWaitInMins){
-		super(name, size, phone)
+	constructor(name, size, phone, estimatedWaitInMins, id){
+		super(name, size, phone, id)
 		this.estimatedWaitInMins = estimatedWaitInMins;
 	}
 
@@ -124,8 +129,8 @@ class WaitlistEntry extends UpcomingListEntry {
 }
 
 class Reservation extends UpcomingListEntry {
-	constructor(name, size, phoneNumber, time) {
-		super(name, size, phoneNumber)
+	constructor(name, size, phoneNumber, time, id) {
+		super(name, size, phoneNumber, id)
 		this.time = time;
 	}
 

@@ -104,12 +104,12 @@ function drawWaiterZone(waiterZone) {
   return waiterZoneView;
 }
 
-function drawWaiterZoneLabel(waiterZone) {
+function drawWaiterZoneLabel(waiterZone, seatMap) {
   var xCoord = waiterZone.x + 10; //hardcoded
   var yCoord = waiterZone.y - 4;
   var labelColor = waiterZone.color;
   var waiterLabel = makeSVG('text', {id: waiterZone.id + 'Waiter', fill: labelColor, 'font-size': '14', 'font-family': 'Verdana', x: xCoord, y: yCoord});
-  waiterLabel.innerHTML = waiterZone.waiterName + " " + waiterZone.getCurrentTablesOccupied() + "/" + waiterZone.getCurrentNumTables();
+  waiterLabel.innerHTML = waiterZone.waiterName + " " + seatMap.getOccupiedWaiterZoneTables(waiterZone) + "/" + seatMap.getWaiterZoneTables(waiterZone);
 
   return waiterLabel;
 }

@@ -22,7 +22,7 @@ class SeatMap {
 		}
 
 		// We'll update the waiterZone for every table update for now.
-		this.updateWaiterZone(table.waiterZone);
+		this.updateWaiterZone(this.getWaiterZone(table));
 	}
 
 	getTableWithID(tableID) {
@@ -78,6 +78,52 @@ class SeatMap {
 		}
 	}
 
+	getWaiterZoneTables(waiterZone) {
+		var waiterX1 = waiterZone.x;
+		var waiterY1 = waiterZone.y;
+		var waiterX2 = waiterZone.x + waiterZone.width;
+		var waiterY2 = waiterZone.y + waiterZone.height;
+		var count = 0;
+		for (var i = 0; i < this.tables.length; i++) {
+			var currTable = this.tables[i];
+			//check if table's x and y is within waiter zone boundaries
+			if (currTable.x >= waiterX1 && currTable.x <= waiterX2 && currTable.y >= waiterY1 && currTable.y <= waiterY2) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	getOccupiedWaiterZoneTables(waiterZone) {
+		var waiterX1 = waiterZone.x;
+		var waiterY1 = waiterZone.y;
+		var waiterX2 = waiterZone.x + waiterZone.width;
+		var waiterY2 = waiterZone.y + waiterZone.height;
+		var count = 0;
+		for (var i = 0; i < this.tables.length; i++) {
+			var currTable = this.tables[i];
+			//check if table's x and y is within waiter zone boundaries
+			if (currTable.x >= waiterX1 && currTable.x <= waiterX2 && currTable.y >= waiterY1 && currTable.y <= waiterY2) {
+				if (currTable.isOccupied()) {
+					count++;
+				}
+			}
+		}
+		return count;
+	}
+
+	getWaiterZone(table) {
+		for (var i = 0; i < this.waiterZones.length; i++) {
+			var currZone = this.waiterZones[i];
+			var zoneX1 = currZone.x;
+			var zoneY1 = currZone.y;
+			var zoneX2 = currZone.x + currZone.width;
+			var zoneY2 = currZone.y + currZone.height;
+			if (table.x >= zoneX1 && table.x <= zoneX2 && table.y >= zoneY1 && table.y <= zoneY2) {
+				return currZone;
+			}
+		}
+	}
 	/** 
 	 * There are currently the following events:
 	 *   addTable, updateTable, addWaiterZone, updateWaiterZone
@@ -106,7 +152,7 @@ class SeatMap {
 
 class Table {
 	// Valid styles: ellipse, rect
-	constructor(id, capacity, x, y, style, orientation, waiterZone, addSelfToWaiterZone) {
+	constructor(id, capacity, x, y, style, orientation) {
 		this.id = id;
 
 		this.capacity = capacity;
@@ -114,11 +160,7 @@ class Table {
 		this.y = y;
 		this.style = style;
 		this.orientation = orientation;
-		this.waiterZone = waiterZone;
-
 		this.assignedParty = null;
-
-		//if (addSelfToWaiterZone) this.waiterZone.addTable(this);
 	}
 
 	isOccupied() {
@@ -146,16 +188,6 @@ class WaiterZone {
 
 	addTable(table) {
 		this.tables.push(table);
-	}
-
-	getCurrentNumTables() {
-		return this.tables.length;
-	}
-
-	getCurrentTablesOccupied() {
-		return this.tables.reduce(function(previousValue, currentElement) {
-			return currentElement.isOccupied() ? previousValue + 1 : previousValue;
-		}, 0);
 	}
 }
 

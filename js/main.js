@@ -78,19 +78,17 @@ $(function() {
   seatMap.registerListener("addWaiterZone", function(event) {
     waiterZoneView = drawWaiterZone(event.item);
   	$("#waiterZones").append(waiterZoneView);
-  	waiterZoneView.after(drawWaiterZoneLabel(event.item))
+  	waiterZoneView.after(drawWaiterZoneLabel(event.item, seatMap))
   });
 
   seatMap.registerListener("updateWaiterZone", function(event) {
     $("#waiterZone" + event.item.id).replaceWith(drawWaiterZone(event.item));
-    $("#" + event.item.id + "Waiter").replaceWith(drawWaiterZoneLabel(event.item));
+    $("#" + event.item.id + "Waiter").replaceWith(drawWaiterZoneLabel(event.item, seatMap));
   })
 
   var retrievedList = localStorage.getItem('upcomingList');
   if (retrievedList !== null) {
     retrievedList = JSON.parse(retrievedList);
-    console.log('hi');
-    console.log(retrievedList);
     for (var i = 0; i < retrievedList.length; i++) {
       currItem = retrievedList[i];
       // if Waitlist
@@ -123,35 +121,48 @@ $(function() {
   var retrievedTables = localStorage.getItem('seatmapTables');
   if (retrievedTables !== null) {
     retrievedTables = JSON.parse(retrievedTables);
-    console.log(retrievedTables);
+    for (var i = 0; i < retrievedTables.length; i++) {
+      var currTable = retrievedTables[i];
+      var assignedParty = null;
+      if (currTable.assignedParty != null) {
+        var party = currTable.assignedParty;
+        var assignedParty = new UpcomingListEntry(party.name, party.partySize, party.assignedParty, party.id);
+      }
+      var table = new Table(currTable.id, currTable.capacity, currTable.x, currTable.y, currTable.style, currTable.orientation, currTable.waiterZone);
+      seatMap.addTable(table);
+      //add the assigned party and update
+      table.assignedParty = assignedParty;
+      seatMap.updateTable(table);
+    }
   }
-  seatMap.addTable(new Table(1, 6, 70, 80, "rect", "horizontal", mikeZone, true));
-  seatMap.addTable(new Table(2, 6, 70, 190, "rect", "horizontal", mikeZone, true));
-  seatMap.addTable(new Table(3, 6, 70, 300, "rect", "horizontal", mikeZone, true));
+  else {
+    seatMap.addTable(new Table(1, 6, 70, 80, "rect", "horizontal"));
+    seatMap.addTable(new Table(2, 6, 70, 190, "rect", "horizontal"));
+    seatMap.addTable(new Table(3, 6, 70, 300, "rect", "horizontal"));
 
-  seatMap.addTable(new Table(4, 2, 320, 120, "ellipse", "horizontal", mikeZone, true));
-  seatMap.addTable(new Table(5, 2, 320, 230, "ellipse", "horizontal", mikeZone, true));
-  seatMap.addTable(new Table(6, 2, 320, 340, "ellipse", "horizontal", mikeZone, true));
+    seatMap.addTable(new Table(4, 2, 320, 120, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(5, 2, 320, 230, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(6, 2, 320, 340, "ellipse", "horizontal"));
 
-  seatMap.addTable(new Table(7, 4, 485, 120, "ellipse", "horizontal", sarahZone, true));
-  seatMap.addTable(new Table(8, 4, 485, 245, "ellipse", "horizontal", sarahZone, true));
-  seatMap.addTable(new Table(9, 6, 410, 320, "rect", "horizontal", sarahZone, true));
+    seatMap.addTable(new Table(7, 4, 485, 120, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(8, 4, 485, 245, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(9, 6, 410, 320, "rect", "horizontal"));
 
-  seatMap.addTable(new Table(10, 4, 620, 80, "rect", "horizontal", adamZone, true));
-  seatMap.addTable(new Table(11, 4, 620, 200, "rect", "horizontal", adamZone, true));
-  seatMap.addTable(new Table(12, 4, 620, 320, "rect", "horizontal", adamZone, true));
-  seatMap.addTable(new Table(16, 4, 760, 80, "rect", "horizontal", adamZone, true));
-  seatMap.addTable(new Table(17, 4, 760, 200, "rect", "horizontal", adamZone, true));
-  seatMap.addTable(new Table(18, 4, 760, 320, "rect", "horizontal", adamZone, true));
+    seatMap.addTable(new Table(10, 4, 620, 80, "rect", "horizontal"));
+    seatMap.addTable(new Table(11, 4, 620, 200, "rect", "horizontal"));
+    seatMap.addTable(new Table(12, 4, 620, 320, "rect", "horizontal"));
+    seatMap.addTable(new Table(16, 4, 760, 80, "rect", "horizontal"));
+    seatMap.addTable(new Table(17, 4, 760, 200, "rect", "horizontal"));
+    seatMap.addTable(new Table(18, 4, 760, 320, "rect", "horizontal"));
 
-  seatMap.addTable(new Table(19, 2, 100, 710, "ellipse", "horizontal", donZone, true));
-  seatMap.addTable(new Table(20, 2, 220, 710, "ellipse", "horizontal", donZone, true));
-  seatMap.addTable(new Table(21, 2, 340, 710, "ellipse", "horizontal", donZone, true));
-  seatMap.addTable(new Table(22, 2, 460, 710, "ellipse", "horizontal", donZone, true));
-  seatMap.addTable(new Table(23, 2, 580, 710, "ellipse", "horizontal", donZone, true));
-  seatMap.addTable(new Table(24, 2, 700, 710, "ellipse", "horizontal", donZone, true));
-  seatMap.addTable(new Table(25, 2, 820, 710, "ellipse", "horizontal", donZone, true));
-
+    seatMap.addTable(new Table(19, 2, 100, 710, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(20, 2, 220, 710, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(21, 2, 340, 710, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(22, 2, 460, 710, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(23, 2, 580, 710, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(24, 2, 700, 710, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(25, 2, 820, 710, "ellipse", "horizontal"));
+  }
   seatMap.addWaiterZone(mikeZone);
   seatMap.addWaiterZone(sarahZone);
   seatMap.addWaiterZone(adamZone);
@@ -294,7 +305,7 @@ $(function() {
     // add 15 to top to account for tooltip
     $("#seatPopUp").slideDown("fast", "linear").css("top", tipPoint.y + 15).css("left", tipPoint.x - halfWidth);
     //update waiter name
-    $("#tableWaiter").html(selectedTable.waiterZone.waiterName);
+    $("#tableWaiter").html(seatMap.getWaiterZone(selectedTable).waiterName);
 
     selectSeatParty($("#seatPartySelector").val());
       
