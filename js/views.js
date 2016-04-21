@@ -14,49 +14,62 @@ function getViewForTable(table) {
   return $("#table" + table.id);
 }
 
-function getLabelCoords(tableView, table) {
+function getLabelCoordsTopMid(tableView, table) {
   if (table.style == "rect") {
     width = parseInt(tableView.attr("width"), 10);
-    return {x: table.x + (width / 2.0), y: table.y};
+    return {x: table.x + (width / 2), y: table.y};
   } else if (table.style == "ellipse") {
     radius = parseInt(tableView.attr("rx"), 10);
     return {x: table.x, y: table.y - radius}
   }
 }
 
+function getLabelCoordsMid(tableView, table) {
+  if (table.style == "rect") {
+    width = parseInt(tableView.attr("width"), 10);
+    height = parseInt(tableView.attr("height"), 10);
+    return {x: table.x + (width / 2.0), y: table.y + (height / 2.0)};
+  } else if (table.style == "ellipse") {
+    radius = parseInt(tableView.attr("rx"), 10);
+    return {x: table.x, y: table.y}
+  }
+}
+
 function drawTableIDLabel(tableView, table) {
-  labelCoords = getLabelCoords(tableView, table);
+  labelCoords = getLabelCoordsTopMid(tableView, table);
 
   hashtagIcon = "&#xf292";
   tableLabel = makeSVG('text', {id: "table" + table.id + 'Label',
-							                  class: 'infoLabel',
-								                x: labelCoords['x'] - 10,
- 								                y: labelCoords['y'] + 20});
+							                  class: 'idLabel',
+								                x: labelCoords['x'] - 15,
+ 								                y: labelCoords['y'] + 17});
 
  	tableLabel.innerHTML = hashtagIcon + " " + table.id;
  	return tableLabel;
 }
 
 function drawTableCapacityLabel(tableView, table) {
-  labelCoords = getLabelCoords(tableView, table);
+  labelCoords = getLabelCoordsMid(tableView, table);
 
 	capacityIcon = "&#xf0c0";
   capacityLabel = makeSVG('text', {id: "table" + table.id + 'Capacity',
-   								   class: 'infoLabel',
+   								   class: 'capacityLabel',
    								   'table-capacity': table.capacity,
-    								  x: labelCoords['x'] - 20,
-    								  y: labelCoords['y'] + 60});
+    								  x: labelCoords['x'] - 28,
+    								  y: labelCoords['y'] + 7});
 
   capacityLabel.innerHTML = capacityIcon + " 0 / " + table.capacity;
   return capacityLabel;
 }
 
+/*
 function drawPartyLabel(tableView, table) {
     labelCoords = getLabelCoords(tableView, table);
     var partyLabel = makeSVG('text', {id: 'table' + table.id + 'PartyLabel', class: "partyLabel", x: labelCoords['x'] - 20, y: labelCoords['y'] + 40});
     partyLabel.innerHTML = table.assignedParty.name;
     return partyLabel;
 }
+*/
 
 function drawTableView(table) {
 	svgAttributes = {class: "restaurantTable"};
@@ -108,8 +121,8 @@ function drawWaiterZoneLabel(waiterZone, seatMap) {
   var xCoord = waiterZone.x + 10; //hardcoded
   var yCoord = waiterZone.y - 4;
   var labelColor = waiterZone.color;
-  var waiterLabel = makeSVG('text', {id: waiterZone.id + 'Waiter', fill: labelColor, 'font-size': '14', 'font-family': 'Verdana', x: xCoord, y: yCoord});
-  waiterLabel.innerHTML = waiterZone.waiterName + " " + seatMap.getOccupiedWaiterZoneTables(waiterZone) + "/" + seatMap.getWaiterZoneTables(waiterZone);
+  var waiterLabel = makeSVG('text', {id: waiterZone.id + 'Waiter', fill: labelColor, 'font-size': '16', 'font-family': 'Verdana', x: xCoord, y: yCoord});
+  waiterLabel.innerHTML = waiterZone.waiterName + " " + seatMap.getOccupiedWaiterZoneTables(waiterZone).length + "/" + seatMap.getWaiterZoneTables(waiterZone).length;
 
   return waiterLabel;
 }

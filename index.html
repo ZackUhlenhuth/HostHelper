@@ -58,12 +58,12 @@
                       <rect id="floor" fill="#fff" height="100%" width="100%" y="-1" x="-1"/>
                     </g>
                     <g>
-                      <rect id="wall1" class="restaurantWall" x="1000" y="0" width="40" height="100"/>
-                      <rect id="door1" class="restaurantDoor" x="1040" y="100" width="5" height="100" transform="rotate(-20 1040 100)"/>
-                      <rect id="wall2" class="restaurantWall" x="1000" y="200" width="40" height="340"/>
-                      <rect id="wall3" class="restaurantWall" x="0" y="500" width="200" height="40"/>
+                      <rect id="wall1" class="restaurantWall" x="1000" y="0" width="10" height="100"/>
+                      <rect id="door1" class="restaurantDoor" x="1010" y="100" width="5" height="100" transform="rotate(-20 1010 100)"/>
+                      <rect id="wall2" class="restaurantWall" x="1000" y="200" width="10" height="340"/>
+                      <rect id="wall3" class="restaurantWall" x="0" y="530" width="200" height="10"/>
                       <rect id="door2" class="restaurantDoor" x="200" y="540" width="100" height="5" transform="rotate(20 200 540)"/>
-                      <rect id="wall4" class="restaurantWall" x="300" y="500" width="600" height="40"/>
+                      <rect id="wall4" class="restaurantWall" x="300" y="530" width="600" height="10"/>
                       <rect id="door3" class="restaurantDoor" x="900" y="540" width="100" height="5" transform="rotate(20 900 540)"/>
                     </g>
                     <g id="tablesArea">
@@ -234,6 +234,10 @@
     <div id="unseatPopUp" class="img-rounded floorplan-tooltip" width="100" height="100">
       <!-- Dismiss button from http://getbootstrap.com/components/ -->
       <button type="button" class="close" aria-label="Close"><span aria-hidden="true">×</span></button>
+      <div id="unseatPartyInfo">
+        <label>Party Name: </label>
+        <div id="unseatPartyName">Walk-In</div>
+      </div>
       <button id="unseatTable" class="btn btn-danger">Unseat!</button>
     </div>
 

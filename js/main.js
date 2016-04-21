@@ -63,14 +63,14 @@ $(function() {
 
   	if (updatedTable.assignedParty) {
   		// A party was assigned to a table.
-  		tableView.after(drawPartyLabel(tableView, updatedTable));
+  		//tableView.after(drawPartyLabel(tableView, updatedTable));
   		$("#table" + updatedTable.id).css("fill", "#cc9933");
   		capacityText = capacityIcon + " " + updatedTable.assignedParty.partySize + " / " + updatedTable.capacity;
   		$("#table" + updatedTable.id + "Capacity").html(capacityText);
   	} else {
   		// A party was removed from a table.
   		tableView.css("fill", "#cccccc");
-  		$("#table" + updatedTable.id + "PartyLabel").remove();
+  		//$("#table" + updatedTable.id + "PartyLabel").remove();
   		$("#table" + updatedTable.id + "Capacity").html(capacityIcon + " 0  / " + updatedTable.capacity);	
   	}
   })
@@ -151,17 +151,17 @@ $(function() {
     seatMap.addTable(new Table(10, 4, 620, 80, "rect", "horizontal"));
     seatMap.addTable(new Table(11, 4, 620, 200, "rect", "horizontal"));
     seatMap.addTable(new Table(12, 4, 620, 320, "rect", "horizontal"));
-    seatMap.addTable(new Table(16, 4, 760, 80, "rect", "horizontal"));
-    seatMap.addTable(new Table(17, 4, 760, 200, "rect", "horizontal"));
-    seatMap.addTable(new Table(18, 4, 760, 320, "rect", "horizontal"));
+    seatMap.addTable(new Table(13, 4, 760, 80, "rect", "horizontal"));
+    seatMap.addTable(new Table(14, 4, 760, 200, "rect", "horizontal"));
+    seatMap.addTable(new Table(15, 4, 760, 320, "rect", "horizontal"));
 
-    seatMap.addTable(new Table(19, 2, 100, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(20, 2, 220, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(21, 2, 340, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(22, 2, 460, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(23, 2, 580, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(24, 2, 700, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(25, 2, 820, 710, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(16, 2, 100, 710, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(17, 2, 220, 710, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(18, 2, 340, 710, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(19, 2, 460, 710, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(20, 2, 580, 710, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(21, 2, 700, 710, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(22, 2, 820, 710, "ellipse", "horizontal"));
   }
   seatMap.addWaiterZone(mikeZone);
   seatMap.addWaiterZone(sarahZone);
@@ -253,6 +253,7 @@ $(function() {
     hidePopups();
     if (selectedTable.isOccupied()) { // If the table is occupied, show the unseat popup, if it's open, show the seat popup.
     	halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
+      $("#unseatPartyName").html(selectedTable.assignedParty.name);
     	// add 15 to top to account for tooltip
     	$("#unseatPopUp").slideDown("fast", "linear").css("top", e.pageY + 15).css("left", e.pageX - halfWidth);
     } else {
@@ -305,7 +306,7 @@ $(function() {
     // add 15 to top to account for tooltip
     $("#seatPopUp").slideDown("fast", "linear").css("top", tipPoint.y + 15).css("left", tipPoint.x - halfWidth);
     //update waiter name
-    $("#tableWaiter").html(seatMap.getWaiterZone(selectedTable).waiterName);
+    $("#tableWaiter").html(seatMap.getWaiterZoneByTable(selectedTable).waiterName);
 
     selectSeatParty($("#seatPartySelector").val());
       

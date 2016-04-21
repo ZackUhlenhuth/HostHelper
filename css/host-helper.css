@@ -133,9 +133,16 @@ h3 {
 	stroke: #0052cc;
 }
 
-.infoLabel {
+.capacityLabel {
 	fill: black;
-	font-size: 12px;
+	font-size: 18px;
+	font-family: FontAwesome;
+	pointer-events: none;
+}
+
+.idLabel {
+	fill: blue;
+	font-size: 15px;
 	font-family: FontAwesome;
 	pointer-events: none;
 }
@@ -148,4 +155,8 @@ h3 {
 }
 .parent {
   border:1px solid #dcdcdc;
+}
+
+#unseatPartyInfo {
+	margin-bottom: 15px;
 }

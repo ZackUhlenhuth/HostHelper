@@ -22,7 +22,7 @@ class SeatMap {
 		}
 
 		// We'll update the waiterZone for every table update for now.
-		this.updateWaiterZone(this.getWaiterZone(table));
+		this.updateWaiterZone(this.getWaiterZoneByTable(table));
 	}
 
 	getTableWithID(tableID) {
@@ -46,20 +46,42 @@ class SeatMap {
 		});
 	}
 
+	//return waiterZone given table
+	getWaiterZoneByTable(table) {
+		for (var i = 0; i < this.waiterZones.length; i++) {
+			var currZone = this.waiterZones[i];
+			var zoneX1 = currZone.x;
+			var zoneY1 = currZone.y;
+			var zoneX2 = currZone.x + currZone.width;
+			var zoneY2 = currZone.y + currZone.height;
+			if (table.x >= zoneX1 && table.x <= zoneX2 && table.y >= zoneY1 && table.y <= zoneY2) {
+				return currZone;
+			}
+		}
+	}
+
+	getWaiterZoneByName(waiterName) {
+		return this.waiterZones.filter(function(thisZone){
+			return thisZone.waiterName == waiterName;
+		})[0];
+	}
+
 	// This will ignore any filters specified as null arguments.
 	// If both arguments are null, it will return an empty list.
 	getOpenTablesMatchingFilters(partySize, server) {
 		if (partySize == null && server == null) return [];
 
+		var waiterZone = this.getWaiterZoneByName(server);
+
 		var tableSizeFilter = function(thisTable) {
     		return partySize <= thisTable.capacity || partySize == null;
-    	}
+    	}    	
 
-    	var serverFilter = function(thisTable) {
-    		return server == thisTable.waiterZone.waiterName || server == null;
+    	if (server == null) {
+    		return this.getOpenTables().filter(tableSizeFilter);
+    	} else {
+    		return this.getOpenWaiterZoneTables(waiterZone).filter(tableSizeFilter);
     	}
-
-		return this.getOpenTables().filter(tableSizeFilter).filter(serverFilter);
 	}
 
 	// this.waiterZones should not be modified directly, it should only be modified
@@ -83,47 +105,24 @@ class SeatMap {
 		var waiterY1 = waiterZone.y;
 		var waiterX2 = waiterZone.x + waiterZone.width;
 		var waiterY2 = waiterZone.y + waiterZone.height;
-		var count = 0;
-		for (var i = 0; i < this.tables.length; i++) {
-			var currTable = this.tables[i];
-			//check if table's x and y is within waiter zone boundaries
-			if (currTable.x >= waiterX1 && currTable.x <= waiterX2 && currTable.y >= waiterY1 && currTable.y <= waiterY2) {
-				count++;
-			}
-		}
-		return count;
+
+		return this.tables.filter(function(currTable){
+			return (currTable.x >= waiterX1 && currTable.x <= waiterX2 && currTable.y >= waiterY1 && currTable.y <= waiterY2);
+		});
 	}
 
 	getOccupiedWaiterZoneTables(waiterZone) {
-		var waiterX1 = waiterZone.x;
-		var waiterY1 = waiterZone.y;
-		var waiterX2 = waiterZone.x + waiterZone.width;
-		var waiterY2 = waiterZone.y + waiterZone.height;
-		var count = 0;
-		for (var i = 0; i < this.tables.length; i++) {
-			var currTable = this.tables[i];
-			//check if table's x and y is within waiter zone boundaries
-			if (currTable.x >= waiterX1 && currTable.x <= waiterX2 && currTable.y >= waiterY1 && currTable.y <= waiterY2) {
-				if (currTable.isOccupied()) {
-					count++;
-				}
-			}
-		}
-		return count;
+		return this.getWaiterZoneTables(waiterZone).filter(function(currTable){
+			return currTable.isOccupied();
+		});
 	}
 
-	getWaiterZone(table) {
-		for (var i = 0; i < this.waiterZones.length; i++) {
-			var currZone = this.waiterZones[i];
-			var zoneX1 = currZone.x;
-			var zoneY1 = currZone.y;
-			var zoneX2 = currZone.x + currZone.width;
-			var zoneY2 = currZone.y + currZone.height;
-			if (table.x >= zoneX1 && table.x <= zoneX2 && table.y >= zoneY1 && table.y <= zoneY2) {
-				return currZone;
-			}
-		}
+	getOpenWaiterZoneTables(waiterZone) {
+		return this.getWaiterZoneTables(waiterZone).filter(function(currTable){
+			return !currTable.isOccupied();
+		});
 	}
+
 	/** 
 	 * There are currently the following events:
 	 *   addTable, updateTable, addWaiterZone, updateWaiterZone
