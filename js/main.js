@@ -24,13 +24,33 @@ $(function() {
   var selectedParty = null;
   var selectedTable = null;
 
+  Date.prototype.addHours = function(h) {    
+    this.setTime(this.getTime() + (h*60*60*1000)); 
+    return this;   
+  }
+
+  //http://stackoverflow.com/questions/1050720/adding-hours-to-javascript-date-object
   upcomingList.registerListener("add", function(event){
     console.log(event.entry);
+    //don't draw entries that are 12 hours past current time
+    if (event.entry.time) {
+      if (event.entry.time > (new Date()).addHours(12)) {
+        return;
+      }
+    }
     $("#upcomingList").append(drawUpcomingListEntry(event.entry));
   });
 
   upcomingList.registerListener("update", function(event) {
   	console.log("update", event);
+    if (event.entry.time) {
+      //if the time is within 12 hours of now, and list entry isn't drawn, draw it
+      if ($("#party" + event.entry.id).length == 0) {
+        if (event.entry.time <= (new Date()).addHours(12)) {
+          $("#upcomingList").append(drawUpcomingListEntry(event.entry));
+        }
+      }
+    }
     $("#party" + event.entry.id).replaceWith(drawUpcomingListEntry(event.entry));
   })
 

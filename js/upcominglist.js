@@ -95,8 +95,12 @@ class UpcomingList {
 			if (entry.estimatedWaitInMins) {
 				if (entry.estimatedWaitInMins > 0){
 					entry.estimatedWaitInMins -= 1;
-					upcomingList.notifyListeners("update", entry)
+					upcomingList.notifyListeners("update", entry);
 				}
+			}
+			//if Reservation, call update to see if we can draw the entry
+			if (entry.time) {
+				upcomingList.notifyListeners("update",entry);
 			}
 		});
 	}
