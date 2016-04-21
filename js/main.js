@@ -220,7 +220,7 @@ $(function() {
     partySize = $("#inputPartySizeWaitlist").val();
     phone = $("#inputPhoneNumberWaitlist").val();
     $('#waitlistForm').trigger('reset');
-    upcomingList.addEntry(new WaitlistEntry(name, partySize, phone, 60));
+    upcomingList.addEntry(new WaitlistEntry(name, partySize, phone, 1));
     $("#waitlistMenu").collapse('hide');
     $("#addPartyMenu").show();
   });

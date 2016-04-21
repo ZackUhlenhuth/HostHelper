@@ -128,10 +128,13 @@ function drawWaiterZoneLabel(waiterZone, seatMap) {
 }
 
 function drawUpcomingListEntry(entry) {
-      var editButtons = $("<span class='pull-right'>" + 
-                  "<button class='btn btn-xs btn-warning edit-upcoming-party'><span class='glyphicon glyphicon-pencil'></span></button>" +
-                  "<button class='btn btn-xs btn-danger remove-upcoming-party'><span class='glyphicon glyphicon-remove'></span></button>" +
-                  "</span>");
+    var editButtons = $("<span class='pull-right'>" + 
+                "<button class='btn btn-xs btn-warning edit-upcoming-party'><span class='glyphicon glyphicon-pencil'></span></button>" +
+                "<button class='btn btn-xs btn-danger remove-upcoming-party'><span class='glyphicon glyphicon-remove'></span></button>" +
+                "</span>");
+
+    //to notify that party must be seated
+    var alertSymbol = $("<span class='party-alert'>!</span>");
 
     newEntry = $("<a href='#' class='list-group-item clearfix upcoming-party'></a>");
     newEntry.attr('party-name', entry.name);
@@ -140,6 +143,16 @@ function drawUpcomingListEntry(entry) {
     newEntry.attr('id', 'party' + entry.id);
     newEntry.html(makeUpcomingListString(entry));
     newEntry.prepend(editButtons);
+    if (entry.time) {
+      if (entry.time < new Date()) {
+        newEntry.prepend(alertSymbol);
+      }
+    }
+    if (entry.estimatedWaitInMins != null) {
+      if (entry.estimatedWaitInMins < 1) {
+        newEntry.prepend(alertSymbol);
+      }
+    }
 
     return newEntry;
 }
