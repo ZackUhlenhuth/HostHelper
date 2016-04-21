@@ -38,13 +38,13 @@ function getLabelCoordsMid(tableView, table) {
 function drawTableIDLabel(tableView, table) {
   labelCoords = getLabelCoordsTopMid(tableView, table);
 
-  hashtagIcon = "&#xf292";
+  //hashtagIcon = "&#xf292";
   tableLabel = makeSVG('text', {id: "table" + table.id + 'Label',
 							                  class: 'idLabel',
 								                x: labelCoords['x'] - 15,
  								                y: labelCoords['y'] + 17});
 
- 	tableLabel.innerHTML = hashtagIcon + " " + table.id;
+ 	tableLabel.innerHTML = "#" + table.id;
  	return tableLabel;
 }
 

@@ -141,9 +141,9 @@ h3 {
 }
 
 .idLabel {
-	fill: blue;
+	fill: #7a7a52;
 	font-size: 15px;
-	font-family: FontAwesome;
+	font-family: Verdana;
 	pointer-events: none;
 }
 
