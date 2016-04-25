@@ -37,15 +37,30 @@
                 <strong>Filter Tables</strong>
                 <div class="input-group">
                   <span class="input-group-addon">Size</span>
-                  <input id="filterSize" type="text" placeholder="None" class="form-control"></input>
+                  <input id="filterSize" type="text" placeholder="Nothing selected" class="form-control"></input>
                 </div>
                 <div class="input-group">
-                  <span class="input-group-addon">Server</span><select id="filterServer" class="selectpicker">
-                    <option value="none">None</option>
+                  <span class="input-group-addon">Server</span><select multiple id="filterServer" class="selectpicker">
                     <option>Mike</option>
                     <option>Sarah</option>
                     <option>Adam</option>
                     <option>Don</option>
+                  </select>
+                </div>
+                <div class="input-group">
+                  <span class="input-group-addon">Type</span><select multiple id="filterType" class="selectpicker">
+                    <optgroup data-max-options="1">
+                      <option>Inside</option>
+                      <option>Outside</option>
+                    </optgroup>
+                    <optgroup data-max-options="1">
+                      <option>Booth</option>
+                      <option>Table</option>
+                      <option>High-Top</option>
+                    </optgroup>
+                    <optgroup>
+                      <option>Handicap-Accessible</option>
+                    </optgroup>
                   </select>
                 </div>
               </div>

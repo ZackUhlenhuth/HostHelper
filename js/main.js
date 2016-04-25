@@ -148,7 +148,7 @@ $(function() {
         var party = currTable.assignedParty;
         var assignedParty = new UpcomingListEntry(party.name, party.partySize, party.assignedParty, party.id);
       }
-      var table = new Table(currTable.id, currTable.capacity, currTable.x, currTable.y, currTable.style, currTable.orientation, currTable.waiterZone);
+      var table = new Table(currTable.id, currTable.capacity, currTable.x, currTable.y, currTable.style, currTable.orientation, currTable.types);
       seatMap.addTable(table);
       //add the assigned party and update
       table.assignedParty = assignedParty;
@@ -160,28 +160,28 @@ $(function() {
     seatMap.addTable(new Table(2, 6, 70, 190, "rect", "horizontal", ["inside", "booth"]));
     seatMap.addTable(new Table(3, 6, 70, 300, "rect", "horizontal", ["inside", "booth"]));
 
-    seatMap.addTable(new Table(4, 2, 320, 120, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(5, 2, 320, 230, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(6, 2, 320, 340, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(4, 2, 320, 120, "ellipse", "horizontal", ["inside", "high-top"]));
+    seatMap.addTable(new Table(5, 2, 320, 230, "ellipse", "horizontal", ["inside", "high-top"]));
+    seatMap.addTable(new Table(6, 2, 320, 340, "ellipse", "horizontal", ["inside", "high-top"]));
 
-    seatMap.addTable(new Table(7, 4, 485, 120, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(8, 4, 485, 245, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(9, 6, 410, 320, "rect", "horizontal"));
+    seatMap.addTable(new Table(7, 4, 485, 120, "ellipse", "horizontal", ["inside", "table"]));
+    seatMap.addTable(new Table(8, 4, 485, 245, "ellipse", "horizontal", ["inside", "table"]));
+    seatMap.addTable(new Table(9, 6, 410, 320, "rect", "horizontal", ["inside", "table"]));
 
-    seatMap.addTable(new Table(10, 4, 620, 80, "rect", "horizontal"));
-    seatMap.addTable(new Table(11, 4, 620, 200, "rect", "horizontal"));
-    seatMap.addTable(new Table(12, 4, 620, 320, "rect", "horizontal"));
-    seatMap.addTable(new Table(13, 4, 760, 80, "rect", "horizontal"));
-    seatMap.addTable(new Table(14, 4, 760, 200, "rect", "horizontal"));
-    seatMap.addTable(new Table(15, 4, 760, 320, "rect", "horizontal"));
+    seatMap.addTable(new Table(10, 4, 620, 80, "rect", "horizontal", ["inside", "table"]));
+    seatMap.addTable(new Table(11, 4, 620, 200, "rect", "horizontal", ["inside", "table"]));
+    seatMap.addTable(new Table(12, 4, 620, 320, "rect", "horizontal", ["inside", "table"]));
+    seatMap.addTable(new Table(13, 4, 760, 80, "rect", "horizontal", ["inside", "table", "handicap-accessible"]));
+    seatMap.addTable(new Table(14, 4, 760, 200, "rect", "horizontal", ["inside", "table", "handicap-accessible"]));
+    seatMap.addTable(new Table(15, 4, 760, 320, "rect", "horizontal", ["inside", "table", "handicap-accessible"]));
 
-    seatMap.addTable(new Table(16, 2, 100, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(17, 2, 220, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(18, 2, 340, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(19, 2, 460, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(20, 2, 580, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(21, 2, 700, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(22, 2, 820, 710, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(16, 2, 100, 710, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(17, 2, 220, 710, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(18, 2, 340, 710, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(19, 2, 460, 710, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(20, 2, 580, 710, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(21, 2, 700, 710, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(22, 2, 820, 710, "ellipse", "horizontal", ["outside", "table"]));
   }
   seatMap.addWaiterZone(mikeZone);
   seatMap.addWaiterZone(sarahZone);
@@ -339,20 +339,27 @@ $(function() {
     }
   }
 
-  //TODO update for new table type filters
   function applyFilters() {
   	seatMap.getOpenTables().map(getViewForTable).map(function(element) {element.css("fill", "#cccccc")});
 
     partySizeText = $("#filterSize").val();
     serverText = $("#filterServer").val();
+    typeText = $("#filterType").val();
 
     partySize = null;
     server = null;
+    type = null;
 
     if (partySizeText != "") partySize = parseInt(partySizeText, 10); 
-    if (serverText != "none") server = serverText; 
+    if (serverText != null) server = serverText;
+    if (typeText != null) {
+      for (var i in typeText) {
+        typeText[i] = typeText[i].toLowerCase();
+      }
+      type = typeText;
+    }
 
-    matchingList = seatMap.getOpenTablesMatchingFilters(partySize, server);
+    matchingList = seatMap.getOpenTablesMatchingFilters(partySize, server, type);
 
     matchingList.map(getViewForTable).map(function(element) {element.css("fill", "#ccff99")});
   }
@@ -406,6 +413,7 @@ $(function() {
   });
 
   $("#filterServer").on('change', applyFilters);
+  $("#filterType").on('change', applyFilters);
 
   //upon clicking items in Upcoming List
   $(document).on('click', ".upcoming-party", function(e) {
