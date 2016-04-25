@@ -124,10 +124,17 @@ class WaitlistEntry extends UpcomingListEntry {
 	constructor(name, size, phone, estimatedWaitInMins, id){
 		super(name, size, phone, id)
 		this.estimatedWaitInMins = estimatedWaitInMins;
+		
 	}
 
 	getCountdownString() {
-		return this.estimatedWaitInMins + " mins";
+	  var minuteSuffix;
+	  if (this.estimatedWaitInMins == 1)
+	    minuteSuffix = " min";
+	  else
+	    minuteSuffix = " mins";
+	  
+		return "<span class='glyphicon glyphicon-hourglass'></span> " + this.estimatedWaitInMins + minuteSuffix;
 	}
 
 }
@@ -155,7 +162,7 @@ class Reservation extends UpcomingListEntry {
 			minutes = "0" + minutes;
 		}
 
-		return hours + ":" + minutes + " " + AMPM
+		return "<span class='glyphicon glyphicon-calendar'></span> " + hours + ":" + minutes + " " + AMPM
 	}
 }
 
