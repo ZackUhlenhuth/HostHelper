@@ -106,6 +106,10 @@ h3 {
   float:right;
   margin-right:5px;
 }
+#upcomingList {
+  max-height:350px;
+  overflow-y:auto;
+}
 
 /* svg elements (floorplan) */
 .restaurantTable {
