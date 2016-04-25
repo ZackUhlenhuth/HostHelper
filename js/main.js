@@ -478,6 +478,10 @@ $(function() {
     minScale = $(".parent").width() / $(".panzoom").width();
     $panzoom.panzoom('option', 'minScale', minScale);
   }
+
   $(window).resize(setMinScale);
   setMinScale()
+
+  // This prevents the seat map from being scaled too small.
+  $panzoom.panzoom('option', 'maxScale', 0.5);
 });
