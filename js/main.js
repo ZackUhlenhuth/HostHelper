@@ -434,7 +434,7 @@ $(function() {
 
     e.stopPropagation();
 
-    correspondingPartyView = $(this).parents(".upcoming-party").first();
+    correspondingPartyView = $(this).parents(".upcoming-party")[0];
     upcomingList.removeEntryWithID(correspondingPartyView.id);
   });
 
