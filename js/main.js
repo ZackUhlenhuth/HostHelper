@@ -156,9 +156,9 @@ $(function() {
     }
   }
   else {
-    seatMap.addTable(new Table(1, 6, 70, 80, "rect", "horizontal"));
-    seatMap.addTable(new Table(2, 6, 70, 190, "rect", "horizontal"));
-    seatMap.addTable(new Table(3, 6, 70, 300, "rect", "horizontal"));
+    seatMap.addTable(new Table(1, 6, 70, 80, "rect", "horizontal", ["inside", "booth"]));
+    seatMap.addTable(new Table(2, 6, 70, 190, "rect", "horizontal", ["inside", "booth"]));
+    seatMap.addTable(new Table(3, 6, 70, 300, "rect", "horizontal", ["inside", "booth"]));
 
     seatMap.addTable(new Table(4, 2, 320, 120, "ellipse", "horizontal"));
     seatMap.addTable(new Table(5, 2, 320, 230, "ellipse", "horizontal"));
@@ -193,6 +193,8 @@ $(function() {
 		$("#addPartyMenu").hide();
     $("#reservationMenu").collapse('show');
     $("#inputPartyName").focus();
+    $("#inputDateReservation").datepicker().datepicker("setDate", new Date());
+    $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date(new Date().getTime() + 15*60000));
   });
   $("#openWaitlistMenu").click(function() {
     $("#addPartyMenu").hide();
@@ -233,9 +235,6 @@ $(function() {
     		$("#inputPhoneNumberReservation").val(),
     		timeAndDate))
     $('#reservationForm').trigger('reset');
-    $("#inputDateReservation").datepicker().datepicker("setDate", new Date()); ///Default date/time
-    $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date());
-
     $("#reservationMenu").collapse('hide');
     $("#addPartyMenu").show();
   });
@@ -253,10 +252,6 @@ $(function() {
   	$("#waitlistEditMenu").collapse("hide");
   	$("#addPartyMenu").show();
   });
-
-  //Default date/time upon load
-  $("#inputDateReservation").datepicker().datepicker("setDate", new Date());
-  $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date(new Date().getTime() + 15*60000));
 
   //Add 'click' affordance upon hovering a table
   $(".restaurantTable").hover(
@@ -344,6 +339,7 @@ $(function() {
     }
   }
 
+  //TODO update for new table type filters
   function applyFilters() {
   	seatMap.getOpenTables().map(getViewForTable).map(function(element) {element.css("fill", "#cccccc")});
 
