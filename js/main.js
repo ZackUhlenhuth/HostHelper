@@ -1,8 +1,8 @@
 // Modified from "Cut & Paste Live Clock using forms" by George Chiang,
 // http://javascriptkit.com/script/cut2.shtml
-function refreshClock(){
-  var hours= new Date().getHours();
-  var minutes= new Date().getMinutes();
+function get12hour(d){
+  var hours= d.getHours();
+  var minutes= d.getMinutes();
   var dn="AM";
   
   if (hours>12) {
@@ -11,8 +11,12 @@ function refreshClock(){
   }
   if (hours == 0) hours=12;
   if (minutes<=9) minutes="0"+minutes;
-    
-  $("#clock").html(hours + ":" + minutes + " " + dn);
+  
+  return hours + ":" + minutes + " " + dn;
+}
+
+function refreshClock(){
+  $("#clock").html(get12hour(new Date()));
 }
 refreshClock();
 setInterval("refreshClock()",1000);
@@ -146,7 +150,7 @@ $(function() {
       var assignedParty = null;
       if (currTable.assignedParty != null) {
         var party = currTable.assignedParty;
-        var assignedParty = new UpcomingListEntry(party.name, party.partySize, party.assignedParty, party.id);
+        var assignedParty = new UpcomingListEntry(party.name, party.partySize, party.assignedParty, party.id, party.seatedTime, party.eta);
       }
       var table = new Table(currTable.id, currTable.capacity, currTable.x, currTable.y, currTable.style, currTable.orientation, currTable.types);
       seatMap.addTable(table);
@@ -269,6 +273,8 @@ $(function() {
     if (selectedTable.isOccupied()) { // If the table is occupied, show the unseat popup, if it's open, show the seat popup.
     	halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
       $("#unseatPartyName").html(selectedTable.assignedParty.name);
+      $("#unseatPartySeatedTime").html(get12hour(selectedTable.assignedParty.seatedTime));
+      $("#unseatPartyETA").html(get12hour(selectedTable.assignedParty.eta));
     	// add 15 to top to account for tooltip
     	$("#unseatPopUp").slideDown("fast", "linear").css("top", e.pageY + 15).css("left", e.pageX - halfWidth);
     } else {
@@ -378,7 +384,6 @@ $(function() {
   	if (partyToSeatID == "walk-in") {
   		partySize = $("#inputWalkInPartySize").val();
   		partyToSeat = new UpcomingListEntry("Walk-In", partySize);
-  		console.log(partyToSeat)
   		if (!selectedTable.canPartyFit(partyToSeat)) {
   			alert("That group has too many members to sit at that table.");
   			return;
@@ -387,7 +392,7 @@ $(function() {
   		partyToSeat = upcomingList.getEntryWithID(partyToSeatID)
   		upcomingList.removeEntryWithID(partyToSeat.id);
   	}
-
+    
   	selectedTable.assignedParty = partyToSeat;
 
   	seatMap.updateTable(selectedTable);

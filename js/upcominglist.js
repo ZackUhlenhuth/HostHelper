@@ -107,7 +107,7 @@ class UpcomingList {
 }
 
 class UpcomingListEntry {
-	constructor(name, size, phone, id) {
+	constructor(name, size, phone, id, seatedTime, eta) {
 		if (id == null) {
 			this.id = Math.round(Math.random() * 10000000);
 		}
@@ -117,6 +117,9 @@ class UpcomingListEntry {
 		this.name = name;
 		this.partySize = size;
 		this.phone = phone;
+		
+		this.seatedTime = new Date();
+  	this.eta = new Date(new Date().getTime() + 30*60000);
 	}
 }
 
@@ -146,8 +149,6 @@ class Reservation extends UpcomingListEntry {
 	}
 
 	getCountdownString() {
-		console.log(this.time);
-
 		var hours = "";
 		var AMPM = "AM"
 		if (this.time.getHours() > 11) {

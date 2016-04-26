@@ -79,6 +79,9 @@ h3 {
 	display:inline-block;
 	width:50px;
 }
+#unseatPartyName {
+  margin-bottom:5px;
+}
 /*
 @media (min-width:1800px) {
   .container {
