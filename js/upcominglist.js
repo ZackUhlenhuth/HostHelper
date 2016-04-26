@@ -118,8 +118,21 @@ class UpcomingListEntry {
 		this.partySize = size;
 		this.phone = phone;
 		
-		this.seatedTime = new Date();
-  	this.eta = new Date(new Date().getTime() + 30*60000);
+		if (seatedTime == null) {
+		  this.seatedTime = new Date();
+		  this.seatedTime = get12hour(this.seatedTime);
+		}
+		else {
+		  this.seatedTime = seatedTime;;
+		}
+		
+		if (eta == null) {
+  	  this.eta = new Date(new Date().getTime() + 30*60000);
+  	  this.eta = get12hour(this.eta);
+  	}
+  	else {
+  	  this.eta = eta;;
+  	}
 	}
 }
 

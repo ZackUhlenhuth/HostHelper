@@ -273,8 +273,8 @@ $(function() {
     if (selectedTable.isOccupied()) { // If the table is occupied, show the unseat popup, if it's open, show the seat popup.
     	halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
       $("#unseatPartyName").html(selectedTable.assignedParty.name);
-      $("#unseatPartySeatedTime").html(get12hour(selectedTable.assignedParty.seatedTime));
-      $("#unseatPartyETA").html(get12hour(selectedTable.assignedParty.eta));
+      $("#unseatPartySeatedTime").html(selectedTable.assignedParty.seatedTime);
+      $("#unseatPartyETA").html(selectedTable.assignedParty.eta);
     	// add 15 to top to account for tooltip
     	$("#unseatPopUp").slideDown("fast", "linear").css("top", e.pageY + 15).css("left", e.pageX - halfWidth);
     } else {
