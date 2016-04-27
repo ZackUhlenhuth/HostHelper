@@ -291,7 +291,7 @@ $(function() {
     }
   });
 
-  // Hid popups. Called when 'close' button in popup is clicked. Does not reset tooltip
+  // Hide popups. Called when 'close' button in popup is clicked. Does not reset tooltip
   function hidePopups() {
       $("#seatPopUp").hide();
       $("#unseatPopUp").hide();
@@ -390,6 +390,8 @@ $(function() {
   		}
   	} else {
   		partyToSeat = upcomingList.getEntryWithID(partyToSeatID)
+  		partyToSeat.seatedTime = get12hour(new Date());
+  		partyToSeat.eta = get12hour(new Date(new Date().getTime() + 30*60000));
   		upcomingList.removeEntryWithID(partyToSeat.id);
   	}
     

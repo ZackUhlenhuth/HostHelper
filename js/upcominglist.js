@@ -119,16 +119,14 @@ class UpcomingListEntry {
 		this.phone = phone;
 		
 		if (seatedTime == null) {
-		  this.seatedTime = new Date();
-		  this.seatedTime = get12hour(this.seatedTime);
+		  this.seatedTime = get12hour(new Date());
 		}
 		else {
 		  this.seatedTime = seatedTime;;
 		}
 		
 		if (eta == null) {
-  	  this.eta = new Date(new Date().getTime() + 30*60000);
-  	  this.eta = get12hour(this.eta);
+  	  this.eta = get12hour(new Date(new Date().getTime() + 30*60000));
   	}
   	else {
   	  this.eta = eta;;
