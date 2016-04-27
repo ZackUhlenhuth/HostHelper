@@ -477,6 +477,7 @@ $(function() {
   setMinScale = function() {
     minScale = $(".parent").width() / $(".panzoom").width();
     $panzoom.panzoom('option', 'minScale', minScale);
+    $panzoom.panzoom('resetPan')
   }
   $(window).resize(setMinScale);
   setMinScale()
