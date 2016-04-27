@@ -107,7 +107,7 @@ class UpcomingList {
 }
 
 class UpcomingListEntry {
-	constructor(name, size, phone, id) {
+	constructor(name, size, phone, id, seatedTime, eta) {
 		if (id == null) {
 			this.id = Math.round(Math.random() * 10000000);
 		}
@@ -117,6 +117,20 @@ class UpcomingListEntry {
 		this.name = name;
 		this.partySize = size;
 		this.phone = phone;
+		
+		if (seatedTime == null) {
+		  this.seatedTime = get12hour(new Date());
+		}
+		else {
+		  this.seatedTime = seatedTime;;
+		}
+		
+		if (eta == null) {
+  	  this.eta = get12hour(new Date(new Date().getTime() + 30*60000));
+  	}
+  	else {
+  	  this.eta = eta;;
+  	}
 	}
 }
 
@@ -124,10 +138,17 @@ class WaitlistEntry extends UpcomingListEntry {
 	constructor(name, size, phone, estimatedWaitInMins, id){
 		super(name, size, phone, id)
 		this.estimatedWaitInMins = estimatedWaitInMins;
+		
 	}
 
 	getCountdownString() {
-		return this.estimatedWaitInMins + " mins";
+	  var minuteSuffix;
+	  if (this.estimatedWaitInMins == 1)
+	    minuteSuffix = " min";
+	  else
+	    minuteSuffix = " mins";
+	  
+		return "<span class='glyphicon glyphicon-hourglass'></span> " + this.estimatedWaitInMins + minuteSuffix;
 	}
 
 }
@@ -139,8 +160,6 @@ class Reservation extends UpcomingListEntry {
 	}
 
 	getCountdownString() {
-		console.log(this.time);
-
 		var hours = "";
 		var AMPM = "AM"
 		if (this.time.getHours() > 11) {
@@ -155,7 +174,7 @@ class Reservation extends UpcomingListEntry {
 			minutes = "0" + minutes;
 		}
 
-		return hours + ":" + minutes + " " + AMPM
+		return "<span class='glyphicon glyphicon-calendar'></span> " + hours + ":" + minutes + " " + AMPM
 	}
 }
 

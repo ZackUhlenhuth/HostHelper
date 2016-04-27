@@ -1,8 +1,8 @@
 // Modified from "Cut & Paste Live Clock using forms" by George Chiang,
 // http://javascriptkit.com/script/cut2.shtml
-function refreshClock(){
-  var hours= new Date().getHours();
-  var minutes= new Date().getMinutes();
+function get12hour(d){
+  var hours= d.getHours();
+  var minutes= d.getMinutes();
   var dn="AM";
   
   if (hours>12) {
@@ -11,8 +11,12 @@ function refreshClock(){
   }
   if (hours == 0) hours=12;
   if (minutes<=9) minutes="0"+minutes;
-    
-  $("#clock").html(hours + ":" + minutes + " " + dn);
+  
+  return hours + ":" + minutes + " " + dn;
+}
+
+function refreshClock(){
+  $("#clock").html(get12hour(new Date()));
 }
 refreshClock();
 setInterval("refreshClock()",1000);
@@ -146,9 +150,9 @@ $(function() {
       var assignedParty = null;
       if (currTable.assignedParty != null) {
         var party = currTable.assignedParty;
-        var assignedParty = new UpcomingListEntry(party.name, party.partySize, party.assignedParty, party.id);
+        var assignedParty = new UpcomingListEntry(party.name, party.partySize, party.assignedParty, party.id, party.seatedTime, party.eta);
       }
-      var table = new Table(currTable.id, currTable.capacity, currTable.x, currTable.y, currTable.style, currTable.orientation, currTable.waiterZone);
+      var table = new Table(currTable.id, currTable.capacity, currTable.x, currTable.y, currTable.style, currTable.orientation, currTable.types);
       seatMap.addTable(table);
       //add the assigned party and update
       table.assignedParty = assignedParty;
@@ -156,32 +160,32 @@ $(function() {
     }
   }
   else {
-    seatMap.addTable(new Table(1, 6, 70, 80, "rect", "horizontal"));
-    seatMap.addTable(new Table(2, 6, 70, 190, "rect", "horizontal"));
-    seatMap.addTable(new Table(3, 6, 70, 300, "rect", "horizontal"));
+    seatMap.addTable(new Table(1, 6, 70, 80, "rect", "horizontal", ["inside", "booth"]));
+    seatMap.addTable(new Table(2, 6, 70, 190, "rect", "horizontal", ["inside", "booth"]));
+    seatMap.addTable(new Table(3, 6, 70, 300, "rect", "horizontal", ["inside", "booth"]));
 
-    seatMap.addTable(new Table(4, 2, 320, 120, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(5, 2, 320, 230, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(6, 2, 320, 340, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(4, 2, 320, 120, "ellipse", "horizontal", ["inside", "high-top"]));
+    seatMap.addTable(new Table(5, 2, 320, 230, "ellipse", "horizontal", ["inside", "high-top"]));
+    seatMap.addTable(new Table(6, 2, 320, 340, "ellipse", "horizontal", ["inside", "high-top"]));
 
-    seatMap.addTable(new Table(7, 4, 485, 120, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(8, 4, 485, 245, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(9, 6, 410, 320, "rect", "horizontal"));
+    seatMap.addTable(new Table(7, 4, 485, 120, "ellipse", "horizontal", ["inside", "table"]));
+    seatMap.addTable(new Table(8, 4, 485, 245, "ellipse", "horizontal", ["inside", "table"]));
+    seatMap.addTable(new Table(9, 6, 410, 320, "rect", "horizontal", ["inside", "table"]));
 
-    seatMap.addTable(new Table(10, 4, 620, 80, "rect", "horizontal"));
-    seatMap.addTable(new Table(11, 4, 620, 200, "rect", "horizontal"));
-    seatMap.addTable(new Table(12, 4, 620, 320, "rect", "horizontal"));
-    seatMap.addTable(new Table(13, 4, 760, 80, "rect", "horizontal"));
-    seatMap.addTable(new Table(14, 4, 760, 200, "rect", "horizontal"));
-    seatMap.addTable(new Table(15, 4, 760, 320, "rect", "horizontal"));
+    seatMap.addTable(new Table(10, 4, 620, 80, "rect", "horizontal", ["inside", "table"]));
+    seatMap.addTable(new Table(11, 4, 620, 200, "rect", "horizontal", ["inside", "table"]));
+    seatMap.addTable(new Table(12, 4, 620, 320, "rect", "horizontal", ["inside", "table"]));
+    seatMap.addTable(new Table(13, 4, 760, 80, "rect", "horizontal", ["inside", "table", "handicap-accessible"]));
+    seatMap.addTable(new Table(14, 4, 760, 200, "rect", "horizontal", ["inside", "table", "handicap-accessible"]));
+    seatMap.addTable(new Table(15, 4, 760, 320, "rect", "horizontal", ["inside", "table", "handicap-accessible"]));
 
-    seatMap.addTable(new Table(16, 2, 100, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(17, 2, 220, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(18, 2, 340, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(19, 2, 460, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(20, 2, 580, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(21, 2, 700, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(22, 2, 820, 710, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(16, 2, 100, 710, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(17, 2, 220, 710, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(18, 2, 340, 710, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(19, 2, 460, 710, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(20, 2, 580, 710, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(21, 2, 700, 710, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(22, 2, 820, 710, "ellipse", "horizontal", ["outside", "table"]));
   }
   seatMap.addWaiterZone(mikeZone);
   seatMap.addWaiterZone(sarahZone);
@@ -193,6 +197,8 @@ $(function() {
 		$("#addPartyMenu").hide();
     $("#reservationMenu").collapse('show');
     $("#inputPartyName").focus();
+    $("#inputDateReservation").datepicker().datepicker("setDate", new Date());
+    $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date(new Date().getTime() + 15*60000));
   });
   $("#openWaitlistMenu").click(function() {
     $("#addPartyMenu").hide();
@@ -233,9 +239,6 @@ $(function() {
     		$("#inputPhoneNumberReservation").val(),
     		timeAndDate))
     $('#reservationForm').trigger('reset');
-    $("#inputDateReservation").datepicker().datepicker("setDate", new Date()); ///Default date/time
-    $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date());
-
     $("#reservationMenu").collapse('hide');
     $("#addPartyMenu").show();
   });
@@ -254,10 +257,6 @@ $(function() {
   	$("#addPartyMenu").show();
   });
 
-  //Default date/time upon load
-  $("#inputDateReservation").datepicker().datepicker("setDate", new Date());
-  $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date(new Date().getTime() + 15*60000));
-
   //Add 'click' affordance upon hovering a table
   $(".restaurantTable").hover(
     function() {
@@ -274,6 +273,8 @@ $(function() {
     if (selectedTable.isOccupied()) { // If the table is occupied, show the unseat popup, if it's open, show the seat popup.
     	halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
       $("#unseatPartyName").html(selectedTable.assignedParty.name);
+      $("#unseatPartySeatedTime").html(selectedTable.assignedParty.seatedTime);
+      $("#unseatPartyETA").html(selectedTable.assignedParty.eta);
     	// add 15 to top to account for tooltip
     	$("#unseatPopUp").slideDown("fast", "linear").css("top", e.pageY + 15).css("left", e.pageX - halfWidth);
     } else {
@@ -290,7 +291,7 @@ $(function() {
     }
   });
 
-  // Hid popups. Called when 'close' button in popup is clicked. Does not reset tooltip
+  // Hide popups. Called when 'close' button in popup is clicked. Does not reset tooltip
   function hidePopups() {
       $("#seatPopUp").hide();
       $("#unseatPopUp").hide();
@@ -349,14 +350,22 @@ $(function() {
 
     partySizeText = $("#filterSize").val();
     serverText = $("#filterServer").val();
+    typeText = $("#filterType").val();
 
     partySize = null;
     server = null;
+    type = null;
 
     if (partySizeText != "") partySize = parseInt(partySizeText, 10); 
-    if (serverText != "none") server = serverText; 
+    if (serverText != null) server = serverText;
+    if (typeText != null) {
+      for (var i in typeText) {
+        typeText[i] = typeText[i].toLowerCase();
+      }
+      type = typeText;
+    }
 
-    matchingList = seatMap.getOpenTablesMatchingFilters(partySize, server);
+    matchingList = seatMap.getOpenTablesMatchingFilters(partySize, server, type);
 
     matchingList.map(getViewForTable).map(function(element) {element.css("fill", "#ccff99")});
   }
@@ -375,16 +384,17 @@ $(function() {
   	if (partyToSeatID == "walk-in") {
   		partySize = $("#inputWalkInPartySize").val();
   		partyToSeat = new UpcomingListEntry("Walk-In", partySize);
-  		console.log(partyToSeat)
   		if (!selectedTable.canPartyFit(partyToSeat)) {
   			alert("That group has too many members to sit at that table.");
   			return;
   		}
   	} else {
   		partyToSeat = upcomingList.getEntryWithID(partyToSeatID)
+  		partyToSeat.seatedTime = get12hour(new Date());
+  		partyToSeat.eta = get12hour(new Date(new Date().getTime() + 30*60000));
   		upcomingList.removeEntryWithID(partyToSeat.id);
   	}
-
+    
   	selectedTable.assignedParty = partyToSeat;
 
   	seatMap.updateTable(selectedTable);
@@ -410,6 +420,7 @@ $(function() {
   });
 
   $("#filterServer").on('change', applyFilters);
+  $("#filterType").on('change', applyFilters);
 
   //upon clicking items in Upcoming List
   $(document).on('click', ".upcoming-party", function(e) {

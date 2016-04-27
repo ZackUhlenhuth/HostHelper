@@ -79,6 +79,9 @@ h3 {
 	display:inline-block;
 	width:50px;
 }
+#unseatPartyName {
+  margin-bottom:5px;
+}
 /*
 @media (min-width:1800px) {
   .container {
@@ -105,6 +108,10 @@ h3 {
 .countdown-string {
   float:right;
   margin-right:5px;
+}
+#upcomingList {
+  max-height:350px;
+  overflow-y:auto;
 }
 
 /* svg elements (floorplan) */
