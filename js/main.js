@@ -480,4 +480,6 @@ $(function() {
   }
   $(window).resize(setMinScale);
   setMinScale()
+
+   $panzoom.panzoom('option', 'maxScale', 3.0);
 });
