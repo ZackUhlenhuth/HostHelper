@@ -17,6 +17,79 @@ function refreshClock(){
 refreshClock();
 setInterval("refreshClock()",1000);
 
+//does date1 occur on or after date2
+function validDate(date1, date2){
+  if (date1.getFullYear() > date2.getFullYear()){
+    return true;
+  }
+  if (date1.getFullYear() == date2.getFullYear()){
+    return (date1.getDate() >= date2.getDate());
+  }
+  return false
+}
+
+// inputs are jquery references in the form "#abcd"
+function validUpcomingEntry(form, name, size, phone, time="none", date="none"){
+    var RESTAURANT_CAPACITY = 100 //TODO calculate actual capacity
+    var validInput = true;
+    //Check that inputs are the correct type
+    if (!($(name).val().match(/^\w+$/) &&
+        $(name).val().length < 12)){
+        // Error: Party must contain 1-12 letters
+      validInput = false;
+      var warning1 = $('<div class="alert alert-warning"></div>').text("Party Name must be between 1 and 12 letters.")
+      warning1.append($('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'))
+      $(form).append(warning1);
+
+    }
+
+    if (!($(size).val().match(/^\d+$/) &&
+      (parseInt($(size).val(),10) < RESTAURANT_CAPACITY))){
+        //Error: Party size must be less than RESTAURANT_CAPACITY
+      validInput = false;
+      var warning2 = $('<div class="alert alert-warning"></div>').text("Party size must be between 1 and 100.")
+      warning2.append($('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'))
+      $(form).append(warning2);
+    }
+
+    if (!($(phone).val().match(/^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/))){
+      //Error: Phone number must contain 10 digits
+      validInput = false
+      var warning3 = $('<div class="alert alert-warning"></div>').text("Phone number must contain 7 or 10 digits.")
+      warning3.append($('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'))
+      $(form).append(warning3);
+    }
+
+
+    if (!((time == "none") | (date == "none"))){ //Reservation, not Waitlist
+      alert("RSE");
+      var currentDate = new Date()
+      var reservationDate = new Date(($(date).val()));
+      if (!($(date).val().match(/^\d{2}\/\d{2}\/\d{4}$/))){
+        validInput = false;
+        var warning4 = $('<div class="alert alert-warning"></div>').text("Date must have the format: mm/dd/yyyy.")
+        warning4.append($('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'))
+        $(form).append(warning4);
+      } 
+      if (!(validDate(reservationDate, currentDate))){
+        validInput = false;
+        var warning5 = $('<div class="alert alert-warning"></div>').text("Date cannot be in the past.")
+        warning5.append($('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'))
+        $(form).append(warning5);
+      }
+      //TODO: check that time is >= current time if reservation is on current date
+      if (!$(time).val().match(/^\d{2}:\d{2}\s(AM|PM)$/)){
+        //Error: Time must have the format: hh:mm AM/PM
+        validInput = false;
+        var warning6 = $('<div class="alert alert-warning"></div>').text("Time must have the format: hh:mm AM/PM.")
+        warning6.append($('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'))
+        $(form).append(warning6);
+      }
+    }
+    return validInput;
+}
+
+
 $(function() {
   var upcomingList = new UpcomingList();
   var seatMap = new SeatMap();
@@ -219,25 +292,34 @@ $(function() {
     name = $("#inputPartyNameWaitlist").val();
     partySize = $("#inputPartySizeWaitlist").val();
     phone = $("#inputPhoneNumberWaitlist").val();
-    $('#waitlistForm').trigger('reset');
-    upcomingList.addEntry(new WaitlistEntry(name, partySize, phone, 1));
-    $("#waitlistMenu").collapse('hide');
-    $("#addPartyMenu").show();
+    if (validUpcomingEntry("#waitlistMenu", "#inputPartyNameWaitlist", "#inputPartySizeWaitlist", "#inputPhoneNumberWaitlist")){
+      $('#waitlistForm').trigger('reset');
+      upcomingList.addEntry(new WaitlistEntry(name, partySize, phone, 1));
+      $("#waitlistMenu").collapse('hide');
+      $("#addPartyMenu").show();
+    }
   });
 
   //add a Reservation to Upcoming
   $("#addReservation").click(function(e) {
     timeAndDate = new Date($('#inputDateReservation').val() + " " + $("#inputTimeReservation").val());
-    upcomingList.addEntry(new Reservation($("#inputPartyNameReservation").val(),
-    		$("#inputPartySizeReservation").val(),
-    		$("#inputPhoneNumberReservation").val(),
-    		timeAndDate))
-    $('#reservationForm').trigger('reset');
-    $("#inputDateReservation").datepicker().datepicker("setDate", new Date()); ///Default date/time
-    $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date());
+    //if the form is filled out correctly
+    if (validUpcomingEntry("#reservationMenu", "#inputPartyNameReservation", "#inputPartySizeReservation", "#inputPhoneNumberReservation", "#inputTimeReservation", "#inputDateReservation")){
+      upcomingList.addEntry(new Reservation($("#inputPartyNameReservation").val(),
+          $("#inputPartySizeReservation").val(),
+          $("#inputPhoneNumberReservation").val(),
+          timeAndDate))
+      $('#reservationForm').trigger('reset');
+      $("#inputDateReservation").datepicker().datepicker("setDate", new Date()); ///Default date/time
+      $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date());
 
-    $("#reservationMenu").collapse('hide');
-    $("#addPartyMenu").show();
+      $("#reservationMenu").collapse('hide');
+      $("#addPartyMenu").show();      
+    }
+
+
+
+
   });
 
   $("#editWaitlist").click(function(e) {

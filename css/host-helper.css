@@ -175,3 +175,7 @@ h3 {
 	50% {color: #e60000;}
 	0% {color: #ffb3b3;}
 }
+
+.alert {
+	padding: 5px;
+}
