@@ -68,20 +68,32 @@ class SeatMap {
 
 	// This will ignore any filters specified as null arguments.
 	// If both arguments are null, it will return an empty list.
-	getOpenTablesMatchingFilters(partySize, server) {
-		if (partySize == null && server == null) return [];
+	getOpenTablesMatchingFilters(partySize, server, type) {
+		if (partySize == null && server == null && type == null) return [];
 
 		var waiterZone = this.getWaiterZoneByName(server);
 
 		var tableSizeFilter = function(thisTable) {
     		return partySize <= thisTable.capacity || partySize == null;
-    	}    	
+    }
 
-    	if (server == null) {
-    		return this.getOpenTables().filter(tableSizeFilter);
-    	} else {
-    		return this.getOpenWaiterZoneTables(waiterZone).filter(tableSizeFilter);
+    if (server == null) {
+      if (type == null)
+    	  return this.getOpenTables().filter(tableSizeFilter);
+    	else {
+    	  return this.getOpenTables().filter(tableSizeFilter).filter(function(index){
+    	    return isSubArray(type, index.types);
+    	  });
     	}
+    } else {
+      if (type == null)
+    	  return this.getOpenWaiterZoneTables(waiterZone).filter(tableSizeFilter);
+    	else {
+    	  return this.getOpenWaiterZoneTables(waiterZone).filter(tableSizeFilter).filter(function(index){
+    	    return isSubArray(type, index.types);
+    	  });
+    	}
+    }
 	}
 
 	// this.waiterZones should not be modified directly, it should only be modified
@@ -151,7 +163,7 @@ class SeatMap {
 
 class Table {
 	// Valid styles: ellipse, rect
-	constructor(id, capacity, x, y, style, orientation) {
+	constructor(id, capacity, x, y, style, orientation, types) {
 		this.id = id;
 
 		this.capacity = capacity;
@@ -159,6 +171,7 @@ class Table {
 		this.y = y;
 		this.style = style;
 		this.orientation = orientation;
+		this.types = types;
 		this.assignedParty = null;
 	}
 
@@ -193,3 +206,14 @@ class WaiterZone {
 function tableIDForElementID(elementID) {
 	return parseInt(elementID.substring("table".length));
 }
+
+// check if an array is contained in another array
+// function courtesy of Grainier Perera, 
+// http://grainier.net/how-to-check-sub-array-in-javascript/
+function isSubArray (subArray, array) {
+    for(var i = 0 , len = subArray.length; i < len; i++) {
+        if($.inArray(subArray[i], array) == -1) return false;
+    }
+    return true;
+}
+

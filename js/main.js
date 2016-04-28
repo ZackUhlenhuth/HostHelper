@@ -1,8 +1,8 @@
 // Modified from "Cut & Paste Live Clock using forms" by George Chiang,
 // http://javascriptkit.com/script/cut2.shtml
-function refreshClock(){
-  var hours= new Date().getHours();
-  var minutes= new Date().getMinutes();
+function get12hour(d){
+  var hours= d.getHours();
+  var minutes= d.getMinutes();
   var dn="AM";
   
   if (hours>12) {
@@ -11,8 +11,12 @@ function refreshClock(){
   }
   if (hours == 0) hours=12;
   if (minutes<=9) minutes="0"+minutes;
-    
-  $("#clock").html(hours + ":" + minutes + " " + dn);
+  
+  return hours + ":" + minutes + " " + dn;
+}
+
+function refreshClock(){
+  $("#clock").html(get12hour(new Date()));
 }
 refreshClock();
 setInterval("refreshClock()",1000);
@@ -37,7 +41,7 @@ function validUpcomingEntry(form, name, size, phone, time="none", date="none"){
         $(name).val().length < 12)){
         // Error: Party must contain 1-12 letters
       validInput = false;
-      var warning1 = $('<div class="alert alert-warning"></div>').text("Party Name must be between 1 and 12 letters.")
+      var warning1 = $('<div class="alert alert-warning"></div>').text("Name must be between 1 and 12 letters.")
       warning1.append($('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'))
       $(form).append(warning1);
 
@@ -62,7 +66,6 @@ function validUpcomingEntry(form, name, size, phone, time="none", date="none"){
 
 
     if (!((time == "none") | (date == "none"))){ //Reservation, not Waitlist
-      alert("RSE");
       var currentDate = new Date()
       var reservationDate = new Date(($(date).val()));
       if (!($(date).val().match(/^\d{2}\/\d{2}\/\d{4}$/))){
@@ -219,9 +222,9 @@ $(function() {
       var assignedParty = null;
       if (currTable.assignedParty != null) {
         var party = currTable.assignedParty;
-        var assignedParty = new UpcomingListEntry(party.name, party.partySize, party.assignedParty, party.id);
+        var assignedParty = new UpcomingListEntry(party.name, party.partySize, party.assignedParty, party.id, party.seatedTime, party.eta);
       }
-      var table = new Table(currTable.id, currTable.capacity, currTable.x, currTable.y, currTable.style, currTable.orientation, currTable.waiterZone);
+      var table = new Table(currTable.id, currTable.capacity, currTable.x, currTable.y, currTable.style, currTable.orientation, currTable.types);
       seatMap.addTable(table);
       //add the assigned party and update
       table.assignedParty = assignedParty;
@@ -229,32 +232,32 @@ $(function() {
     }
   }
   else {
-    seatMap.addTable(new Table(1, 6, 70, 80, "rect", "horizontal"));
-    seatMap.addTable(new Table(2, 6, 70, 190, "rect", "horizontal"));
-    seatMap.addTable(new Table(3, 6, 70, 300, "rect", "horizontal"));
+    seatMap.addTable(new Table(1, 6, 70, 80, "rect", "horizontal", ["inside", "booth"]));
+    seatMap.addTable(new Table(2, 6, 70, 190, "rect", "horizontal", ["inside", "booth"]));
+    seatMap.addTable(new Table(3, 6, 70, 300, "rect", "horizontal", ["inside", "booth"]));
 
-    seatMap.addTable(new Table(4, 2, 320, 120, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(5, 2, 320, 230, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(6, 2, 320, 340, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(4, 2, 320, 120, "ellipse", "horizontal", ["inside", "high-top"]));
+    seatMap.addTable(new Table(5, 2, 320, 230, "ellipse", "horizontal", ["inside", "high-top"]));
+    seatMap.addTable(new Table(6, 2, 320, 340, "ellipse", "horizontal", ["inside", "high-top"]));
 
-    seatMap.addTable(new Table(7, 4, 485, 120, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(8, 4, 485, 245, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(9, 6, 410, 320, "rect", "horizontal"));
+    seatMap.addTable(new Table(7, 4, 485, 120, "ellipse", "horizontal", ["inside", "table"]));
+    seatMap.addTable(new Table(8, 4, 485, 245, "ellipse", "horizontal", ["inside", "table"]));
+    seatMap.addTable(new Table(9, 6, 410, 320, "rect", "horizontal", ["inside", "table"]));
 
-    seatMap.addTable(new Table(10, 4, 620, 80, "rect", "horizontal"));
-    seatMap.addTable(new Table(11, 4, 620, 200, "rect", "horizontal"));
-    seatMap.addTable(new Table(12, 4, 620, 320, "rect", "horizontal"));
-    seatMap.addTable(new Table(13, 4, 760, 80, "rect", "horizontal"));
-    seatMap.addTable(new Table(14, 4, 760, 200, "rect", "horizontal"));
-    seatMap.addTable(new Table(15, 4, 760, 320, "rect", "horizontal"));
+    seatMap.addTable(new Table(10, 4, 620, 80, "rect", "horizontal", ["inside", "table"]));
+    seatMap.addTable(new Table(11, 4, 620, 200, "rect", "horizontal", ["inside", "table"]));
+    seatMap.addTable(new Table(12, 4, 620, 320, "rect", "horizontal", ["inside", "table"]));
+    seatMap.addTable(new Table(13, 4, 760, 80, "rect", "horizontal", ["inside", "table", "handicap-accessible"]));
+    seatMap.addTable(new Table(14, 4, 760, 200, "rect", "horizontal", ["inside", "table", "handicap-accessible"]));
+    seatMap.addTable(new Table(15, 4, 760, 320, "rect", "horizontal", ["inside", "table", "handicap-accessible"]));
 
-    seatMap.addTable(new Table(16, 2, 100, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(17, 2, 220, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(18, 2, 340, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(19, 2, 460, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(20, 2, 580, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(21, 2, 700, 710, "ellipse", "horizontal"));
-    seatMap.addTable(new Table(22, 2, 820, 710, "ellipse", "horizontal"));
+    seatMap.addTable(new Table(16, 2, 100, 710, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(17, 2, 220, 710, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(18, 2, 340, 710, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(19, 2, 460, 710, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(20, 2, 580, 710, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(21, 2, 700, 710, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(22, 2, 820, 710, "ellipse", "horizontal", ["outside", "table"]));
   }
   seatMap.addWaiterZone(mikeZone);
   seatMap.addWaiterZone(sarahZone);
@@ -265,19 +268,47 @@ $(function() {
  	$("#openReservationMenu").click(function() {
 		$("#addPartyMenu").hide();
     $("#reservationMenu").collapse('show');
-    $("#inputPartyName").focus();
+    $("#inputPartyNameReservation").focus();
+    $("#inputDateReservation").datepicker().datepicker("setDate", new Date());
+    $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date(new Date().getTime() + 15*60000));
+    $("#inputPartyNameReservation").parent().parent().removeClass("has-error");
+    $("#inputPartyNameReservation").parent().parent().removeClass("has-success");
+    $("#inputPartyNameReservation").siblings(".help-block").addClass("hidden");
+    $("#inputPartySizeReservation").parent().parent().removeClass("has-error");
+    $("#inputPartySizeReservation").parent().parent().removeClass("has-success");
+    $("#inputPartySizeReservation").siblings(".help-block").addClass("hidden");
+    $("#inputPhoneNumberReservation").parent().parent().removeClass("has-error");
+    $("#inputPhoneNumberReservation").parent().parent().removeClass("has-success");
+    $("#inputPhoneNumberReservation").siblings(".help-block").addClass("hidden");
+    $("#inputTimeReservation").parent().parent().removeClass("has-error");
+    $("#inputTimeReservation").parent().parent().removeClass("has-success");
+    $("#inputTimeReservation").siblings(".help-block").addClass("hidden");
+    $("#inputDateReservation").parent().parent().removeClass("has-error");
+    $("#inputDateReservation").parent().parent().removeClass("has-success");
+    $("#inputDateReservation").siblings(".help-block").addClass("hidden");
   });
   $("#openWaitlistMenu").click(function() {
     $("#addPartyMenu").hide();
     $("#waitlistMenu").collapse('show');
-    $("#inputPartyNameWaitlist").focus()
+    $("#inputPartyNameWaitlist").focus();
+    $("#inputPartyNameWaitlist").parent().parent().removeClass("has-error");
+    $("#inputPartyNameWaitlist").parent().parent().removeClass("has-success");
+    $("#inputPartyNameWaitlist").siblings(".help-block").addClass("hidden");
+    $("#inputPartySizeWaitlist").parent().parent().removeClass("has-error");
+    $("#inputPartySizeWaitlist").parent().parent().removeClass("has-success");
+    $("#inputPartySizeWaitlist").siblings(".help-block").addClass("hidden");
+    $("#inputPhoneNumberWaitlist").parent().parent().removeClass("has-warning");
+    $("#inputPhoneNumberWaitlist").parent().parent().removeClass("has-success");
+    $("#inputPhoneNumberWaitlist").siblings(".help-block").addClass("hidden");
   });
   $("#cancelReservation").click(function() {
     $("#reservationMenu").collapse('hide');
+    $("#reservationForm").trigger("reset");
     $("#addPartyMenu").show();
   });
   $("#cancelWaitlist").click(function() {
     $("#waitlistMenu").collapse('hide');
+    $("#waitlistForm").trigger("reset");
     $("#addPartyMenu").show();
   });
 
@@ -292,12 +323,51 @@ $(function() {
     name = $("#inputPartyNameWaitlist").val();
     partySize = $("#inputPartySizeWaitlist").val();
     phone = $("#inputPhoneNumberWaitlist").val();
+
     if (validUpcomingEntry("#waitlistMenu", "#inputPartyNameWaitlist", "#inputPartySizeWaitlist", "#inputPhoneNumberWaitlist")){
       $('#waitlistForm').trigger('reset');
       upcomingList.addEntry(new WaitlistEntry(name, partySize, phone, 1));
       $("#waitlistMenu").collapse('hide');
       $("#addPartyMenu").show();
     }
+
+    
+    // if (name != "" && partySize != "" && (phone != "" || $("#inputPhoneNumberWaitlist").parent().parent().hasClass("has-warning"))) {
+
+    //   $('#waitlistForm').trigger('reset');
+    //   upcomingList.addEntry(new WaitlistEntry(name, partySize, phone, 1));
+    //   $("#waitlistMenu").collapse('hide');
+    //   $("#addPartyMenu").show();
+    // }
+    // else {
+    //   if (name == "") {
+    //     $("#inputPartyNameWaitlist").parent().parent().addClass("has-error");
+    //     $("#inputPartyNameWaitlist").siblings(".help-block").removeClass("hidden");
+    //   }
+    //   else {
+    //     $("#inputPartyNameWaitlist").parent().parent().removeClass("has-error");
+    //     $("#inputPartyNameWaitlist").parent().parent().addClass("has-success");
+    //     $("#inputPartyNameWaitlist").siblings(".help-block").addClass("hidden");
+    //   }     
+    //   if (partySize == "") {
+    //     $("#inputPartySizeWaitlist").parent().parent().addClass("has-error");
+    //     $("#inputPartySizeWaitlist").siblings(".help-block").removeClass("hidden");
+    //   }
+    //   else {
+    //     $("#inputPartySizeWaitlist").parent().parent().removeClass("has-error");
+    //     $("#inputPartySizeWaitlist").parent().parent().addClass("has-success");
+    //     $("#inputPartyNameWaitlist").siblings(".help-block").addClass("hidden");
+    //   }   
+    //   if (phone == "") {
+    //     $("#inputPhoneNumberWaitlist").parent().parent().addClass("has-warning");
+    //     $("#inputPhoneNumberWaitlist").siblings(".help-block").removeClass("hidden");
+    //   }
+    //   else {
+    //     $("#inputPhoneNumberWaitlist").parent().parent().removeClass("has-warning");
+    //     $("#inputPhoneNumberWaitlist").parent().parent().addClass("has-success");
+    //     $("#inputPartyNameWaitlist").siblings(".help-block").addClass("hidden");
+    //   }   
+    // }
   });
 
   //add a Reservation to Upcoming
@@ -316,9 +386,69 @@ $(function() {
       $("#reservationMenu").collapse('hide');
       $("#addPartyMenu").show();      
     }
-
-
-
+    name = $("#inputPartyNameReservation").val();
+    partySize = $("#inputPartySizeReservation").val();
+    phone = $("#inputPhoneNumberReservation").val();
+    time = $("#inputTimeReservation").val();
+    date = $("#inputDateReservation").val();
+    
+    // if (name != "" && partySize != "" && phone != "" && time != "" && date != "") {
+    //   timeAndDate = new Date($('#inputDateReservation').val() + " " + $("#inputTimeReservation").val());
+    //   upcomingList.addEntry(new Reservation($("#inputPartyNameReservation").val(),
+    //   		$("#inputPartySizeReservation").val(),
+    //   		$("#inputPhoneNumberReservation").val(),
+    //   		timeAndDate))
+    //   $('#reservationForm').trigger('reset');
+    //   $("#reservationMenu").collapse('hide');
+    //   $("#addPartyMenu").show();
+    // }
+    // else {
+    //   if (name == "") {
+    //     $("#inputPartyNameReservation").parent().parent().addClass("has-error");
+    //     $("#inputPartyNameReservation").siblings(".help-block").removeClass("hidden");
+    //   }
+    //   else {
+    //     $("#inputPartyNameReservation").parent().parent().removeClass("has-error");
+    //     $("#inputPartyNameReservation").parent().parent().addClass("has-success");
+    //     $("#inputPartyNameReservation").siblings(".help-block").addClass("hidden");
+    //   }
+    //   if (partySize == "") {
+    //     $("#inputPartySizeReservation").parent().parent().addClass("has-error");
+    //     $("#inputPartySizeReservation").siblings(".help-block").removeClass("hidden");
+    //   }
+    //   else {
+    //     $("#inputPartySizeReservation").parent().parent().removeClass("has-error");
+    //     $("#inputPartySizeReservation").parent().parent().addClass("has-success");
+    //     $("#inputPartySizeReservation").siblings(".help-block").addClass("hidden");
+    //   }   
+    //   if (phone == "") {
+    //     $("#inputPhoneNumberReservation").parent().parent().addClass("has-error");
+    //     $("#inputPhoneNumberReservation").siblings(".help-block").removeClass("hidden");
+    //   }
+    //   else {
+    //     $("#inputPhoneNumberReservation").parent().parent().removeClass("has-error");
+    //     $("#inputPhoneNumberReservation").parent().parent().addClass("has-success");
+    //     $("#inputPhoneNumberReservation").siblings(".help-block").addClass("hidden");
+    //   }
+    //   if (time == "") {
+    //     $("#inputTimeReservation").parent().parent().addClass("has-error");
+    //     $("#inputTimeReservation").siblings(".help-block").removeClass("hidden");
+    //   }
+    //   else {
+    //     $("#inputTimeReservation").parent().parent().removeClass("has-error");
+    //     $("#inputTimeReservation").parent().parent().addClass("has-success");
+    //     $("#inputTimeReservation").siblings(".help-block").addClass("hidden");
+    //   }
+    //   if (date == "") {
+    //     $("#inputDateReservation").parent().parent().addClass("has-error");
+    //     $("#inputDateReservation").siblings(".help-block").removeClass("hidden");
+    //   }
+    //   else {
+    //     $("#inputDateReservation").parent().parent().removeClass("has-error");
+    //     $("#inputDateReservation").parent().parent().addClass("has-success");
+    //     $("#inputDateReservation").siblings(".help-block").addClass("hidden");
+    //   }
+    // }
 
   });
 
@@ -336,10 +466,6 @@ $(function() {
   	$("#addPartyMenu").show();
   });
 
-  //Default date/time upon load
-  $("#inputDateReservation").datepicker().datepicker("setDate", new Date());
-  $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date(new Date().getTime() + 15*60000));
-
   //Add 'click' affordance upon hovering a table
   $(".restaurantTable").hover(
     function() {
@@ -356,6 +482,8 @@ $(function() {
     if (selectedTable.isOccupied()) { // If the table is occupied, show the unseat popup, if it's open, show the seat popup.
     	halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
       $("#unseatPartyName").html(selectedTable.assignedParty.name);
+      $("#unseatPartySeatedTime").html(selectedTable.assignedParty.seatedTime);
+      $("#unseatPartyETA").html(selectedTable.assignedParty.eta);
     	// add 15 to top to account for tooltip
     	$("#unseatPopUp").slideDown("fast", "linear").css("top", e.pageY + 15).css("left", e.pageX - halfWidth);
     } else {
@@ -372,7 +500,7 @@ $(function() {
     }
   });
 
-  // Hid popups. Called when 'close' button in popup is clicked. Does not reset tooltip
+  // Hide popups. Called when 'close' button in popup is clicked. Does not reset tooltip
   function hidePopups() {
       $("#seatPopUp").hide();
       $("#unseatPopUp").hide();
@@ -411,6 +539,8 @@ $(function() {
     $("#tableWaiter").html(seatMap.getWaiterZoneByTable(selectedTable).waiterName);
 
     selectSeatParty($("#seatPartySelector").val());
+    $("#inputWalkInPartySizeFeedback").addClass("hidden");
+    $("#seatPartySizeGroup").removeClass("has-error");
       
     $("#inputWalkInPartySize").focus();
   }
@@ -431,14 +561,22 @@ $(function() {
 
     partySizeText = $("#filterSize").val();
     serverText = $("#filterServer").val();
+    typeText = $("#filterType").val();
 
     partySize = null;
     server = null;
+    type = null;
 
     if (partySizeText != "") partySize = parseInt(partySizeText, 10); 
-    if (serverText != "none") server = serverText; 
+    if (serverText != null) server = serverText;
+    if (typeText != null) {
+      for (var i in typeText) {
+        typeText[i] = typeText[i].toLowerCase();
+      }
+      type = typeText;
+    }
 
-    matchingList = seatMap.getOpenTablesMatchingFilters(partySize, server);
+    matchingList = seatMap.getOpenTablesMatchingFilters(partySize, server, type);
 
     matchingList.map(getViewForTable).map(function(element) {element.css("fill", "#ccff99")});
   }
@@ -457,16 +595,21 @@ $(function() {
   	if (partyToSeatID == "walk-in") {
   		partySize = $("#inputWalkInPartySize").val();
   		partyToSeat = new UpcomingListEntry("Walk-In", partySize);
-  		console.log(partyToSeat)
-  		if (!selectedTable.canPartyFit(partyToSeat)) {
-  			alert("That group has too many members to sit at that table.");
-  			return;
-  		}
+  		if (partySize == "" || isNaN(partySize)) {
+        $("#seatPartySizeGroup").addClass("has-error");
+        $("#inputWalkInPartySizeFeedback").removeClass("hidden");
+        if (!selectedTable.canPartyFit(partyToSeat)) {
+    			alert("That group has too many members to sit at that table.");
+    		}
+        return;
+      }
   	} else {
   		partyToSeat = upcomingList.getEntryWithID(partyToSeatID)
+  		partyToSeat.seatedTime = get12hour(new Date());
+  		partyToSeat.eta = get12hour(new Date(new Date().getTime() + 30*60000));
   		upcomingList.removeEntryWithID(partyToSeat.id);
   	}
-
+    
   	selectedTable.assignedParty = partyToSeat;
 
   	seatMap.updateTable(selectedTable);
@@ -492,6 +635,7 @@ $(function() {
   });
 
   $("#filterServer").on('change', applyFilters);
+  $("#filterType").on('change', applyFilters);
 
   //upon clicking items in Upcoming List
   $(document).on('click', ".upcoming-party", function(e) {
@@ -516,7 +660,7 @@ $(function() {
 
     e.stopPropagation();
 
-    correspondingPartyView = $(this).parents(".upcoming-party").first();
+    correspondingPartyView = $(this).parents(".upcoming-party")[0];
     upcomingList.removeEntryWithID(correspondingPartyView.id);
   });
 
@@ -559,7 +703,10 @@ $(function() {
   setMinScale = function() {
     minScale = $(".parent").width() / $(".panzoom").width();
     $panzoom.panzoom('option', 'minScale', minScale);
+    $panzoom.panzoom('resetPan')
   }
   $(window).resize(setMinScale);
   setMinScale()
+
+   $panzoom.panzoom('option', 'maxScale', 3.0);
 });
