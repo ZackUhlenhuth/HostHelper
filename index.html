@@ -126,26 +126,31 @@
                   <div class="form-group">
                     <div class="col-md-12">
                       <input type="text" class="form-control" id="inputPartyNameReservation" placeholder="Party Name">
+                      <span class="help-block hidden">Party name is required!</span>
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="col-md-12">
                       <input type="number" class="form-control" id="inputPartySizeReservation" placeholder="Party Size">
+                      <span class="help-block hidden">Party size is required!</span>
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="col-md-12">
                       <input type="tel" class="form-control" id="inputPhoneNumberReservation" placeholder="Phone Number">
+                      <span class="help-block hidden">Phone number is required!</span>
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="col-md-12">
                       <input type="text" class="form-control" id="inputTimeReservation">
+                      <span class="help-block hidden">Time is required!</span>
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="col-md-12">
                       <input class="form-control" type="text" id="inputDateReservation">
+                      <span class="help-block hidden">Date is required!</span>
                     </div>
                   </div>
                   <div class="form-group">
@@ -165,16 +170,19 @@
                   <div class="form-group">
                     <div class="col-md-12">
                       <input type="text" class="form-control" id="inputPartyNameWaitlist" placeholder="Party Name">
+                      <span class="help-block hidden">Party name is required!</span>
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="col-md-12">
                       <input type="number" class="form-control" id="inputPartySizeWaitlist" placeholder="Party Size">
+                      <span class="help-block hidden">Party size is required!</span>
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="col-md-12">
                       <input type="tel" class="form-control" id="inputPhoneNumberWaitlist" placeholder="Phone Number">
+                      <span class="help-block hidden">Phone number is recommended!</span>
                     </div>
                   </div>
                   <div class="form-group">
@@ -228,7 +236,7 @@
       <!-- Dismiss button from http://getbootstrap.com/components/ -->
       <button type="button" class="close" aria-label="Close"><span aria-hidden="true">×</span></button>
       <form class="form">
-        <div id="walkInOptions" class="form-group">
+        <div id="seatPartyName" class="form-group">
           <label for="seatPartySelector">Party Name:</label>
           <select id="seatPartySelector">
             <option value="walk-in" id="walk-in">Walk-In</option>
@@ -238,9 +246,10 @@
           <label for="tableWaiter" class="form-group">Waiter:</label>
           <span id="tableWaiter">Waiter1</span>
         </div>
-        <div id="walkInOptions" class="form-group">
+        <div id="seatPartySizeGroup" class="form-group">
           <label for="inputWalkInPartySize">Size:</label>
           <input type="text" class="form-control" id="inputWalkInPartySize" placeholder="0" autocomplete="off">
+          <span class="glyphicon glyphicon-remove hidden" id="inputWalkInPartySizeFeedback"></span>
           <span id="seatPartySize"></span>
         </div>
         <button id="seatTable" type="reset" class="btn btn-primary">Seat!</button>

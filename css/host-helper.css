@@ -82,6 +82,9 @@ h3 {
 #unseatPartyName {
   margin-bottom:5px;
 }
+.floorplan-tooltip .glyphicon-remove {
+  color:darkred;
+}
 /*
 @media (min-width:1800px) {
   .container {
