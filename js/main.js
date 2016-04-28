@@ -460,10 +460,14 @@ $(function() {
   	editedEvent.partySize = parseInt($("#inputPartySizeWaitlistEdit").val(), 10);
   	editedEvent.phone = $("#inputPhoneNumberWaitlistEdit").val();
 
-  	upcomingList.updateEntry(editedEvent);
+    if (validUpcomingEntry("#waitlistEditMenu", "#inputPartyNameWaitlistEdit", "#inputPartySizeWaitlistEdit", "#inputPhoneNumberWaitlistEdit")){
+      upcomingList.updateEntry(editedEvent);
 
-  	$("#waitlistEditMenu").collapse("hide");
-  	$("#addPartyMenu").show();
+      $("#waitlistEditMenu").collapse("hide");
+      $("#addPartyMenu").show();    
+    }
+
+
   });
 
   //Add 'click' affordance upon hovering a table
