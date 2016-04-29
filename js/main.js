@@ -271,35 +271,11 @@ $(function() {
     $("#inputPartyNameReservation").focus();
     $("#inputDateReservation").datepicker().datepicker("setDate", new Date());
     $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date(new Date().getTime() + 15*60000));
-    $("#inputPartyNameReservation").parent().parent().removeClass("has-error");
-    $("#inputPartyNameReservation").parent().parent().removeClass("has-success");
-    $("#inputPartyNameReservation").siblings(".help-block").addClass("hidden");
-    $("#inputPartySizeReservation").parent().parent().removeClass("has-error");
-    $("#inputPartySizeReservation").parent().parent().removeClass("has-success");
-    $("#inputPartySizeReservation").siblings(".help-block").addClass("hidden");
-    $("#inputPhoneNumberReservation").parent().parent().removeClass("has-error");
-    $("#inputPhoneNumberReservation").parent().parent().removeClass("has-success");
-    $("#inputPhoneNumberReservation").siblings(".help-block").addClass("hidden");
-    $("#inputTimeReservation").parent().parent().removeClass("has-error");
-    $("#inputTimeReservation").parent().parent().removeClass("has-success");
-    $("#inputTimeReservation").siblings(".help-block").addClass("hidden");
-    $("#inputDateReservation").parent().parent().removeClass("has-error");
-    $("#inputDateReservation").parent().parent().removeClass("has-success");
-    $("#inputDateReservation").siblings(".help-block").addClass("hidden");
   });
   $("#openWaitlistMenu").click(function() {
     $("#addPartyMenu").hide();
     $("#waitlistMenu").collapse('show');
     $("#inputPartyNameWaitlist").focus();
-    $("#inputPartyNameWaitlist").parent().parent().removeClass("has-error");
-    $("#inputPartyNameWaitlist").parent().parent().removeClass("has-success");
-    $("#inputPartyNameWaitlist").siblings(".help-block").addClass("hidden");
-    $("#inputPartySizeWaitlist").parent().parent().removeClass("has-error");
-    $("#inputPartySizeWaitlist").parent().parent().removeClass("has-success");
-    $("#inputPartySizeWaitlist").siblings(".help-block").addClass("hidden");
-    $("#inputPhoneNumberWaitlist").parent().parent().removeClass("has-warning");
-    $("#inputPhoneNumberWaitlist").parent().parent().removeClass("has-success");
-    $("#inputPhoneNumberWaitlist").siblings(".help-block").addClass("hidden");
   });
   $("#cancelReservation").click(function() {
     $("#reservationMenu").collapse('hide');
@@ -316,12 +292,14 @@ $(function() {
 
   $("#cancelWaitlistEdit").click(function() {
     $("#waitlistEditMenu").collapse('hide');
+    $("#waitlistEditMenu").trigger("reset");
     $("#addPartyMenu").show();
     $(".alert").remove();
   });
 
   $("#cancelReservationEdit").click(function() {
     $("#reservationEditMenu").collapse('hide');
+    $("#reservationEditMenu").trigger("reset");
     $("#addPartyMenu").show();
     $(".alert").remove();
   });
@@ -333,10 +311,13 @@ $(function() {
     name = $("#inputPartyNameWaitlist").val();
     partySize = $("#inputPartySizeWaitlist").val();
     phone = $("#inputPhoneNumberWaitlist").val();
-
+    types = $("#inputTypesWaitlist").val();
+    
+    eta = 1
+    
     if (validUpcomingEntry("#waitlistMenu", "#inputPartyNameWaitlist", "#inputPartySizeWaitlist", "#inputPhoneNumberWaitlist")){
       $('#waitlistForm').trigger('reset');
-      upcomingList.addEntry(new WaitlistEntry(name, partySize, phone, 1));
+      upcomingList.addEntry(new WaitlistEntry(name, partySize, phone, eta, types));
       $("#waitlistMenu").collapse('hide');
       $("#addPartyMenu").show();
       $(".alert").remove();
@@ -347,12 +328,16 @@ $(function() {
   $("#addReservation").click(function(e) {
     $(".alert").remove();
     timeAndDate = new Date($('#inputDateReservation').val() + " " + $("#inputTimeReservation").val());
+    name = $("#inputPartyNameReservation").val();
+    partySize = $("#inputPartySizeReservation").val();
+    phone = $("#inputPhoneNumberReservation").val();
+    time = $("#inputTimeReservation").val();
+    date = $("#inputDateReservation").val();
+    types = $("#inputTypesReservation").val();
+    
     //if the form is filled out correctly
     if (validUpcomingEntry("#reservationMenu", "#inputPartyNameReservation", "#inputPartySizeReservation", "#inputPhoneNumberReservation", "#inputTimeReservation", "#inputDateReservation")){
-      upcomingList.addEntry(new Reservation($("#inputPartyNameReservation").val(),
-          $("#inputPartySizeReservation").val(),
-          $("#inputPhoneNumberReservation").val(),
-          timeAndDate))
+      upcomingList.addEntry(new Reservation(name, partySize, phone, timeAndDate, null, types))
       $('#reservationForm').trigger('reset');
       $("#inputDateReservation").datepicker().datepicker("setDate", new Date()); ///Default date/time
       $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date());
@@ -360,11 +345,7 @@ $(function() {
       $("#reservationMenu").collapse('hide');
       $("#addPartyMenu").show();      
     }
-    name = $("#inputPartyNameReservation").val();
-    partySize = $("#inputPartySizeReservation").val();
-    phone = $("#inputPhoneNumberReservation").val();
-    time = $("#inputTimeReservation").val();
-    date = $("#inputDateReservation").val();
+    
   });
 
   $("#editWaitlist").click(function(e) {
@@ -376,6 +357,7 @@ $(function() {
       editedEvent.name = $("#inputPartyNameWaitlistEdit").val();
       editedEvent.partySize = parseInt($("#inputPartySizeWaitlistEdit").val(), 10);
       editedEvent.phone = $("#inputPhoneNumberWaitlistEdit").val();
+      editedEvent.types = $("#inputTypesWaitlistEdit").val();
       upcomingList.updateEntry(editedEvent);
 
       $("#waitlistEditMenu").collapse("hide");
@@ -393,6 +375,7 @@ $(function() {
       editedEvent.name = $("#inputPartyNameReservationEdit").val();
       editedEvent.partySize = parseInt($("#inputPartySizeReservationEdit").val(), 10);
       editedEvent.phone = $("#inputPhoneNumberReservationEdit").val();
+      editedEvent.types = $("#inputTypesReservationEdit").val();
       timeAndDate = new Date($('#inputDateReservationEdit').val() + " " + $("#inputTimeReservationEdit").val());
       editedEvent.time = timeAndDate
       upcomingList.updateEntry(editedEvent);
@@ -459,8 +442,10 @@ $(function() {
   // Reset the tooltip to clear filter.
   function resetTooltip() {
     $("#inputWalkInPartySize").show();
-    $("#filterSize").val(null);
+    $("#filterSize").val("");
     $("#filterSize").change();
+    $("#filterType").val("");
+    $("#filterType").change();
     $("#seatPartySize").html(null);
   }
 
@@ -553,6 +538,8 @@ $(function() {
 
     $("#filterSize").val("");
     $("#filterSize").change();
+    $("#filterType").val("");
+    $("#filterType").change();
     resetTooltip();
     $("#seatPopUp").hide();
   });
@@ -588,6 +575,8 @@ $(function() {
       $(this).addClass('active');
       $("#filterSize").val(thisParty.partySize);
       $("#filterSize").change();
+      $("#filterType").val(thisParty.types);
+      $("#filterType").change();
       selectedParty = thisParty;
     }
   });
@@ -620,6 +609,7 @@ $(function() {
       $("#inputPartyIDReservationEdit").val(correspondingParty.id);
       $("#inputPartySizeReservationEdit").val(correspondingParty.partySize);
       $("#inputPhoneNumberReservationEdit").val(correspondingParty.phone);
+      $("#inputTypesReservationEdit").val(correspondingParty.types);
       $("#inputDateReservationEdit").datepicker().datepicker("setDate", d1); ///Default date/time
       $("#inputTimeReservationEdit").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", d1);
     }else{
@@ -633,6 +623,7 @@ $(function() {
       $("#inputPartyIDWaitlistEdit").val(correspondingParty.id);
       $("#inputPartySizeWaitlistEdit").val(correspondingParty.partySize);
       $("#inputPhoneNumberWaitlistEdit").val(correspondingParty.phone);
+      $("#inputTypesWaitlistEdit").val(correspondingParty.types);
     }
 
   });

@@ -129,16 +129,16 @@ class UpcomingListEntry {
   	  this.eta = get12hour(new Date(new Date().getTime() + 30*60000));
   	}
   	else {
-  	  this.eta = eta;;
+  	  this.eta = eta;
   	}
 	}
 }
 
 class WaitlistEntry extends UpcomingListEntry {
-	constructor(name, size, phone, estimatedWaitInMins, id){
+	constructor(name, size, phone, estimatedWaitInMins, id, types){
 		super(name, size, phone, id)
 		this.estimatedWaitInMins = estimatedWaitInMins;
-		
+		this.types = types;
 	}
 
 	getCountdownString() {
@@ -154,9 +154,10 @@ class WaitlistEntry extends UpcomingListEntry {
 }
 
 class Reservation extends UpcomingListEntry {
-	constructor(name, size, phoneNumber, time, id) {
+	constructor(name, size, phoneNumber, time, id, types) {
 		super(name, size, phoneNumber, id)
 		this.time = time;
+		this.types = types;
 	}
 
 	getCountdownString() {
