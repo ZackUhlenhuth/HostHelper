@@ -305,16 +305,25 @@ $(function() {
     $("#reservationMenu").collapse('hide');
     $("#reservationForm").trigger("reset");
     $("#addPartyMenu").show();
+    $(".alert").remove();
   });
   $("#cancelWaitlist").click(function() {
     $("#waitlistMenu").collapse('hide');
     $("#waitlistForm").trigger("reset");
     $("#addPartyMenu").show();
+    $(".alert").remove();
   });
 
   $("#cancelWaitlistEdit").click(function() {
     $("#waitlistEditMenu").collapse('hide');
     $("#addPartyMenu").show();
+    $(".alert").remove();
+  });
+
+  $("#cancelReservationEdit").click(function() {
+    $("#reservationEditMenu").collapse('hide');
+    $("#addPartyMenu").show();
+    $(".alert").remove();
   });
 
 
@@ -329,45 +338,8 @@ $(function() {
       upcomingList.addEntry(new WaitlistEntry(name, partySize, phone, 1));
       $("#waitlistMenu").collapse('hide');
       $("#addPartyMenu").show();
+      $(".alert").remove();
     }
-
-    
-    // if (name != "" && partySize != "" && (phone != "" || $("#inputPhoneNumberWaitlist").parent().parent().hasClass("has-warning"))) {
-
-    //   $('#waitlistForm').trigger('reset');
-    //   upcomingList.addEntry(new WaitlistEntry(name, partySize, phone, 1));
-    //   $("#waitlistMenu").collapse('hide');
-    //   $("#addPartyMenu").show();
-    // }
-    // else {
-    //   if (name == "") {
-    //     $("#inputPartyNameWaitlist").parent().parent().addClass("has-error");
-    //     $("#inputPartyNameWaitlist").siblings(".help-block").removeClass("hidden");
-    //   }
-    //   else {
-    //     $("#inputPartyNameWaitlist").parent().parent().removeClass("has-error");
-    //     $("#inputPartyNameWaitlist").parent().parent().addClass("has-success");
-    //     $("#inputPartyNameWaitlist").siblings(".help-block").addClass("hidden");
-    //   }     
-    //   if (partySize == "") {
-    //     $("#inputPartySizeWaitlist").parent().parent().addClass("has-error");
-    //     $("#inputPartySizeWaitlist").siblings(".help-block").removeClass("hidden");
-    //   }
-    //   else {
-    //     $("#inputPartySizeWaitlist").parent().parent().removeClass("has-error");
-    //     $("#inputPartySizeWaitlist").parent().parent().addClass("has-success");
-    //     $("#inputPartyNameWaitlist").siblings(".help-block").addClass("hidden");
-    //   }   
-    //   if (phone == "") {
-    //     $("#inputPhoneNumberWaitlist").parent().parent().addClass("has-warning");
-    //     $("#inputPhoneNumberWaitlist").siblings(".help-block").removeClass("hidden");
-    //   }
-    //   else {
-    //     $("#inputPhoneNumberWaitlist").parent().parent().removeClass("has-warning");
-    //     $("#inputPhoneNumberWaitlist").parent().parent().addClass("has-success");
-    //     $("#inputPartyNameWaitlist").siblings(".help-block").addClass("hidden");
-    //   }   
-    // }
   });
 
   //add a Reservation to Upcoming
@@ -391,65 +363,6 @@ $(function() {
     phone = $("#inputPhoneNumberReservation").val();
     time = $("#inputTimeReservation").val();
     date = $("#inputDateReservation").val();
-    
-    // if (name != "" && partySize != "" && phone != "" && time != "" && date != "") {
-    //   timeAndDate = new Date($('#inputDateReservation').val() + " " + $("#inputTimeReservation").val());
-    //   upcomingList.addEntry(new Reservation($("#inputPartyNameReservation").val(),
-    //   		$("#inputPartySizeReservation").val(),
-    //   		$("#inputPhoneNumberReservation").val(),
-    //   		timeAndDate))
-    //   $('#reservationForm').trigger('reset');
-    //   $("#reservationMenu").collapse('hide');
-    //   $("#addPartyMenu").show();
-    // }
-    // else {
-    //   if (name == "") {
-    //     $("#inputPartyNameReservation").parent().parent().addClass("has-error");
-    //     $("#inputPartyNameReservation").siblings(".help-block").removeClass("hidden");
-    //   }
-    //   else {
-    //     $("#inputPartyNameReservation").parent().parent().removeClass("has-error");
-    //     $("#inputPartyNameReservation").parent().parent().addClass("has-success");
-    //     $("#inputPartyNameReservation").siblings(".help-block").addClass("hidden");
-    //   }
-    //   if (partySize == "") {
-    //     $("#inputPartySizeReservation").parent().parent().addClass("has-error");
-    //     $("#inputPartySizeReservation").siblings(".help-block").removeClass("hidden");
-    //   }
-    //   else {
-    //     $("#inputPartySizeReservation").parent().parent().removeClass("has-error");
-    //     $("#inputPartySizeReservation").parent().parent().addClass("has-success");
-    //     $("#inputPartySizeReservation").siblings(".help-block").addClass("hidden");
-    //   }   
-    //   if (phone == "") {
-    //     $("#inputPhoneNumberReservation").parent().parent().addClass("has-error");
-    //     $("#inputPhoneNumberReservation").siblings(".help-block").removeClass("hidden");
-    //   }
-    //   else {
-    //     $("#inputPhoneNumberReservation").parent().parent().removeClass("has-error");
-    //     $("#inputPhoneNumberReservation").parent().parent().addClass("has-success");
-    //     $("#inputPhoneNumberReservation").siblings(".help-block").addClass("hidden");
-    //   }
-    //   if (time == "") {
-    //     $("#inputTimeReservation").parent().parent().addClass("has-error");
-    //     $("#inputTimeReservation").siblings(".help-block").removeClass("hidden");
-    //   }
-    //   else {
-    //     $("#inputTimeReservation").parent().parent().removeClass("has-error");
-    //     $("#inputTimeReservation").parent().parent().addClass("has-success");
-    //     $("#inputTimeReservation").siblings(".help-block").addClass("hidden");
-    //   }
-    //   if (date == "") {
-    //     $("#inputDateReservation").parent().parent().addClass("has-error");
-    //     $("#inputDateReservation").siblings(".help-block").removeClass("hidden");
-    //   }
-    //   else {
-    //     $("#inputDateReservation").parent().parent().removeClass("has-error");
-    //     $("#inputDateReservation").parent().parent().addClass("has-success");
-    //     $("#inputDateReservation").siblings(".help-block").addClass("hidden");
-    //   }
-    // }
-
   });
 
   $("#editWaitlist").click(function(e) {
@@ -464,10 +377,28 @@ $(function() {
       upcomingList.updateEntry(editedEvent);
 
       $("#waitlistEditMenu").collapse("hide");
-      $("#addPartyMenu").show();    
+      $("#addPartyMenu").show();
+      $(".alert").remove();    
     }
+  });
 
+  $("#editReservation").click(function(e) {
+    editedEventID = parseInt($("#inputPartyIDReservationEdit").val(), 10);
+    editedEvent = upcomingList.getEntryWithID(editedEventID);
 
+    editedEvent.name = $("#inputPartyNameReservationEdit").val();
+    editedEvent.partySize = parseInt($("#inputPartySizeReservationEdit").val(), 10);
+    editedEvent.phone = $("#inputPhoneNumberReservationEdit").val();
+    timeAndDate = new Date($('#inputDateReservationEdit').val() + " " + $("#inputTimeReservationEdit").val());
+    editedEvent.time = timeAndDate
+
+    if (validUpcomingEntry("#reservationEditMenu", "#inputPartyNameReservationEdit", "#inputPartySizeReservationEdit", "#inputPhoneNumberReservationEdit", "#inputTimeReservationEdit", "#inputDateReservationEdit")){
+      upcomingList.updateEntry(editedEvent);
+
+      $("#reservationEditMenu").collapse("hide");
+      $("#addPartyMenu").show();
+      $(".alert").remove();    
+    }
   });
 
   //Add 'click' affordance upon hovering a table
@@ -675,15 +606,31 @@ $(function() {
     correspondingPartyView = $(this).parents(".upcoming-party")[0];
     correspondingParty = upcomingList.getEntryWithID(correspondingPartyView.id);
     
-    //Show the edit waitlist menu.
-    $("#addPartyMenu").hide();
-    $("#waitlistEditMenu").collapse('show');
-    $("#inputPartyNameWaitlistEdit").focus()
+    //Checks if upcoming entry is Reservation or Waitlist
+    if (correspondingParty.getCountdownString().match(/(AM|PM)$/)){
+      //Show edit Reservation menu
+      $("#addPartyMenu").hide();
+      $("#reservationEditMenu").collapse('show');
+      $("#inputPartyNameReservationEdit").focus()
+      var d1 = new Date(correspondingParty.time);
+      $("#inputPartyNameReservationEdit").val(correspondingParty.name);
+      $("#inputPartyIDReservationEdit").val(correspondingParty.id);
+      $("#inputPartySizeReservationEdit").val(correspondingParty.partySize);
+      $("#inputPhoneNumberReservationEdit").val(correspondingParty.phone);
+      $("#inputDateReservationEdit").datepicker().datepicker("setDate", d1); ///Default date/time
+      $("#inputTimeReservationEdit").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", d1);
+    }else{
+      //Show the edit waitlist menu.
+      $("#addPartyMenu").hide();
+      $("#waitlistEditMenu").collapse('show');
+      $("#inputPartyNameWaitlistEdit").focus()
 
-    $("#inputPartyNameWaitlistEdit").val(correspondingParty.name);
-    $("#inputPartyIDWaitlistEdit").val(correspondingParty.id);
-    $("#inputPartySizeWaitlistEdit").val(correspondingParty.partySize);
-    $("#inputPhoneNumberWaitlistEdit").val(correspondingParty.phone);
+      $("#inputPartyNameWaitlistEdit").val(correspondingParty.name);
+      $("#inputPartyIDWaitlistEdit").val(correspondingParty.id);
+      $("#inputPartySizeWaitlistEdit").val(correspondingParty.partySize);
+      $("#inputPhoneNumberWaitlistEdit").val(correspondingParty.phone);
+    }
+
   });
 
   /* pan-zoom stuff taken from https://github.com/timmywil/jquery.panzoom/blob/master/demo/index.html */
