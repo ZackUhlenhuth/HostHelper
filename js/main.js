@@ -329,6 +329,7 @@ $(function() {
 
   //add a Walk-in to Upcoming
   $("#addWaitlist").click(function(e) {
+    $(".alert").remove();
     name = $("#inputPartyNameWaitlist").val();
     partySize = $("#inputPartySizeWaitlist").val();
     phone = $("#inputPhoneNumberWaitlist").val();
@@ -344,6 +345,7 @@ $(function() {
 
   //add a Reservation to Upcoming
   $("#addReservation").click(function(e) {
+    $(".alert").remove();
     timeAndDate = new Date($('#inputDateReservation').val() + " " + $("#inputTimeReservation").val());
     //if the form is filled out correctly
     if (validUpcomingEntry("#reservationMenu", "#inputPartyNameReservation", "#inputPartySizeReservation", "#inputPhoneNumberReservation", "#inputTimeReservation", "#inputDateReservation")){
@@ -366,6 +368,7 @@ $(function() {
   });
 
   $("#editWaitlist").click(function(e) {
+    $(".alert").remove();
     if (validUpcomingEntry("#waitlistEditMenu", "#inputPartyNameWaitlistEdit", "#inputPartySizeWaitlistEdit", "#inputPhoneNumberWaitlistEdit")){
       editedEventID = parseInt($("#inputPartyIDWaitlistEdit").val(), 10);
       editedEvent = upcomingList.getEntryWithID(editedEventID);
@@ -382,6 +385,7 @@ $(function() {
   });
 
   $("#editReservation").click(function(e) {
+    $(".alert").remove();
     if (validUpcomingEntry("#reservationEditMenu", "#inputPartyNameReservationEdit", "#inputPartySizeReservationEdit", "#inputPhoneNumberReservationEdit", "#inputTimeReservationEdit", "#inputDateReservationEdit")){
       editedEventID = parseInt($("#inputPartyIDReservationEdit").val(), 10);
       editedEvent = upcomingList.getEntryWithID(editedEventID);
