@@ -366,14 +366,13 @@ $(function() {
   });
 
   $("#editWaitlist").click(function(e) {
-  	editedEventID = parseInt($("#inputPartyIDWaitlistEdit").val(), 10);
-  	editedEvent = upcomingList.getEntryWithID(editedEventID);
-
-  	editedEvent.name = $("#inputPartyNameWaitlistEdit").val();
-  	editedEvent.partySize = parseInt($("#inputPartySizeWaitlistEdit").val(), 10);
-  	editedEvent.phone = $("#inputPhoneNumberWaitlistEdit").val();
-
     if (validUpcomingEntry("#waitlistEditMenu", "#inputPartyNameWaitlistEdit", "#inputPartySizeWaitlistEdit", "#inputPhoneNumberWaitlistEdit")){
+      editedEventID = parseInt($("#inputPartyIDWaitlistEdit").val(), 10);
+      editedEvent = upcomingList.getEntryWithID(editedEventID);
+
+      editedEvent.name = $("#inputPartyNameWaitlistEdit").val();
+      editedEvent.partySize = parseInt($("#inputPartySizeWaitlistEdit").val(), 10);
+      editedEvent.phone = $("#inputPhoneNumberWaitlistEdit").val();
       upcomingList.updateEntry(editedEvent);
 
       $("#waitlistEditMenu").collapse("hide");
@@ -383,16 +382,17 @@ $(function() {
   });
 
   $("#editReservation").click(function(e) {
-    editedEventID = parseInt($("#inputPartyIDReservationEdit").val(), 10);
-    editedEvent = upcomingList.getEntryWithID(editedEventID);
 
-    editedEvent.name = $("#inputPartyNameReservationEdit").val();
-    editedEvent.partySize = parseInt($("#inputPartySizeReservationEdit").val(), 10);
-    editedEvent.phone = $("#inputPhoneNumberReservationEdit").val();
-    timeAndDate = new Date($('#inputDateReservationEdit').val() + " " + $("#inputTimeReservationEdit").val());
-    editedEvent.time = timeAndDate
 
     if (validUpcomingEntry("#reservationEditMenu", "#inputPartyNameReservationEdit", "#inputPartySizeReservationEdit", "#inputPhoneNumberReservationEdit", "#inputTimeReservationEdit", "#inputDateReservationEdit")){
+      editedEventID = parseInt($("#inputPartyIDReservationEdit").val(), 10);
+      editedEvent = upcomingList.getEntryWithID(editedEventID);
+
+      editedEvent.name = $("#inputPartyNameReservationEdit").val();
+      editedEvent.partySize = parseInt($("#inputPartySizeReservationEdit").val(), 10);
+      editedEvent.phone = $("#inputPhoneNumberReservationEdit").val();
+      timeAndDate = new Date($('#inputDateReservationEdit').val() + " " + $("#inputTimeReservationEdit").val());
+      editedEvent.time = timeAndDate
       upcomingList.updateEntry(editedEvent);
 
       $("#reservationEditMenu").collapse("hide");
