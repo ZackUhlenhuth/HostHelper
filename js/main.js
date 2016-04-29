@@ -382,8 +382,6 @@ $(function() {
   });
 
   $("#editReservation").click(function(e) {
-
-
     if (validUpcomingEntry("#reservationEditMenu", "#inputPartyNameReservationEdit", "#inputPartySizeReservationEdit", "#inputPhoneNumberReservationEdit", "#inputTimeReservationEdit", "#inputDateReservationEdit")){
       editedEventID = parseInt($("#inputPartyIDReservationEdit").val(), 10);
       editedEvent = upcomingList.getEntryWithID(editedEventID);
@@ -609,6 +607,7 @@ $(function() {
     //Checks if upcoming entry is Reservation or Waitlist
     if (correspondingParty.getCountdownString().match(/(AM|PM)$/)){
       //Show edit Reservation menu
+      $("#waitlistEditMenu").collapse("hide");
       $("#addPartyMenu").hide();
       $("#reservationEditMenu").collapse('show');
       $("#inputPartyNameReservationEdit").focus()
@@ -621,6 +620,7 @@ $(function() {
       $("#inputTimeReservationEdit").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", d1);
     }else{
       //Show the edit waitlist menu.
+      $("#reservationEditMenu").collapse("hide");
       $("#addPartyMenu").hide();
       $("#waitlistEditMenu").collapse('show');
       $("#inputPartyNameWaitlistEdit").focus()
