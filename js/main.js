@@ -1,6 +1,7 @@
 // Modified from "Cut & Paste Live Clock using forms" by George Chiang,
 // http://javascriptkit.com/script/cut2.shtml
-function get12hour(d){
+function get12hour(ds){
+  d = new Date(ds);
   var hours= d.getHours();
   var minutes= d.getMinutes();
   var dn="AM";
@@ -90,6 +91,12 @@ function validUpcomingEntry(form, name, size, phone, time="none", date="none"){
       }
     }
     return validInput;
+}
+
+// check for upcoming reservations
+function checkUpcomingReservations (seatMap) {
+  timeRemaining = []
+  
 }
 
 
@@ -213,7 +220,6 @@ $(function() {
   adamZone = new WaiterZone("Adam", 380, 300, 593, 40, "green");
   donZone = new WaiterZone("Don", 125, 850, 30, 650, "red");
 
-
   var retrievedTables = localStorage.getItem('seatmapTables');
   if (retrievedTables !== null) {
     retrievedTables = JSON.parse(retrievedTables);
@@ -263,7 +269,8 @@ $(function() {
   seatMap.addWaiterZone(sarahZone);
   seatMap.addWaiterZone(adamZone);
   seatMap.addWaiterZone(donZone);
-
+  console.log(seatMap);
+  
   // Waitlist and Reservation Menus
  	$("#openReservationMenu").click(function() {
 		$("#addPartyMenu").hide();
@@ -402,8 +409,8 @@ $(function() {
     if (selectedTable.isOccupied()) { // If the table is occupied, show the unseat popup, if it's open, show the seat popup.
     	halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
       $("#unseatPartyName").html(selectedTable.assignedParty.name);
-      $("#unseatPartySeatedTime").html(selectedTable.assignedParty.seatedTime);
-      $("#unseatPartyETA").html(selectedTable.assignedParty.eta);
+      $("#unseatPartySeatedTime").html(get12hour(selectedTable.assignedParty.seatedTime));
+      $("#unseatPartyETA").html(get12hour(selectedTable.assignedParty.eta));
     	// add 15 to top to account for tooltip
     	$("#unseatPopUp").slideDown("fast", "linear").css("top", e.pageY + 15).css("left", e.pageX - halfWidth);
     } else {
@@ -527,8 +534,8 @@ $(function() {
       }
   	} else {
   		partyToSeat = upcomingList.getEntryWithID(partyToSeatID)
-  		partyToSeat.seatedTime = get12hour(new Date());
-  		partyToSeat.eta = get12hour(new Date(new Date().getTime() + 30*60000));
+  		partyToSeat.seatedTime = (new Date()).toString();
+  		partyToSeat.eta = (new Date(new Date().getTime() + 30*60000)).toString();
   		upcomingList.removeEntryWithID(partyToSeat.id);
   	}
     

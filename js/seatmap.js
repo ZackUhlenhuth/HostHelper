@@ -45,6 +45,13 @@ class SeatMap {
 			return !thisTable.isOccupied();
 		});
 	}
+	
+	getTimeUntilNextTable() {
+	  next = this.tables[0].eta;
+	  for (var i = 1; i < this.tables.length; i++) {
+	    
+	  }
+	}
 
 	//return waiterZone given table
 	getWaiterZoneByTable(table) {
