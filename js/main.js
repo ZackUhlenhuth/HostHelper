@@ -39,6 +39,13 @@ function validUpcomingEntry(form, name, size, phone, time="none", date="none"){
     var RESTAURANT_CAPACITY = 100 //TODO calculate actual capacity
     var validInput = true;
 
+    if (!($(name).val().match(/^\w+$/))){
+      validInput = false;
+      var warning1 = $('<div class="alert alert-warning"></div>').text("Name must contain at least one letter")
+      warning1.append($('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'))
+      $(form).append(warning1);      
+    }
+
     if (!($(size).val().match(/^\d+$/) &&
       (parseInt($(size).val(),10) < RESTAURANT_CAPACITY))){
         //Error: Party size must be less than RESTAURANT_CAPACITY
@@ -420,6 +427,7 @@ $(function() {
 
   // Hide popups. Called when 'close' button in popup is clicked. Does not reset tooltip
   function hidePopups() {
+      $("#sizeWarning").remove();
       $("#seatPopUp").hide();
       $("#unseatPopUp").hide();
   }
@@ -514,6 +522,15 @@ $(function() {
   	partyToSeatID = $("#seatPartySelector").val();
   	if (partyToSeatID == "walk-in") {
   		partySize = $("#inputWalkInPartySize").val();
+      //Give warning if attempting to seat a walk-in party that is larger than the table capacity
+      //TODO can't figure out why party size gets set to 0 after the warning
+      if (partySize > selectedTable.capacity){
+        $("#sizeWarning").remove();
+        var sizeWarning = $('<div id="sizeWarning" class="alert alert-warning"></div>').text("Party size is too large");
+        $("#seatPartySizeGroup").append(sizeWarning);
+        return;
+      }
+
   		partyToSeat = new UpcomingListEntry("Walk-In", partySize);
   		if (partySize == "" || isNaN(partySize)) {
         $("#seatPartySizeGroup").addClass("has-error");
