@@ -47,6 +47,22 @@ class UpcomingList {
 	getUpcomingListEntries() {
 		return this.list.slice(); // Gaurd against rep. exposure here.
 	}
+	
+	getNextReservationTime() {
+	  var times = [];
+	  for (var i = 0; i < this.list.length; i++) {
+	    if (isNaN(this.list[i].estimatedWaitInMins)) {
+	      times.push(this.list[i].time);
+	    }
+	  }
+	  var next = times[0];
+	  for (var i = 1; i < times.length; ++i) {
+	    if (next > times[i])
+	      next = times[i];
+	  }
+	  return (next - new Date());
+	  
+	}
 
 	getEntryWithID(entryID) {
 		// We'll be nice and translate DOM IDs to our model IDs.

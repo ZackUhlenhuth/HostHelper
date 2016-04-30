@@ -539,8 +539,15 @@ $(function() {
   		upcomingList.removeEntryWithID(partyToSeat.id);
   	}
     
+    // TODO
+    console.log(seatMap.getTimeUntilNextTable());
+    console.log(upcomingList.getNextReservationTime());
+    if (seatMap.getTimeUntilNextTable() > upcomingList.getNextReservationTime()) {
+      alert("You have an upcoming reservation before the next table is expected to be free!");
+      return;
+    }
+    
   	selectedTable.assignedParty = partyToSeat;
-
   	seatMap.updateTable(selectedTable);
 
     $("#filterSize").val("");

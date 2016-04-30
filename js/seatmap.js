@@ -47,10 +47,15 @@ class SeatMap {
 	}
 	
 	getTimeUntilNextTable() {
-	  next = this.tables[0].eta;
-	  for (var i = 1; i < this.tables.length; i++) {
-	    
+	  var times = [];
+	  for (var i = 0; i < this.tables.length; i++) {
+	    if (this.tables[i].assignedParty != null)
+	      times.push(new Date(this.tables[i].assignedParty.eta));
+	    else
+	      times.push(new Date());
 	  }
+	  console.log(times);
+	  return (times.sort()[1] - new Date());
 	}
 
 	//return waiterZone given table
