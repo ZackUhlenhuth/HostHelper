@@ -33,20 +33,11 @@ function validDate(date1, date2){
   return false
 }
 
-// inputs are jquery references in the form "#abcd"
+// Inputs are jquery references in the form "#abcd"
+// Party Name should be truncated to 12 characters before validUpcomingEntry is run
 function validUpcomingEntry(form, name, size, phone, time="none", date="none"){
     var RESTAURANT_CAPACITY = 100 //TODO calculate actual capacity
     var validInput = true;
-    //Check that inputs are the correct type
-    if (!($(name).val().match(/^\w+$/) &&
-        $(name).val().length < 12)){
-        // Error: Party must contain 1-12 letters
-      validInput = false;
-      var warning1 = $('<div class="alert alert-warning"></div>').text("Name must be between 1 and 12 letters.")
-      warning1.append($('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'))
-      $(form).append(warning1);
-
-    }
 
     if (!($(size).val().match(/^\d+$/) &&
       (parseInt($(size).val(),10) < RESTAURANT_CAPACITY))){
@@ -315,7 +306,7 @@ $(function() {
   //add a Walk-in to Upcoming
   $("#addWaitlist").click(function(e) {
     $(".alert").remove();
-    name = $("#inputPartyNameWaitlist").val();
+    name = $("#inputPartyNameWaitlist").val().substring(0,12); //truncate name to 12 letters
     partySize = $("#inputPartySizeWaitlist").val();
     phone = $("#inputPhoneNumberWaitlist").val();
     types = $("#inputTypesWaitlist").val();
@@ -335,7 +326,7 @@ $(function() {
   $("#addReservation").click(function(e) {
     $(".alert").remove();
     timeAndDate = new Date($('#inputDateReservation').val() + " " + $("#inputTimeReservation").val());
-    name = $("#inputPartyNameReservation").val();
+    name = $("#inputPartyNameReservation").val().substring(0,12); //truncate name to 12 letters;
     partySize = $("#inputPartySizeReservation").val();
     phone = $("#inputPhoneNumberReservation").val();
     time = $("#inputTimeReservation").val();
@@ -361,7 +352,7 @@ $(function() {
       editedEventID = parseInt($("#inputPartyIDWaitlistEdit").val(), 10);
       editedEvent = upcomingList.getEntryWithID(editedEventID);
 
-      editedEvent.name = $("#inputPartyNameWaitlistEdit").val();
+      editedEvent.name = $("#inputPartyNameWaitlistEdit").substring(0,12); //truncate name to 12 letters;
       editedEvent.partySize = parseInt($("#inputPartySizeWaitlistEdit").val(), 10);
       editedEvent.phone = $("#inputPhoneNumberWaitlistEdit").val();
       editedEvent.types = $("#inputTypesWaitlistEdit").val();
@@ -379,7 +370,7 @@ $(function() {
       editedEventID = parseInt($("#inputPartyIDReservationEdit").val(), 10);
       editedEvent = upcomingList.getEntryWithID(editedEventID);
 
-      editedEvent.name = $("#inputPartyNameReservationEdit").val();
+      editedEvent.name = $("#inputPartyNameReservationEdit").substring(0,12); //truncate name to 12 letters;
       editedEvent.partySize = parseInt($("#inputPartySizeReservationEdit").val(), 10);
       editedEvent.phone = $("#inputPhoneNumberReservationEdit").val();
       editedEvent.types = $("#inputTypesReservationEdit").val();
