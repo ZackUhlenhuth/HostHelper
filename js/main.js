@@ -12,7 +12,7 @@ function get12hour(ds){
   }
   if (hours == 0) hours=12;
   if (minutes<=9) minutes="0"+minutes;
-  
+  if (hours<=9 == 1) hours="0"+hours;
   return hours + ":" + minutes + " " + dn;
 }
 
@@ -22,16 +22,67 @@ function refreshClock(){
 refreshClock();
 setInterval("refreshClock()",1000);
 
+function isLater(time1, time2){
+  hour1 = parseInt(time1.substring(0,2));
+  minutes1 = parseInt(time1.substring(3,5));
+  hour2 = parseInt(time2.substring(0,2));
+  minutes2 = parseInt(time2.substring(3,5));
+  if (time1.match(/PM$/)){
+    if (time2.match(/AM$/)){
+      return true;
+    }else{
+      if (hour1 < hour2){
+        return false;
+      }else if (hour1 > hour2){
+        return true;
+      }else{
+        if (minutes1 > minutes2){
+          return true;
+        }else{
+          return false;
+        }
+      }
+    }
+  }else{
+    if (time2.match(/PM$/)){
+      return false;
+    }else{
+      if (hour1 < hour2){
+        return false;
+      }else if (hour1 > hour2){
+        return true;
+      }else{
+        if (minutes1 > minutes2){
+          return true;
+        }else{
+          return false;
+        }
+      }     
+    }
+  }
+}
+
+
 //does date1 occur on or after date2
-function validDate(date1, date2){
+function validDate(date1, time1, date2){
   if (date1.getFullYear() > date2.getFullYear()){
     return true;
   }
-  if (date1.getFullYear() == date2.getFullYear()){
-    return (date1.getDate() >= date2.getDate());
+  else if (date1.getFullYear() == date2.getFullYear()){
+    if (date1.getDate() < date2.getDate()){
+      return false;
+    }else if (date1.getMonth() > date2.getMonth()){
+      return true;
+    }else if (date1.getMonth() == date2.getMonth()){
+      if (date1.getDate() > date2.getDate()){
+        return true;
+      }else if (date1.getDate() == date2.getDate()){
+        return (isLater(time1,get12hour(date2)));
+      }
+    }
   }
-  return false
 }
+  
 
 // Inputs are jquery references in the form "#abcd"
 // Party Name should be truncated to 12 characters before validUpcomingEntry is run
@@ -67,18 +118,6 @@ function validUpcomingEntry(form, name, size, phone, time="none", date="none"){
     if (!((time == "none") | (date == "none"))){ //Reservation, not Waitlist
       var currentDate = new Date()
       var reservationDate = new Date(($(date).val()));
-      if (!($(date).val().match(/^\d{2}\/\d{2}\/\d{4}$/))){
-        validInput = false;
-        var warning4 = $('<div class="alert alert-warning"></div>').text("Date must have the format: mm/dd/yyyy.")
-        warning4.append($('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'))
-        $(form).append(warning4);
-      } 
-      if (!(validDate(reservationDate, currentDate))){
-        validInput = false;
-        var warning5 = $('<div class="alert alert-warning"></div>').text("Date cannot be in the past.")
-        warning5.append($('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'))
-        $(form).append(warning5);
-      }
       //TODO: check that time is >= current time if reservation is on current date
       if (!$(time).val().match(/^\d{2}:\d{2}\s(AM|PM)$/)){
         //Error: Time must have the format: hh:mm AM/PM
@@ -87,6 +126,19 @@ function validUpcomingEntry(form, name, size, phone, time="none", date="none"){
         warning6.append($('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'))
         $(form).append(warning6);
       }
+      if (!($(date).val().match(/^\d{2}\/\d{2}\/\d{4}$/))){
+        validInput = false;
+        var warning4 = $('<div class="alert alert-warning"></div>').text("Date must have the format: mm/dd/yyyy.")
+        warning4.append($('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'))
+        $(form).append(warning4);
+      } 
+      if (!(validDate(reservationDate, $(time).val(), currentDate))){
+        validInput = false;
+        var warning5 = $('<div class="alert alert-warning"></div>').text("Reservation cannot be in the past.")
+        warning5.append($('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'))
+        $(form).append(warning5);
+      }
+
     }
     return validInput;
 }
@@ -519,14 +571,14 @@ $(function() {
   $(".close").click(hidePopups);
 
   $("#seatTable").click(function() {
+    $("#sizeWarning").remove();
   	partyToSeatID = $("#seatPartySelector").val();
   	if (partyToSeatID == "walk-in") {
   		partySize = $("#inputWalkInPartySize").val();
       //Give warning if attempting to seat a walk-in party that is larger than the table capacity
-      //TODO can't figure out why party size gets set to 0 after the warning
+      //TODO can't figure out why party size gets set to 0 after the alert
       if (partySize > selectedTable.capacity){
-        $("#sizeWarning").remove();
-        var sizeWarning = $('<div id="sizeWarning" class="alert alert-warning"></div>').text("Party size is too large");
+        var sizeWarning = $('<div id="sizeWarning" class="alert alert-danger"></div>').text("This table can only fit " + selectedTable.capacity + " people.");
         $("#seatPartySizeGroup").append(sizeWarning);
         return;
       }
@@ -554,7 +606,6 @@ $(function() {
       alert("You have an upcoming reservation before the next table is expected to be free!");
       return;
     }
-    
   	selectedTable.assignedParty = partyToSeat;
   	seatMap.updateTable(selectedTable);
 
