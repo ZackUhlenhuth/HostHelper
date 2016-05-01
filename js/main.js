@@ -92,7 +92,7 @@ function validUpcomingEntry(form, name, size, phone, time="none", date="none"){
 
     if (!($(name).val().match(/^\w+$/))){
       validInput = false;
-      var warning1 = $('<div class="alert alert-warning"></div>').text("Name must contain at least one letter")
+      var warning1 = $('<div class="alert alert-warning alertParty"></div>').text("Name must contain at least one letter")
       warning1.append($('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'))
       $(form).append(warning1);      
     }
@@ -101,7 +101,7 @@ function validUpcomingEntry(form, name, size, phone, time="none", date="none"){
       (parseInt($(size).val(),10) < RESTAURANT_CAPACITY))){
         //Error: Party size must be less than RESTAURANT_CAPACITY
       validInput = false;
-      var warning2 = $('<div class="alert alert-warning"></div>').text("Party size must be between 1 and 100.")
+      var warning2 = $('<div class="alert alert-warning alertParty"></div>').text("Party size must be between 1 and 100.")
       warning2.append($('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'))
       $(form).append(warning2);
     }
@@ -109,7 +109,7 @@ function validUpcomingEntry(form, name, size, phone, time="none", date="none"){
     if (!($(phone).val().match(/^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/))){
       //Error: Phone number must contain 10 digits
       validInput = false
-      var warning3 = $('<div class="alert alert-warning"></div>').text("Phone number must contain 7 or 10 digits.")
+      var warning3 = $('<div class="alert alert-warning alertParty"></div>').text("Phone number must contain 7 or 10 digits.")
       warning3.append($('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'))
       $(form).append(warning3);
     }
@@ -122,19 +122,19 @@ function validUpcomingEntry(form, name, size, phone, time="none", date="none"){
       if (!$(time).val().match(/^\d{2}:\d{2}\s(AM|PM)$/)){
         //Error: Time must have the format: hh:mm AM/PM
         validInput = false;
-        var warning6 = $('<div class="alert alert-warning"></div>').text("Time must have the format: hh:mm AM/PM.")
+        var warning6 = $('<div class="alert alert-warning alertParty"></div>').text("Time must have the format: hh:mm AM/PM.")
         warning6.append($('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'))
         $(form).append(warning6);
       }
       if (!($(date).val().match(/^\d{2}\/\d{2}\/\d{4}$/))){
         validInput = false;
-        var warning4 = $('<div class="alert alert-warning"></div>').text("Date must have the format: mm/dd/yyyy.")
+        var warning4 = $('<div class="alert alert-warning alertParty"></div>').text("Date must have the format: mm/dd/yyyy.")
         warning4.append($('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'))
         $(form).append(warning4);
       } 
       if (!(validDate(reservationDate, $(time).val(), currentDate))){
         validInput = false;
-        var warning5 = $('<div class="alert alert-warning"></div>').text("Reservation cannot be in the past.")
+        var warning5 = $('<div class="alert alert-warning alertParty"></div>').text("Reservation cannot be in the past.")
         warning5.append($('<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'))
         $(form).append(warning5);
       }
@@ -338,37 +338,37 @@ $(function() {
     $("#reservationMenu").collapse('hide');
     $("#reservationForm").trigger("reset");
     $("#addPartyMenu").show();
-    $(".alert").remove();
+    $(".alertParty").remove();
   });
   $("#cancelWaitlist").click(function() {
     $("#waitlistMenu").collapse('hide');
     $("#waitlistForm").trigger("reset");
     $("#addPartyMenu").show();
-    $(".alert").remove();
+    $(".alertParty").remove();
   });
 
   $("#cancelWaitlistEdit").click(function() {
     $("#waitlistEditMenu").collapse('hide');
     $("#waitlistEditMenu").trigger("reset");
     $("#addPartyMenu").show();
-    $(".alert").remove();
+    $(".alertParty").remove();
   });
 
   $("#cancelReservationEdit").click(function() {
     $("#reservationEditMenu").collapse('hide');
     $("#reservationEditMenu").trigger("reset");
     $("#addPartyMenu").show();
-    $(".alert").remove();
+    $(".alertParty").remove();
   });
 
 
   //add a Walk-in to Upcoming
   $("#addWaitlist").click(function(e) {
-    $(".alert").remove();
-    name = $("#inputPartyNameWaitlist").val().substring(0,12); //truncate name to 12 letters
-    partySize = $("#inputPartySizeWaitlist").val();
-    phone = $("#inputPhoneNumberWaitlist").val();
-    types = $("#inputTypesWaitlist").val();
+    $(".alertParty").remove();
+    var name = $("#inputPartyNameWaitlist").val().substring(0,12); //truncate name to 12 letters
+    var partySize = $("#inputPartySizeWaitlist").val();
+    var phone = $("#inputPhoneNumberWaitlist").val();
+    var types = $("#inputTypesWaitlist").val();
     
     eta = 1
     
@@ -377,13 +377,13 @@ $(function() {
       upcomingList.addEntry(new WaitlistEntry(name, partySize, phone, eta, types));
       $("#waitlistMenu").collapse('hide');
       $("#addPartyMenu").show();
-      $(".alert").remove();
+      $(".alertParty").remove();
     }
   });
 
   //add a Reservation to Upcoming
   $("#addReservation").click(function(e) {
-    $(".alert").remove();
+    $(".alertParty").remove();
     timeAndDate = new Date($('#inputDateReservation').val() + " " + $("#inputTimeReservation").val());
     name = $("#inputPartyNameReservation").val().substring(0,12); //truncate name to 12 letters;
     partySize = $("#inputPartySizeReservation").val();
@@ -405,8 +405,45 @@ $(function() {
     
   });
 
+  //move party to a different table
+  $("#moveParty").click(function(e){
+    var party = selectedTable.assignedParty;
+    console.log("PARTY");
+    console.log(party);
+    unseatTable();
+   
+    if (party.name == "Walk-In"){//if walk-in
+      console.log("DANGER ZONE");
+      var entry = new WaitlistEntry(party.name, party.partySize, party.phone, 0, party.id, party.types)
+    }else if (party.estimatedWaitInMins != null){ //if Waitlist entry
+      var entry = new WaitlistEntry(party.name, party.partySize, party.phone, party.estimatedWaitInMins, party.id, party.types);
+    }else{ //Reservation entry
+      var entry = new Reservation(party.name, party.partySize, party.phone, party.time, party.id, party.types)
+    }
+    
+    upcomingList.addEntry(entry);
+    //autoselect entry from Upcoming list
+    var partyId = "#party" + party.id;
+    $(partyId).parent().find("a").removeClass('active');
+    thisParty = upcomingList.getEntryWithID($(partyId).attr('id'));
+    //if already selected, unselect
+    if (selectedParty && selectedParty.id == thisParty.id) {
+      selectedParty = null;
+      resetTooltip();
+    }
+    //otherwise, select
+    else {
+      $(partyId).addClass('active');
+      $("#filterSize").val(thisParty.partySize);
+      $("#filterSize").change();
+      $("#filterType").val(thisParty.types);
+      $("#filterType").change();
+      selectedParty = thisParty;
+    }
+  });
+
   $("#editWaitlist").click(function(e) {
-    $(".alert").remove();
+    $(".alertParty").remove();
     if (validUpcomingEntry("#waitlistEditMenu", "#inputPartyNameWaitlistEdit", "#inputPartySizeWaitlistEdit", "#inputPhoneNumberWaitlistEdit")){
       editedEventID = parseInt($("#inputPartyIDWaitlistEdit").val(), 10);
       editedEvent = upcomingList.getEntryWithID(editedEventID);
@@ -424,7 +461,7 @@ $(function() {
   });
 
   $("#editReservation").click(function(e) {
-    $(".alert").remove();
+    $(".alertParty").remove();
     if (validUpcomingEntry("#reservationEditMenu", "#inputPartyNameReservationEdit", "#inputPartySizeReservationEdit", "#inputPhoneNumberReservationEdit", "#inputTimeReservationEdit", "#inputDateReservationEdit")){
       editedEventID = parseInt($("#inputPartyIDReservationEdit").val(), 10);
       editedEvent = upcomingList.getEntryWithID(editedEventID);
@@ -439,7 +476,7 @@ $(function() {
 
       $("#reservationEditMenu").collapse("hide");
       $("#addPartyMenu").show();
-      $(".alert").remove();    
+      $(".alertParty").remove();    
     }
   });
 
@@ -531,7 +568,6 @@ $(function() {
       $("#seatPartySize").html(null);
     } else {
       $("#inputWalkInPartySize").hide();
-      console.log(partyID);
       $("#seatPartySize").html(upcomingList.getEntryWithID(partyID).partySize);
     }
   }
@@ -617,13 +653,16 @@ $(function() {
     $("#seatPopUp").hide();
   });
 
-  $("#unseatTable").click(function() {
-  	selectedTable.assignedParty = null;
-  	seatMap.updateTable(selectedTable);
-  	selectedTable = null;
+  //removes party from table
+  var unseatTable = function() {
+    selectedTable.assignedParty = null;
+    seatMap.updateTable(selectedTable);
+    selectedTable = null;
     $("#filterSize").change();
     $("#unseatPopUp").hide();
-  });
+  };
+
+  $("#unseatTable").click(unseatTable);
 
   $("#filterSize").on('change input', function() {
     //if there is a partySize in the filter, highlight valid tables
