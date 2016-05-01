@@ -617,6 +617,10 @@ $(function() {
         var sizeWarning = $('<div id="sizeWarning" class="alert alert-danger"></div>').text("This table can only fit " + selectedTable.capacity + " people.");
         $("#seatPartySizeGroup").append(sizeWarning);
         return;
+      }else if (partySize == 0){
+        var sizeWarning = $('<div id="sizeWarning" class="alert alert-danger"></div>').text("Party Size must be greater than 0.");
+        $("#seatPartySizeGroup").append(sizeWarning);
+        return;     
       }
 
   		partyToSeat = new UpcomingListEntry("Walk-In", partySize);
