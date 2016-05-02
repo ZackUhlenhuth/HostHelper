@@ -622,7 +622,9 @@ $(function() {
   //hide popups and reset filters when you click the floor
   $("#floor").click(hidePopupsAndReset);
   // Hide popups when close button in popup clicked.
-  $(".close").click(hidePopups);
+  $(".close-popup").click(hidePopups);
+  //hide Extended Upcoming list
+  $(".close-upcoming").click(function(){$("#extendedUpcomingListPopUp").addClass("hidden")});
 
   $("#seatTable").click(function() {
     $("#sizeWarning").remove();

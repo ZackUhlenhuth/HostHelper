@@ -112,7 +112,7 @@ h3 {
   float:right;
   margin-right:5px;
 }
-#upcomingList {
+#upcomingList, #extendedUpcomingList {
   max-height:350px;
   overflow-y:auto;
 }
