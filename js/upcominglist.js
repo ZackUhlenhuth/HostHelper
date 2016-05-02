@@ -12,6 +12,7 @@ class UpcomingList {
 
 	addEntry(entry) {
 		this.list.push(entry);
+		this.sort();
 		this.notifyListeners("add", entry);
 	}
 
@@ -30,9 +31,32 @@ class UpcomingList {
 
 		var removedEntry = this.list[indexToSplice];
 		this.list.splice(indexToSplice, 1)
+		this.sort();
 		if (removedEntry) {
 			this.notifyListeners("remove", removedEntry)
 		}
+	}
+
+	/* We sort upcoming list entries by "urgency", which we define as follows:
+		The upcoming list entry with the SMALLEST amount of time remaining until it needs seated is
+		seated first.
+
+		The time to seat of a waitlist entry is the estimated wait time of that waitlist entry.
+
+		The time to seat of a reservation is ten minutes less than the amount of time between
+		now and the time associated with that reservation.
+
+		Reservations are given the additional ten minute advantage as they are more urgent to seat at a
+		given time than a waitlist entry.
+	*/
+	sort() {
+		this.list.sort(function(reservationEntryA, reservationEntryB){
+			return reservationEntryA.getTimeUntilHostShouldSeat() - reservationEntryB.getTimeUntilHostShouldSeat();
+		});
+
+		$.each(this.list, function(index, element){
+			element.position = index;
+		});
 	}
 
 	updateEntry(entry) {
@@ -105,6 +129,8 @@ class UpcomingList {
 		});
 	}
 
+	// Normally this would be done with some sort of backend algorith, however
+	// backends are beyond the scope of this course, so this function just fakes it.
 	tick(upcomingList) {
 		// This is just some mock code for our wait prediction algorithm.
 		$.each(upcomingList.getUpcomingListEntries(), function(index, entry){
@@ -123,30 +149,32 @@ class UpcomingList {
 }
 
 class UpcomingListEntry {
-	constructor(name, size, phone, id, seatedTime, eta) {
+	constructor(name, size, phone, id, seatedTime) {
 		if (id == null) {
 			this.id = Math.round(Math.random() * 10000000);
-		}
-		else {
+		} else {
 			this.id = id;
 		}
+
 		this.name = name;
 		this.partySize = size;
 		this.phone = phone;
 		
 		if (seatedTime == null) {
-		  this.seatedTime = (new Date()).toString();
-		}
-		else {
+		  this.seatedTime = new Date();
+		} else {
 		  this.seatedTime = seatedTime;
 		}
-		
-		if (eta == null) {
-  	  this.eta = (new Date(new Date().getTime() + 30*60000)).toString();
-  	}
-  	else {
-  	  this.eta = eta;
-  	}
+
+		// This will be defined after the upcomingList is sorted.
+		this.position = null;
+	}
+
+	// Returns number of miliseconds remaining until party is estimated to finish eating.
+	// We estimate all parties take 30 minutes to eat after they are seated. 
+	getEstimatedTimeUntilPartyFinishes() {
+		var THIRTY_MINUTES_IN_MILISECONDS = 30*60*1000;
+		return this.seatedTime.getTime() + THIRTY_MINUTES_IN_MILISECONDS - Date.now();
 	}
 }
 
@@ -159,14 +187,20 @@ class WaitlistEntry extends UpcomingListEntry {
 
 	getCountdownString() {
 	  var minuteSuffix;
-	  if (this.estimatedWaitInMins == 1)
+	  if (this.estimatedWaitInMins == 1){
 	    minuteSuffix = " min";
-	  else
+	  } else {
 	    minuteSuffix = " mins";
+	 }
 	  
 		return "<span class='glyphicon glyphicon-hourglass'></span> " + this.estimatedWaitInMins + minuteSuffix;
 	}
 
+	// Returns the number of miliseconds until the host should seat this party.
+	getTimeUntilHostShouldSeat() {
+		var MILISECONDS_IN_MINUTE = 1*60*1000;
+		return this.estimatedWaitInMins * MILISECONDS_IN_MINUTE;
+	}
 }
 
 class Reservation extends UpcomingListEntry {
@@ -192,6 +226,13 @@ class Reservation extends UpcomingListEntry {
 		}
 
 		return "<span class='glyphicon glyphicon-calendar'></span> " + hours + ":" + minutes + " " + AMPM
+	}
+
+	// Gets the number of miliseconds until a host should seat this reservations.
+	// Reservations should be seated ten minutes before their reservation time.
+	getTimeUntilHostShouldSeat() {
+		var TEN_MINUTES_MILISECONDS = 10*60*1000;
+		return this.time.getTime() - Date.now() - TEN_MINUTES_MILISECONDS;
 	}
 }
 

@@ -176,7 +176,15 @@ $(function() {
         return;
       }
     }
-    $("#upcomingList").append(drawUpcomingListEntry(event.entry));
+
+    upcomingListEntryView = drawUpcomingListEntry(event.entry);
+
+    if ($("#upcomingList").children().length == 0) {
+    	$("#upcomingList").append(upcomingListEntryView);	
+    } else {
+    	$("#upcomingList").children().eq(event.entry.position - 1).after(upcomingListEntryView);
+    }
+
   });
 
   upcomingList.registerListener("update", function(event) {
@@ -285,7 +293,7 @@ $(function() {
       var assignedParty = null;
       if (currTable.assignedParty != null) {
         var party = currTable.assignedParty;
-        var assignedParty = new UpcomingListEntry(party.name, party.partySize, party.assignedParty, party.id, party.seatedTime, party.eta);
+        var assignedParty = new UpcomingListEntry(party.name, party.partySize, party.assignedParty, party.id, new Date(party.seatedTime));
       }
       var table = new Table(currTable.id, currTable.capacity, currTable.x, currTable.y, currTable.style, currTable.orientation, currTable.types);
       seatMap.addTable(table);
@@ -506,8 +514,8 @@ $(function() {
     if (selectedTable.isOccupied()) { // If the table is occupied, show the unseat popup, if it's open, show the seat popup.
     	halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
       $("#unseatPartyName").html(selectedTable.assignedParty.name);
-      $("#unseatPartySeatedTime").html(get12hour(selectedTable.assignedParty.seatedTime));
-      $("#unseatPartyETA").html(get12hour(selectedTable.assignedParty.eta));
+      $("#unseatPartySeatedTime").html(get12hour(selectedTable.assignedParty.seatedTime.toString()));
+      $("#unseatPartyETA").html(get12hour(new Date(Date.now() + selectedTable.assignedParty.getEstimatedTimeUntilPartyFinishes())));
     	// add 15 to top to account for tooltip
     	$("#unseatPopUp").slideDown("fast", "linear").css("top", e.pageY + 15).css("left", e.pageX - halfWidth);
     } else {
@@ -644,8 +652,7 @@ $(function() {
       }
   	} else {
   		partyToSeat = upcomingList.getEntryWithID(partyToSeatID)
-  		partyToSeat.seatedTime = (new Date()).toString();
-  		partyToSeat.eta = (new Date(new Date().getTime() + 30*60000)).toString();
+  		partyToSeat.seatedTime = new Date();
   		upcomingList.removeEntryWithID(partyToSeat.id);
   	}
     
