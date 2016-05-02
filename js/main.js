@@ -6,7 +6,7 @@ function get12hour(ds){
   var minutes= d.getMinutes();
   var dn="AM";
   
-  if (hours>12) {
+  if (hours>11) {
     dn="PM";
     hours=hours-12;
   }
