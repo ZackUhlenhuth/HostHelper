@@ -154,9 +154,6 @@ $(function() {
   var upcomingList = new UpcomingList();
   var extendedUpcomingList = new UpcomingList(); //zack
   var seatMap = new SeatMap();
-  
-  var waiters = ["Mike","Sarah","Adam","Don"];
-  var currentWaiter = 0;
 
   var selectedParty = null;
   var selectedTable = null;
