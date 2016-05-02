@@ -512,12 +512,7 @@ $(function() {
     
     hidePopups();
     if (selectedTable.isOccupied()) { // If the table is occupied, show the unseat popup, if it's open, show the seat popup.
-    	halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
-      $("#unseatPartyName").html(selectedTable.assignedParty.name);
-      $("#unseatPartySeatedTime").html(get12hour(selectedTable.assignedParty.seatedTime.toString()));
-      $("#unseatPartyETA").html(get12hour(new Date(Date.now() + selectedTable.assignedParty.getEstimatedTimeUntilPartyFinishes())));
-    	// add 15 to top to account for tooltip
-    	$("#unseatPopUp").slideDown("fast", "linear").css("top", e.pageY + 15).css("left", e.pageX - halfWidth);
+    	showUnseatPopup({x: e.pageX, y: e.pageY});
     } else {
     	// Show seat popup unless the selected party won't fit at that table.
     	if (!(selectedParty && selectedParty.partySize > selectedTable.capacity)) showSeatPopup({x: e.pageX, y: e.pageY});
@@ -578,6 +573,15 @@ $(function() {
     $("#seatPartySizeGroup").removeClass("has-error");
       
     $("#inputWalkInPartySize").focus();
+  }
+
+  function showUnseatPopup(tipPoint) {
+  	halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
+    $("#unseatPartyName").html(selectedTable.assignedParty.name);
+    $("#unseatPartySeatedTime").html(get12hour(selectedTable.assignedParty.seatedTime.toString()));
+    $("#unseatPartyETA").html(get12hour(new Date(Date.now() + selectedTable.assignedParty.getEstimatedTimeUntilPartyFinishes())));
+    // add 15 to top to account for tooltip
+    $("#unseatPopUp").slideDown("fast", "linear").css("top", tipPoint.y + 15).css("left", tipPoint.x - halfWidth);
   }
 
   function selectSeatParty(partyID) {
