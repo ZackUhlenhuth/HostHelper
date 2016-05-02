@@ -152,6 +152,7 @@ function checkUpcomingReservations (seatMap) {
 
 $(function() {
   var upcomingList = new UpcomingList();
+  var extendedUpcomingList = new UpcomingList(); //zack
   var seatMap = new SeatMap();
 
   var selectedParty = null;
@@ -168,6 +169,10 @@ $(function() {
     //don't draw entries that are 12 hours past current time
     if (event.entry.time) {
       if (event.entry.time > (new Date()).addHours(12)) {
+        //add the entry to the extended list
+        extendedUpcomingList.addEntry(event.entry);//zack
+        $("#extendedUpcomingList").append(drawUpcomingListEntry(event.entry));
+        console.log(extendedUpcomingList);
         return;
       }
     }
@@ -181,6 +186,8 @@ $(function() {
       if ($("#party" + event.entry.id).length == 0) {
         if (event.entry.time <= (new Date()).addHours(12)) {
           $("#upcomingList").append(drawUpcomingListEntry(event.entry));
+        }else{//zack extended list
+          $("#extendedUpcomingList").append(drawUpcomingListEntry(event.entry));
         }
       }
     }
@@ -361,6 +368,10 @@ $(function() {
     $(".alertParty").remove();
   });
 
+  $("#showExtendedUpcoming").click(function() {
+    $("#extendedUpcomingListPopUp").removeClass("hidden");
+  });
+
 
   //add a Walk-in to Upcoming
   $("#addWaitlist").click(function(e) {
@@ -413,7 +424,6 @@ $(function() {
     unseatTable();
    
     if (party.name == "Walk-In"){//if walk-in
-      console.log("DANGER ZONE");
       var entry = new WaitlistEntry(party.name, party.partySize, party.phone, 0, party.id, party.types)
     }else if (party.estimatedWaitInMins != null){ //if Waitlist entry
       var entry = new WaitlistEntry(party.name, party.partySize, party.phone, party.estimatedWaitInMins, party.id, party.types);
