@@ -590,7 +590,7 @@ $(function() {
     }
   }
 
-  function applyFilters() {
+  function applyFilters(targetElement=0) {
   	seatMap.getOpenTables().map(getViewForTable).map(function(element) {element.css("fill", "#cccccc")});
 
     partySizeText = $("#filterSize").val();
@@ -600,7 +600,7 @@ $(function() {
     partySize = null;
     server = null;
     type = null;
-
+   
     if (partySizeText != "") partySize = parseInt(partySizeText, 10); 
     if (serverText != null) server = serverText;
     if (typeText != null) {
@@ -611,8 +611,8 @@ $(function() {
     }
 
     matchingList = seatMap.getOpenTablesMatchingFilters(partySize, server, type);
-
-    matchingList.map(getViewForTable).map(function(element) {element.css("fill", "#ccff99")});
+    matchingList.map(getViewForTable).map(function(element) {element.css("fill", "#ccffcc")});
+    
   }
 
   $("#seatPartySelector").change(function(event) {
@@ -690,10 +690,12 @@ $(function() {
   $(document).on('click', ".upcoming-party", function(e) {
     $(this).parent().find("a").removeClass('active');
     thisParty = upcomingList.getEntryWithID($(this).attr('id'));
+    
     //if already selected, unselect
     if (selectedParty && selectedParty.id == thisParty.id) {
       selectedParty = null;
       resetTooltip();
+      $("#table" + String(seatMap.getTableBestFit(partySize).id)).css("fill", "#cccccc");      
     }
     //otherwise, select
     else {
@@ -703,6 +705,8 @@ $(function() {
       $("#filterType").val(thisParty.types);
       $("#filterType").change();
       selectedParty = thisParty;
+      
+      $("#table" + String(seatMap.getTableBestFit(partySize).id)).css("fill", "#00cc00");
     }
   });
 
