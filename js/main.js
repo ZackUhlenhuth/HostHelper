@@ -640,28 +640,18 @@ $(function() {
         $("#seatPartySizeGroup").append(sizeWarning);
         return;     
       }
-
   		partyToSeat = new UpcomingListEntry("Walk-In", partySize);
-  		if (partySize == "" || isNaN(partySize)) {
-        $("#seatPartySizeGroup").addClass("has-error");
-        $("#inputWalkInPartySizeFeedback").removeClass("hidden");
-        if (!selectedTable.canPartyFit(partyToSeat)) {
-    			alert("That group has too many members to sit at that table.");
-    		}
-        return;
-      }
   	} else {
   		partyToSeat = upcomingList.getEntryWithID(partyToSeatID)
   		partyToSeat.seatedTime = new Date();
   		upcomingList.removeEntryWithID(partyToSeat.id);
   	}
     
-    // TODO
     console.log(seatMap.getTimeUntilNextTable());
     console.log(upcomingList.getNextReservationTime());
     if (seatMap.getTimeUntilNextTable() > upcomingList.getNextReservationTime()) {
-      alert("You have an upcoming reservation before the next table is expected to be free!");
-      return;
+      if(!confirm("You have an upcoming reservation before the next table is expected to be free!"))
+        return;
     }
   	selectedTable.assignedParty = partyToSeat;
   	seatMap.updateTable(selectedTable);
