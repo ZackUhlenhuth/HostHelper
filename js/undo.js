@@ -94,7 +94,7 @@ class Action {
 	}
 }
 
-function initUndoStackListeners(undoStack, upcomingList, seatmap) {
+function initUndoStackListeners(undoStack, upcomingList, seatMap) {
 	upcomingList.registerListener("add", function(event) {
 		undoFunction = function() {
 			upcomingList.removeEntryWithID(event.entry.id);
@@ -121,5 +121,54 @@ function initUndoStackListeners(undoStack, upcomingList, seatmap) {
 		action = new Action("removeUpcomingList", undoFunction, redoFunction);
 
 		undoStack.pushAction(action);
+	});
+
+	seatMap.registerListener("updateTable", function(event) {
+		updatedTable = event.item;
+
+		if (updatedTable.assignedParty) {
+			// A party was seated.
+
+			undoFunction = function() {
+				console.log("attempting to undo seating of ", updatedTable)
+				// On undo of a party being seated, put them back in the upcoming list if they're not a
+				// walk-in and unassign them from the table.
+				if (!updatedTable.assignedParty.isWalkIn) {
+					upcomingList.addEntry(updatedTable.assignedParty);
+				}
+				updatedTable.assignedParty = null;
+				seatMap.updateTable(updatedTable);
+			}
+
+			partyToReassign = updatedTable.assignedParty;
+			redoFunction = function() {
+				// On redo of a party being seated, remove them from the upcoming list if they're not a walk-in
+				// and assign them to the table.
+				if (!partyToReassign.isWalkIn) {
+					upcomingList.removeEntryWithID(partyToReassign.id);
+				}
+				updatedTable.assignedParty = partyToReassign;
+				seatMap.updateTable(updatedTable);
+			}
+
+			action = new Action("partySeated", undoFunction, redoFunction);
+
+			undoStack.pushAction(action);
+
+		} else {
+			// A party was unseated.
+			undoFunction = function() {
+				console.log("this is not yet supported");
+			}
+
+			redoFunction = function() {
+				console.log("this is not yet supported");
+			}
+
+			action = new Action("partyUnseated", undoFunction, redoFunction);
+
+			undoStack.pushAction(action);
+		}
+
 	});
 }

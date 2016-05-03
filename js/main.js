@@ -207,6 +207,8 @@ $(function() {
   })
 
   upcomingList.registerListener("remove", function(event){
+
+    console.log("got remove ", event)
     //if party was selected, reset tooltip
     if (selectedParty && selectedParty.id == event.entry.id) {
       resetTooltip();
@@ -704,7 +706,7 @@ $(function() {
         $("#seatPartySizeGroup").append(sizeWarning);
         return;     
       }
-  		partyToSeat = new UpcomingListEntry("Walk-In", partySize);
+  		partyToSeat = new WalkIn(partySize);
   	} else {
   		partyToSeat = upcomingList.getEntryWithID(partyToSeatID)
   		partyToSeat.seatedTime = new Date();

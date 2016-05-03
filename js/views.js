@@ -168,7 +168,6 @@ function drawPartyOption(entry) {
 
 function calculateCenterOfTable(tableView) {
   boundingRect = tableView[0].getBoundingClientRect();
-  console.log(boundingRect)
   return {x: tableView.offset().left + (boundingRect.width / 2.0), y: tableView.offset().top + (boundingRect.height / 2.0)};
 }
 
@@ -178,5 +177,9 @@ function getLabelForUndoActionType(undoActionType) {
       return "Add Upcoming Entry"
     case "removeUpcomingList":
       return "Remove Upcoming Entry"
+    case "partySeated":
+      return "Seat Party"
+    case "partyUnseated":
+      return "Unseat Party"
   }
 }
