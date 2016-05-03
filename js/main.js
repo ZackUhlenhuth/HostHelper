@@ -157,6 +157,7 @@ $(function() {
   var upcomingList = new UpcomingList();
   var extendedUpcomingList = new UpcomingList(); //zack
   var seatMap = new SeatMap();
+  var undoStack = new UndoStack();
 
   var selectedParty = null;
   var selectedTable = null;
@@ -206,6 +207,8 @@ $(function() {
   })
 
   upcomingList.registerListener("remove", function(event){
+
+    console.log("got remove ", event)
     //if party was selected, reset tooltip
     if (selectedParty && selectedParty.id == event.entry.id) {
       resetTooltip();
@@ -296,7 +299,7 @@ $(function() {
       var assignedParty = null;
       if (currTable.assignedParty != null) {
         var party = currTable.assignedParty;
-        var assignedParty = new UpcomingListEntry(party.name, party.partySize, party.assignedParty, party.id, new Date(party.seatedTime));
+        var assignedParty = new UpcomingListEntry(party.name, party.partySize, party.assignedParty, party.id, new Date(party.seatedTime), party.isWalkIn);
       }
       var table = new Table(currTable.id, currTable.capacity, currTable.x, currTable.y, currTable.style, currTable.orientation, currTable.types);
       seatMap.addTable(table);
@@ -338,6 +341,33 @@ $(function() {
   seatMap.addWaiterZone(adamZone);
   seatMap.addWaiterZone(donZone);
   console.log(seatMap);
+
+  $("#undoButton").hide();
+  $("#redoButton").hide();
+  $("#undoRedoMenu").hide();
+
+  $("#undoButton").click(function() {
+    undoStack.undo();
+  });
+
+  $("#redoButton").click(function(){
+    undoStack.redo();
+  });
+
+  undoStack.onUpdate = function() {
+    $("#undoButton").toggle(undoStack.canUndo());
+    $("#redoButton").toggle(undoStack.canRedo());
+
+    if (undoStack.canUndo()) {
+      $("#undoButton").html("Undo " + getLabelForUndoActionType(undoStack.peekUndo().type))
+    }
+
+    if (undoStack.canRedo()) {
+      $("#redoButton").html("Redo " + getLabelForUndoActionType(undoStack.peekRedo().type));
+    }
+
+    $("#undoRedoMenu").toggle(undoStack.canUndo() || undoStack.canRedo());
+  }
   
   // Waitlist and Reservation Menus
  	$("#openReservationMenu").click(function() {
@@ -396,10 +426,13 @@ $(function() {
     
     if (validUpcomingEntry("#waitlistMenu", "#inputPartyNameWaitlist", "#inputPartySizeWaitlist", "#inputPhoneNumberWaitlist")){
       $('#waitlistForm').trigger('reset');
-      upcomingList.addEntry(new WaitlistEntry(name, partySize, phone, eta, types));
+      var entryToAdd = new WaitlistEntry(name, partySize, phone, eta, types);
+      upcomingList.addEntry(entryToAdd);
       $("#waitlistMenu").collapse('hide');
       $("#addPartyMenu").show();
       $(".alertParty").remove();
+
+      undoStack.pushAction(getActionForAddUpcomingList(entryToAdd, upcomingList));
     }
   });
 
@@ -416,13 +449,16 @@ $(function() {
     
     //if the form is filled out correctly
     if (validUpcomingEntry("#reservationMenu", "#inputPartyNameReservation", "#inputPartySizeReservation", "#inputPhoneNumberReservation", "#inputTimeReservation", "#inputDateReservation")){
-      upcomingList.addEntry(new Reservation(name, partySize, phone, timeAndDate, null, types))
+      var entryToAdd = new Reservation(name, partySize, phone, timeAndDate, null, types);
+      upcomingList.addEntry(entryToAdd)
       $('#reservationForm').trigger('reset');
       $("#inputDateReservation").datepicker().datepicker("setDate", new Date()); ///Default date/time
       $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date());
 
       $("#reservationMenu").collapse('hide');
       $("#addPartyMenu").show();      
+
+      undoStack.pushAction(getActionForAddUpcomingList(entryToAdd, upcomingList));
     }
     
   });
@@ -469,10 +505,13 @@ $(function() {
       editedEventID = parseInt($("#inputPartyIDWaitlistEdit").val(), 10);
       editedEvent = upcomingList.getEntryWithID(editedEventID);
 
-      editedEvent.name = $("#inputPartyNameWaitlistEdit").substring(0,12); //truncate name to 12 letters;
+      originalEvent = new WaitlistEntry(editedEvent.name, editedEvent.partySize, editedEvent.phone, editedEvent.estimatedWaitInMins, editedEvent.id, editedEvent.types);
+
+      editedEvent.name = $("#inputPartyNameWaitlistEdit").val().substring(0,12); //truncate name to 12 letters;
       editedEvent.partySize = parseInt($("#inputPartySizeWaitlistEdit").val(), 10);
       editedEvent.phone = $("#inputPhoneNumberWaitlistEdit").val();
       editedEvent.types = $("#inputTypesWaitlistEdit").val();
+      undoStack.pushAction(getActionForUpdateUpcomingList(originalEvent, editedEvent, upcomingList))
       upcomingList.updateEntry(editedEvent);
 
       $("#waitlistEditMenu").collapse("hide");
@@ -486,13 +525,17 @@ $(function() {
     if (validUpcomingEntry("#reservationEditMenu", "#inputPartyNameReservationEdit", "#inputPartySizeReservationEdit", "#inputPhoneNumberReservationEdit", "#inputTimeReservationEdit", "#inputDateReservationEdit")){
       editedEventID = parseInt($("#inputPartyIDReservationEdit").val(), 10);
       editedEvent = upcomingList.getEntryWithID(editedEventID);
+      
+      originalEvent = new Reservation(editedEvent.name, editedEvent.partySize, editedEvent.phone, editedEvent.time, editedEvent.id, editedEvent.types)
 
-      editedEvent.name = $("#inputPartyNameReservationEdit").substring(0,12); //truncate name to 12 letters;
+      editedEvent.name = $("#inputPartyNameReservationEdit").val().substring(0,12); //truncate name to 12 letters;
       editedEvent.partySize = parseInt($("#inputPartySizeReservationEdit").val(), 10);
       editedEvent.phone = $("#inputPhoneNumberReservationEdit").val();
       editedEvent.types = $("#inputTypesReservationEdit").val();
       timeAndDate = new Date($('#inputDateReservationEdit').val() + " " + $("#inputTimeReservationEdit").val());
       editedEvent.time = timeAndDate
+
+      undoStack.pushAction(getActionForUpdateUpcomingList(originalEvent, editedEvent, upcomingList))
       upcomingList.updateEntry(editedEvent);
 
       $("#reservationEditMenu").collapse("hide");
@@ -674,7 +717,7 @@ $(function() {
         $("#seatPartySizeGroup").append(sizeWarning);
         return;     
       }
-  		partyToSeat = new UpcomingListEntry("Walk-In", partySize);
+  		partyToSeat = new WalkIn(partySize);
   	} else {
   		partyToSeat = upcomingList.getEntryWithID(partyToSeatID)
   		partyToSeat.seatedTime = new Date();
@@ -689,6 +732,7 @@ $(function() {
     }
   	selectedTable.assignedParty = partyToSeat;
   	seatMap.updateTable(selectedTable);
+    undoStack.pushAction(getActionForPartySeated(selectedTable, upcomingList, seatMap));
 
     $("#filterSize").val("");
     $("#filterSize").change();
@@ -700,11 +744,14 @@ $(function() {
 
   //removes party from table
   var unseatTable = function() {
+    undoStack.pushAction(getActionForPartyUnseated(selectedTable, selectedTable.assignedParty, upcomingList, seatMap));
+
     selectedTable.assignedParty = null;
     seatMap.updateTable(selectedTable);
     selectedTable = null;
     $("#filterSize").change();
     $("#unseatPopUp").hide();
+
   };
 
   $("#unseatTable").click(unseatTable);
@@ -748,7 +795,9 @@ $(function() {
     e.stopPropagation();
 
     correspondingPartyView = $(this).parents(".upcoming-party")[0];
+    correspondingParty = upcomingList.getEntryWithID(correspondingPartyView.id);
     upcomingList.removeEntryWithID(correspondingPartyView.id);
+    undoStack.pushAction(getActionForRemoveUpcomingList(correspondingParty, upcomingList));
   });
 
   $(document).on('click', ".edit-upcoming-party", function(e) {

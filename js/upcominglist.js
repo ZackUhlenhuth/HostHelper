@@ -124,6 +124,8 @@ class UpcomingList {
 					entry: entry,
 				}
 
+				console.log("sentNotification", event, " -> ", eventListener)
+
 				eventListener.handler(event);
 			}
 		});
@@ -149,7 +151,7 @@ class UpcomingList {
 }
 
 class UpcomingListEntry {
-	constructor(name, size, phone, id, seatedTime) {
+	constructor(name, size, phone, id, seatedTime, isWalkIn) {
 		if (id == null) {
 			this.id = Math.round(Math.random() * 10000000);
 		} else {
@@ -168,6 +170,12 @@ class UpcomingListEntry {
 
 		// This will be defined after the upcomingList is sorted.
 		this.position = null;
+		// We will set this manually if the party is a walk-in.
+		if (isWalkIn) {
+			this.isWalkIn = isWalkIn
+		} else {
+			this.isWalkIn = false;
+		}
 	}
 
 	// Returns number of miliseconds remaining until party is estimated to finish eating.
@@ -234,6 +242,15 @@ class Reservation extends UpcomingListEntry {
 		var TEN_MINUTES_MILISECONDS = 10*60*1000;
 		return this.time.getTime() - Date.now() - TEN_MINUTES_MILISECONDS;
 	}
+}
+
+class WalkIn extends UpcomingListEntry {
+	constructor(size){
+		super("Walk-In", size);
+		this.isWalkIn = true;
+	}
+
+	/* The methods that we normally extend are for the upcoming list, we should not need them here. */
 }
 
 function entryIDForElementID(elementID) {

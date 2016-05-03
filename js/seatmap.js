@@ -54,7 +54,7 @@ class SeatMap {
 	    else
 	      times.push(new Date());
 	  }
-	  console.log(times);
+	  //console.log(times);
 	  return (times.sort()[1] - new Date());
 	}
 
