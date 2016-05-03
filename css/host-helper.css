@@ -36,16 +36,6 @@ h3 {
   height:30px;
 }
 
-#seatPopUp {
-	/* The floorplan has z-index 1, we want it to display over the floorplan. */
-	z-index: 2;
-}
-
-#unseatPopUp {
-	/* The floorplan has z-index 1, we want it to display over the floorplan. */
-	z-index: 2;
-}
-
 /* Floorplan */
 /* Used http://www.cssarrowplease.com/ */
 .floorplan-tooltip {
