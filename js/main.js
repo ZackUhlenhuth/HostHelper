@@ -358,6 +358,14 @@ $(function() {
     $("#undoButton").toggle(undoStack.canUndo());
     $("#redoButton").toggle(undoStack.canRedo());
 
+    if (undoStack.canUndo()) {
+      $("#undoButton").html("Undo " + getLabelForUndoActionType(undoStack.peekUndo().type))
+    }
+
+    if (undoStack.canRedo()) {
+      $("#redoButton").html("Redo " + getLabelForUndoActionType(undoStack.peekRedo().type));
+    }
+
     $("#undoRedoMenu").toggle(undoStack.canUndo() || undoStack.canRedo());
   }
   

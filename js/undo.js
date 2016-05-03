@@ -50,12 +50,24 @@ class UndoStack {
 		if (this.onUpdate) this.onUpdate();
 	}
 
+	// Returns true iff there is an action that can be undone.
 	canUndo() {
 		return this.currentPosition >= 0;
 	}
 
+	// Returns true iff there is an action that can be redone.
 	canRedo() {
 		return this.currentPosition < (this.stack.length - 1);
+	}
+
+	// If there is an action that can be undone, this returns it.
+	peekUndo() {
+		return this.stack[this.currentPosition];
+	}
+
+	// If there is an action that can be reodne, this returns it.
+	peekRedo() {
+		return this.stack[this.currentPosition + 1]
 	}
 }
 
