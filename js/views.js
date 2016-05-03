@@ -141,6 +141,7 @@ function drawUpcomingListEntry(entry) {
     newEntry.attr('party-size', entry.partySize);
     newEntry.attr('party-phone', entry.phone);
     newEntry.attr('id', 'party' + entry.id);
+    newEntry.addClass('party' + entry.id);
     newEntry.html(makeUpcomingListString(entry));
     newEntry.prepend(editButtons);
     if (entry.time) {

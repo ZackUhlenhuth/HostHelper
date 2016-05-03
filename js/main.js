@@ -168,7 +168,7 @@ $(function() {
 
   //http://stackoverflow.com/questions/1050720/adding-hours-to-javascript-date-object
   upcomingList.registerListener("add", function(event){
-    upcomingListEntryView = drawUpcomingListEntry(event.entry);
+  upcomingListEntryView = drawUpcomingListEntry(event.entry);
 
     if ($("#shortUpcomingList").children().length == 0) {
     	$("#shortUpcomingList").append(upcomingListEntryView);
@@ -182,7 +182,7 @@ $(function() {
 
   upcomingList.registerListener("update", function(event) {
   	console.log("update", event);
-    $("#party" + event.entry.id).replaceWith(drawUpcomingListEntry(event.entry));
+    $(".party" + event.entry.id).replaceWith(drawUpcomingListEntry(event.entry));
   })
 
   upcomingList.registerListener("remove", function(event){
@@ -194,7 +194,7 @@ $(function() {
       selectedParty = null;
     }
 
-    $("#party" + event.entry.id).remove()
+   $(".party" + event.entry.id).remove();
   })
 
   seatMap.registerListener("addTable", function(event) {
@@ -459,7 +459,7 @@ $(function() {
     
     upcomingList.addEntry(entry);
     //autoselect entry from Upcoming list
-    var partyId = "#party" + party.id;
+    var partyId = ".party" + party.id;
     $(partyId).parent().find("a").removeClass('active');
     thisParty = upcomingList.getEntryWithID($(partyId).attr('id'));
     //if already selected, unselect
