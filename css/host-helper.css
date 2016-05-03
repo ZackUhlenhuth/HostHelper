@@ -108,11 +108,11 @@ h3 {
   margin:0px;
   margin-bottom:-5px;
 }
-#openReservationMenu,#openWaitlistMenu {
+#openReservationMenu,#openWaitlistMenu,#undoButton,#redoButton{
   width:100%;
   overflow:hidden;
 }
-#openReservationMenu {
+#openReservationMenu, #undoButton {
   margin-bottom:10px;
 }
 .remove-upcoming-party, .edit-upcoming-party {

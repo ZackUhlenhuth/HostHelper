@@ -157,6 +157,7 @@ $(function() {
   var upcomingList = new UpcomingList();
   var extendedUpcomingList = new UpcomingList(); //zack
   var seatMap = new SeatMap();
+  var undoStack = new UndoStack();
 
   var selectedParty = null;
   var selectedTable = null;
@@ -338,6 +339,27 @@ $(function() {
   seatMap.addWaiterZone(adamZone);
   seatMap.addWaiterZone(donZone);
   console.log(seatMap);
+
+  initUndoStackListeners(undoStack, upcomingList, seatMap);
+
+  $("#undoButton").hide();
+  $("#redoButton").hide();
+  $("#undoRedoMenu").hide();
+
+  $("#undoButton").click(function() {
+    undoStack.undo();
+  });
+
+  $("#redoButton").click(function(){
+    undoStack.redo();
+  });
+
+  undoStack.onUpdate = function() {
+    $("#undoButton").toggle(undoStack.canUndo());
+    $("#redoButton").toggle(undoStack.canRedo());
+
+    $("#undoRedoMenu").toggle(undoStack.canUndo() || undoStack.canRedo());
+  }
   
   // Waitlist and Reservation Menus
  	$("#openReservationMenu").click(function() {
