@@ -77,17 +77,15 @@ class SeatMap {
 			return thisZone.waiterName == waiterName;
 		})[0];
 	}
-	
+
 	getWaiterZonesLowestUsage() {
-	  var initial = this.waiterZones[0];
-	  var lowest = [];
-	  for (var i = 1; i < this.waiterZones.length; i++) {
-	    if (this.getOccupiedWaiterZoneTables(initial).length > this.getOccupiedWaiterZoneTables(this.waiterZones[i]).length)
-	      lowest.push(this.waiterZones[i]);
+	  var zones = this.waiterZones.sort();
+	  var stop = zones.length;
+	  for (var i = 1; i < zones.length; ++i) {
+	    if (zones[i] > zones[i-1])
+	      stop = i;
 	  }
-	  if (lowest.length == 0)
-	    lowest.push(this.waiterZones[0]);
-	  return lowest;
+	  return zones.slice(0,stop+1);
 	}
 	
 	getTableBestFit(partySize) {
