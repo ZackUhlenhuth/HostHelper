@@ -86,9 +86,13 @@ function validDate(date1, time1, date2){
 
 // Inputs are jquery references in the form "#abcd"
 // Party Name should be truncated to 12 characters before validUpcomingEntry is run
-function validUpcomingEntry(form, name, size, phone, time="none", date="none"){
+function validUpcomingEntry(form, name, size, phone, time, date){
     var RESTAURANT_CAPACITY = 100 //TODO calculate actual capacity
     var validInput = true;
+
+    // Default arguments aren't supported in some browsers. :-/
+    if (time == null) time = "none";
+    if (date == null) date = "none";
 
     if (!($(name).val().match(/^\w+$/))){
       validInput = false;
@@ -619,7 +623,8 @@ $(function() {
     }
   }
 
-  function applyFilters(targetElement=0) {
+  function applyFilters(targetElement) {
+    if (targetElement == null) targetElement = 0;
   	seatMap.getOpenTables().map(getViewForTable).map(function(element) {element.css("fill", "#cccccc")});
 
     partySizeText = $("#filterSize").val();
