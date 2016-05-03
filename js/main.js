@@ -605,7 +605,7 @@ $(function() {
   function movePopup(popup, destinationTipPoint) {
   	halfWidth = parseInt(popup.css("width"), 10) / 2.0;
   	popupPosition = {top: destinationTipPoint.y + 15, left: destinationTipPoint.x - halfWidth}
-  	popup.offset(popupPosition)
+  	popup.css("top", popupPosition.top).css("left", popupPosition.left);
   }
 
   function getTipPointOfPopup(popup) {
