@@ -118,6 +118,18 @@ function getActionForRemoveUpcomingList(entry, upcomingList) {
 	return new Action("removeUpcomingList", undoFunction, redoFunction);
 }
 
+function getActionForUpdateUpcomingList(entryBefore, entryAfter, upcomingList) {
+	undoFunction = function() {
+		upcomingList.updateEntry(entryBefore);
+	}
+
+	redoFunction = function() {
+		upcomingList.updateEntry(entryAfter);
+	}
+
+	return new Action("editUpcomingList", undoFunction, redoFunction);
+}
+
 function getActionForPartySeated(table, upcomingList, seatMap) {	
 	undoFunction = function() {
 		// On undo of a party being seated, put them back in the upcoming list if they're not a
@@ -162,4 +174,3 @@ function getActionForPartyUnseated(table, party, upcomingList, seatMap) {
 
 	return new Action("partyUnseated", undoFunction, redoFunction);
 }
-

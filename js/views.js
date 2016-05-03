@@ -177,6 +177,8 @@ function getLabelForUndoActionType(undoActionType) {
       return "Add Upcoming Entry"
     case "removeUpcomingList":
       return "Remove Upcoming Entry"
+    case "editUpcomingList":
+      return "Edit Upcoming List"
     case "partySeated":
       return "Seat Party"
     case "partyUnseated":

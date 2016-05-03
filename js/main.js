@@ -505,10 +505,13 @@ $(function() {
       editedEventID = parseInt($("#inputPartyIDWaitlistEdit").val(), 10);
       editedEvent = upcomingList.getEntryWithID(editedEventID);
 
-      editedEvent.name = $("#inputPartyNameWaitlistEdit").substring(0,12); //truncate name to 12 letters;
+      originalEvent = new WaitlistEntry(editedEvent.name, editedEvent.partySize, editedEvent.phone, editedEvent.estimatedWaitInMins, editedEvent.id, editedEvent.types);
+
+      editedEvent.name = $("#inputPartyNameWaitlistEdit").val().substring(0,12); //truncate name to 12 letters;
       editedEvent.partySize = parseInt($("#inputPartySizeWaitlistEdit").val(), 10);
       editedEvent.phone = $("#inputPhoneNumberWaitlistEdit").val();
       editedEvent.types = $("#inputTypesWaitlistEdit").val();
+      undoStack.pushAction(getActionForUpdateUpcomingList(originalEvent, editedEvent, upcomingList))
       upcomingList.updateEntry(editedEvent);
 
       $("#waitlistEditMenu").collapse("hide");
@@ -522,13 +525,17 @@ $(function() {
     if (validUpcomingEntry("#reservationEditMenu", "#inputPartyNameReservationEdit", "#inputPartySizeReservationEdit", "#inputPhoneNumberReservationEdit", "#inputTimeReservationEdit", "#inputDateReservationEdit")){
       editedEventID = parseInt($("#inputPartyIDReservationEdit").val(), 10);
       editedEvent = upcomingList.getEntryWithID(editedEventID);
+      
+      originalEvent = new Reservation(editedEvent.name, editedEvent.partySize, editedEvent.phone, editedEvent.time, editedEvent.id, editedEvent.types)
 
-      editedEvent.name = $("#inputPartyNameReservationEdit").substring(0,12); //truncate name to 12 letters;
+      editedEvent.name = $("#inputPartyNameReservationEdit").val().substring(0,12); //truncate name to 12 letters;
       editedEvent.partySize = parseInt($("#inputPartySizeReservationEdit").val(), 10);
       editedEvent.phone = $("#inputPhoneNumberReservationEdit").val();
       editedEvent.types = $("#inputTypesReservationEdit").val();
       timeAndDate = new Date($('#inputDateReservationEdit').val() + " " + $("#inputTimeReservationEdit").val());
       editedEvent.time = timeAndDate
+
+      undoStack.pushAction(getActionForUpdateUpcomingList(originalEvent, editedEvent, upcomingList))
       upcomingList.updateEntry(editedEvent);
 
       $("#reservationEditMenu").collapse("hide");
