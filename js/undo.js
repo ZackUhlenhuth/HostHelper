@@ -94,81 +94,72 @@ class Action {
 	}
 }
 
-function initUndoStackListeners(undoStack, upcomingList, seatMap) {
-	upcomingList.registerListener("add", function(event) {
-		undoFunction = function() {
-			upcomingList.removeEntryWithID(event.entry.id);
-		}
+function getActionForAddUpcomingList(entry, upcomingList) {
+	undoFunction = function() {
+		upcomingList.removeEntryWithID(entry.id);
+	}
 
-		redoFunction = function() {
-			upcomingList.addEntry(event.entry);
-		}
+	redoFunction = function() {
+		upcomingList.addEntry(entry);
+	}
 
-		action = new Action("addUpcomingList", undoFunction, redoFunction);
-
-		undoStack.pushAction(action);
-	});
-
-	upcomingList.registerListener("remove", function(event) {
-		undoFunction = function() {
-			upcomingList.addEntry(event.entry);
-		}
-
-		redoFunction = function() {
-			upcomingList.removeEntryWithID(event.entry.id);
-		}
-
-		action = new Action("removeUpcomingList", undoFunction, redoFunction);
-
-		undoStack.pushAction(action);
-	});
-
-	seatMap.registerListener("updateTable", function(event) {
-		updatedTable = event.item;
-
-		if (updatedTable.assignedParty) {
-			// A party was seated.
-
-			undoFunction = function() {
-				console.log("attempting to undo seating of ", updatedTable)
-				// On undo of a party being seated, put them back in the upcoming list if they're not a
-				// walk-in and unassign them from the table.
-				if (!updatedTable.assignedParty.isWalkIn) {
-					upcomingList.addEntry(updatedTable.assignedParty);
-				}
-				updatedTable.assignedParty = null;
-				seatMap.updateTable(updatedTable);
-			}
-
-			partyToReassign = updatedTable.assignedParty;
-			redoFunction = function() {
-				// On redo of a party being seated, remove them from the upcoming list if they're not a walk-in
-				// and assign them to the table.
-				if (!partyToReassign.isWalkIn) {
-					upcomingList.removeEntryWithID(partyToReassign.id);
-				}
-				updatedTable.assignedParty = partyToReassign;
-				seatMap.updateTable(updatedTable);
-			}
-
-			action = new Action("partySeated", undoFunction, redoFunction);
-
-			undoStack.pushAction(action);
-
-		} else {
-			// A party was unseated.
-			undoFunction = function() {
-				console.log("this is not yet supported");
-			}
-
-			redoFunction = function() {
-				console.log("this is not yet supported");
-			}
-
-			action = new Action("partyUnseated", undoFunction, redoFunction);
-
-			undoStack.pushAction(action);
-		}
-
-	});
+	return new Action("addUpcomingList", undoFunction, redoFunction);
 }
+
+function getActionForRemoveUpcomingList(entry, upcomingList) {
+	undoFunction = function() {
+		upcomingList.addEntry(entry);
+	}
+
+	redoFunction = function() {
+		upcomingList.removeEntryWithID(entry.id);
+	}
+
+	return new Action("removeUpcomingList", undoFunction, redoFunction);
+}
+
+function getActionForPartySeated(table, upcomingList, seatMap) {	
+	undoFunction = function() {
+		// On undo of a party being seated, put them back in the upcoming list if they're not a
+		// walk-in and unassign them from the table.
+		if (!table.assignedParty.isWalkIn) {
+			upcomingList.addEntry(table.assignedParty);
+		}
+		table.assignedParty = null;
+		seatMap.updateTable(table);
+	}
+
+	partyToReassign = table.assignedParty;
+	redoFunction = function() {
+		// On redo of a party being seated, remove them from the upcoming list if they're not a walk-in
+		// and assign them to the table.
+		if (!partyToReassign.isWalkIn) {
+			upcomingList.removeEntryWithID(partyToReassign.id);
+		}
+		table.assignedParty = partyToReassign;
+		seatMap.updateTable(table);
+	}
+
+	return new Action("partySeated", undoFunction, redoFunction);
+}
+
+function getActionForPartyUnseated(table, party, upcomingList, seatMap) {
+	undoFunction = function() {
+		if (!party.isWalkIn) {
+			upcomingList.removeEntryWithID(party.id);
+		}
+		table.assignedParty = party;
+		seatMap.updateTable(table);
+	}
+
+	redoFunction = function() {
+		if (!party.isWalkIn) {
+			upcomingList.addEntry(party);
+		}
+		table.assignedParty = null;
+		seatMap.updateTable(table);
+	}
+
+	return new Action("partyUnseated", undoFunction, redoFunction);
+}
+

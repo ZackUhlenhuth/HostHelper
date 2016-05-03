@@ -151,7 +151,7 @@ class UpcomingList {
 }
 
 class UpcomingListEntry {
-	constructor(name, size, phone, id, seatedTime) {
+	constructor(name, size, phone, id, seatedTime, isWalkIn) {
 		if (id == null) {
 			this.id = Math.round(Math.random() * 10000000);
 		} else {
@@ -171,7 +171,11 @@ class UpcomingListEntry {
 		// This will be defined after the upcomingList is sorted.
 		this.position = null;
 		// We will set this manually if the party is a walk-in.
-		this.isWalkIn = false;
+		if (isWalkIn) {
+			this.isWalkIn = isWalkIn
+		} else {
+			this.isWalkIn = false;
+		}
 	}
 
 	// Returns number of miliseconds remaining until party is estimated to finish eating.

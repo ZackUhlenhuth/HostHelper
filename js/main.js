@@ -299,7 +299,7 @@ $(function() {
       var assignedParty = null;
       if (currTable.assignedParty != null) {
         var party = currTable.assignedParty;
-        var assignedParty = new UpcomingListEntry(party.name, party.partySize, party.assignedParty, party.id, new Date(party.seatedTime));
+        var assignedParty = new UpcomingListEntry(party.name, party.partySize, party.assignedParty, party.id, new Date(party.seatedTime), party.isWalkIn);
       }
       var table = new Table(currTable.id, currTable.capacity, currTable.x, currTable.y, currTable.style, currTable.orientation, currTable.types);
       seatMap.addTable(table);
@@ -341,8 +341,6 @@ $(function() {
   seatMap.addWaiterZone(adamZone);
   seatMap.addWaiterZone(donZone);
   console.log(seatMap);
-
-  initUndoStackListeners(undoStack, upcomingList, seatMap);
 
   $("#undoButton").hide();
   $("#redoButton").hide();
@@ -428,10 +426,13 @@ $(function() {
     
     if (validUpcomingEntry("#waitlistMenu", "#inputPartyNameWaitlist", "#inputPartySizeWaitlist", "#inputPhoneNumberWaitlist")){
       $('#waitlistForm').trigger('reset');
-      upcomingList.addEntry(new WaitlistEntry(name, partySize, phone, eta, types));
+      var entryToAdd = new WaitlistEntry(name, partySize, phone, eta, types);
+      upcomingList.addEntry(entryToAdd);
       $("#waitlistMenu").collapse('hide');
       $("#addPartyMenu").show();
       $(".alertParty").remove();
+
+      undoStack.pushAction(getActionForAddUpcomingList(entryToAdd, upcomingList));
     }
   });
 
@@ -448,13 +449,16 @@ $(function() {
     
     //if the form is filled out correctly
     if (validUpcomingEntry("#reservationMenu", "#inputPartyNameReservation", "#inputPartySizeReservation", "#inputPhoneNumberReservation", "#inputTimeReservation", "#inputDateReservation")){
-      upcomingList.addEntry(new Reservation(name, partySize, phone, timeAndDate, null, types))
+      var entryToAdd = new Reservation(name, partySize, phone, timeAndDate, null, types);
+      upcomingList.addEntry(entryToAdd)
       $('#reservationForm').trigger('reset');
       $("#inputDateReservation").datepicker().datepicker("setDate", new Date()); ///Default date/time
       $("#inputTimeReservation").timepicker({'step': 15, 'timeFormat': 'h:i A', 'forceRoundTime': true}).timepicker("setTime", new Date());
 
       $("#reservationMenu").collapse('hide');
       $("#addPartyMenu").show();      
+
+      undoStack.pushAction(getActionForAddUpcomingList(entryToAdd, upcomingList));
     }
     
   });
@@ -721,6 +725,7 @@ $(function() {
     }
   	selectedTable.assignedParty = partyToSeat;
   	seatMap.updateTable(selectedTable);
+    undoStack.pushAction(getActionForPartySeated(selectedTable, upcomingList, seatMap));
 
     $("#filterSize").val("");
     $("#filterSize").change();
@@ -732,11 +737,14 @@ $(function() {
 
   //removes party from table
   var unseatTable = function() {
+    undoStack.pushAction(getActionForPartyUnseated(selectedTable, selectedTable.assignedParty, upcomingList, seatMap));
+
     selectedTable.assignedParty = null;
     seatMap.updateTable(selectedTable);
     selectedTable = null;
     $("#filterSize").change();
     $("#unseatPopUp").hide();
+
   };
 
   $("#unseatTable").click(unseatTable);
@@ -780,7 +788,9 @@ $(function() {
     e.stopPropagation();
 
     correspondingPartyView = $(this).parents(".upcoming-party")[0];
+    correspondingParty = upcomingList.getEntryWithID(correspondingPartyView.id);
     upcomingList.removeEntryWithID(correspondingPartyView.id);
+    undoStack.pushAction(getActionForRemoveUpcomingList(correspondingParty, upcomingList));
   });
 
   $(document).on('click', ".edit-upcoming-party", function(e) {
