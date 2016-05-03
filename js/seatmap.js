@@ -77,6 +77,33 @@ class SeatMap {
 			return thisZone.waiterName == waiterName;
 		})[0];
 	}
+	
+	getWaiterZonesLowestUsage() {
+	  var initial = this.waiterZones[0];
+	  var lowest = [];
+	  for (var i = 1; i < this.waiterZones.length; i++) {
+	    if (this.getOccupiedWaiterZoneTables(initial).length > this.getOccupiedWaiterZoneTables(this.waiterZones[i]).length)
+	      lowest.push(this.waiterZones[i]);
+	  }
+	  if (lowest.length == 0)
+	    lowest.push(this.waiterZones[0]);
+	  return lowest;
+	}
+	
+	getTableBestFit(partySize) {
+	  var possibleZones = this.getWaiterZonesLowestUsage();
+	  for (var i = 0; i < 10; i++) {
+	    for (var j = 0; j < possibleZones.length; ++j) {
+	      var tableSizeFilter = function(thisTable) {
+      		return partySize+i == thisTable.capacity || partySize == null;
+        }
+	      var possibleTables = this.getOpenWaiterZoneTables(possibleZones[j]).filter(tableSizeFilter);
+	      if (possibleTables.length > 0)
+	        return possibleTables[0];
+	    }
+	  }
+	  return null;
+	}
 
 	// This will ignore any filters specified as null arguments.
 	// If both arguments are null, it will return an empty list.

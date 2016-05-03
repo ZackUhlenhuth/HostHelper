@@ -619,7 +619,7 @@ $(function() {
     }
   }
 
-  function applyFilters() {
+  function applyFilters(targetElement=0) {
   	seatMap.getOpenTables().map(getViewForTable).map(function(element) {element.css("fill", "#cccccc")});
 
     partySizeText = $("#filterSize").val();
@@ -629,7 +629,7 @@ $(function() {
     partySize = null;
     server = null;
     type = null;
-
+   
     if (partySizeText != "") partySize = parseInt(partySizeText, 10); 
     if (serverText != null) server = serverText;
     if (typeText != null) {
@@ -640,8 +640,8 @@ $(function() {
     }
 
     matchingList = seatMap.getOpenTablesMatchingFilters(partySize, server, type);
-
-    matchingList.map(getViewForTable).map(function(element) {element.css("fill", "#ccff99")});
+    matchingList.map(getViewForTable).map(function(element) {element.css("fill", "#ccffcc")});
+    
   }
 
   $("#seatPartySelector").change(function(event) {
@@ -649,7 +649,9 @@ $(function() {
   })
 
   // Hide popups when close button in popup clicked.
-  $(".close").click(hidePopups);
+  $(".close-popup").click(hidePopups);
+  //hide Extended Upcoming list
+  $(".close-upcoming").click(function(){$("#extendedUpcomingListPopUp").addClass("hidden")});
 
   $("#seatTable").click(function() {
     $("#sizeWarning").remove();
@@ -667,28 +669,18 @@ $(function() {
         $("#seatPartySizeGroup").append(sizeWarning);
         return;     
       }
-
   		partyToSeat = new UpcomingListEntry("Walk-In", partySize);
-  		if (partySize == "" || isNaN(partySize)) {
-        $("#seatPartySizeGroup").addClass("has-error");
-        $("#inputWalkInPartySizeFeedback").removeClass("hidden");
-        if (!selectedTable.canPartyFit(partyToSeat)) {
-    			alert("That group has too many members to sit at that table.");
-    		}
-        return;
-      }
   	} else {
   		partyToSeat = upcomingList.getEntryWithID(partyToSeatID)
   		partyToSeat.seatedTime = new Date();
   		upcomingList.removeEntryWithID(partyToSeat.id);
   	}
     
-    // TODO
     console.log(seatMap.getTimeUntilNextTable());
     console.log(upcomingList.getNextReservationTime());
     if (seatMap.getTimeUntilNextTable() > upcomingList.getNextReservationTime()) {
-      alert("You have an upcoming reservation before the next table is expected to be free!");
-      return;
+      if(!confirm("You have an upcoming reservation before the next table is expected to be free!"))
+        return;
     }
   	selectedTable.assignedParty = partyToSeat;
   	seatMap.updateTable(selectedTable);
@@ -725,10 +717,12 @@ $(function() {
   $(document).on('click', ".upcoming-party", function(e) {
     $(this).parent().find("a").removeClass('active');
     thisParty = upcomingList.getEntryWithID($(this).attr('id'));
+    
     //if already selected, unselect
     if (selectedParty && selectedParty.id == thisParty.id) {
       selectedParty = null;
       resetTooltip();
+      $("#table" + String(seatMap.getTableBestFit(partySize).id)).css("fill", "#cccccc");      
     }
     //otherwise, select
     else {
@@ -738,6 +732,8 @@ $(function() {
       $("#filterType").val(thisParty.types);
       $("#filterType").change();
       selectedParty = thisParty;
+      
+      $("#table" + String(seatMap.getTableBestFit(partySize).id)).css("fill", "#00cc00");
     }
   });
 
