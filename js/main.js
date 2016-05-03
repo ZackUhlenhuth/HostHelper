@@ -149,7 +149,6 @@ function checkUpcomingReservations (seatMap) {
   
 }
 
-
 $(function() {
   var upcomingList = new UpcomingList();
   var extendedUpcomingList = new UpcomingList(); //zack
@@ -649,8 +648,6 @@ $(function() {
     selectSeatParty(event.target.value);
   })
 
-  //hide popups and reset filters when you click the floor
-  $("#floor").click(hidePopupsAndReset);
   // Hide popups when close button in popup clicked.
   $(".close").click(hidePopups);
 
@@ -796,8 +793,6 @@ $(function() {
   var $panzoom = $section.find('.panzoom').panzoom({ 
     contain: 'invert' });
   $panzoom.parent().on('mousewheel.focal', function( e ) {
-    $("#seatPopUp").hide();
-    $("#unseatPopUp").hide();
     e.preventDefault();
     var delta = e.delta || e.originalEvent.wheelDelta;
     var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
@@ -818,4 +813,22 @@ $(function() {
   setMinScale()
 
    $panzoom.panzoom('option', 'maxScale', 3.0);
+
+   function repositionPopupIfNeeded(popupView) {
+    if (popupView.is(":visible")){
+      tableViewForPopup = $("#" +  popupView.data("table-id"));
+      popupTipAfterZoom = calculateCenterOfTable(tableViewForPopup);
+      movePopup(popupView, popupTipAfterZoom)
+    }
+   }
+
+   $panzoom.panzoom('option', 'onZoom', function() {
+    repositionPopupIfNeeded($("#seatPopUp"));
+    repositionPopupIfNeeded($("#unseatPopUp"));
+   });
+
+   $panzoom.panzoom('option', 'onPan', function(){
+    repositionPopupIfNeeded($("#seatPopUp"));
+    repositionPopupIfNeeded($("#unseatPopUp"));
+   });
 });
