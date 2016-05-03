@@ -54,7 +54,6 @@ class SeatMap {
 	    else
 	      times.push(new Date());
 	  }
-	  //console.log(times);
 	  return (times.sort()[1] - new Date());
 	}
 
@@ -79,13 +78,17 @@ class SeatMap {
 	}
 
 	getWaiterZonesLowestUsage() {
-	  var zones = this.waiterZones.sort();
+	  var zones = this.waiterZones;
+	  var sm = this;
+	  zones.sort(function(a,b){
+	    return sm.getOccupiedWaiterZoneTables(a).length > sm.getOccupiedWaiterZoneTables(b).length;
+	  });
 	  var stop = zones.length;
 	  for (var i = 1; i < zones.length; ++i) {
-	    if (zones[i] > zones[i-1])
+	    if (sm.getOccupiedWaiterZoneTables(zones[i]).length > sm.getOccupiedWaiterZoneTables(zones[i-1]).length)
 	      stop = i;
 	  }
-	  return zones.slice(0,stop+1);
+	  return zones.slice(0,stop);
 	}
 	
 	getTableBestFit(partySize) {
