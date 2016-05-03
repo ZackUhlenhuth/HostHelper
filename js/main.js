@@ -509,13 +509,14 @@ $(function() {
 
   $(".restaurantTable").click(function(e) {
     selectedTable = seatMap.getTableWithID($(this).attr("id"));
+    selectedTableView = $(this);
     
     hidePopups();
     if (selectedTable.isOccupied()) { // If the table is occupied, show the unseat popup, if it's open, show the seat popup.
-    	showUnseatPopup({x: e.pageX, y: e.pageY});
+    	showUnseatPopup(selectedTableView)
     } else {
     	// Show seat popup unless the selected party won't fit at that table.
-    	if (!(selectedParty && selectedParty.partySize > selectedTable.capacity)) showSeatPopup({x: e.pageX, y: e.pageY});
+    	if (!(selectedParty && selectedParty.partySize > selectedTable.capacity)) showSeatPopup(selectedTableView);
     }
   });
 
@@ -557,31 +558,56 @@ $(function() {
     $("#seatPartySize").html(null);
   }
 
-  function showSeatPopup(tipPoint) {
+  function showSeatPopup(tableView) {
     resetPartySelector();
     $("#seatPartySelector").append(upcomingList.getUpcomingListEntries().filter(selectedTable.canPartyFit, selectedTable).map(drawPartyOption))
     if (selectedParty) $("#seatPartySelector").val("party" + selectedParty.id);
 
     var halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
     // add 15 to top to account for tooltip
-    $("#seatPopUp").slideDown("fast", "linear").css("top", tipPoint.y + 15).css("left", tipPoint.x - halfWidth);
+    $("#seatPopUp").slideDown("fast", "linear");
+
+    // Move the seat popup to the center of the table.
+    tipPoint = calculateCenterOfTable(tableView);
+    movePopup($("#seatPopUp"), tipPoint);
+
     //update waiter name
     $("#tableWaiter").html(seatMap.getWaiterZoneByTable(selectedTable).waiterName);
 
     selectSeatParty($("#seatPartySelector").val());
     $("#inputWalkInPartySizeFeedback").addClass("hidden");
     $("#seatPartySizeGroup").removeClass("has-error");
+
+    // Associate the popup view with the table view.
+    $("#seatPopUp").data("table-id", tableView.attr("id"));
       
     $("#inputWalkInPartySize").focus();
   }
 
-  function showUnseatPopup(tipPoint) {
-  	halfWidth = parseInt($("#seatPopUp").css("width"), 10) / 2.0;
+  function showUnseatPopup(tableView) {
     $("#unseatPartyName").html(selectedTable.assignedParty.name);
     $("#unseatPartySeatedTime").html(get12hour(selectedTable.assignedParty.seatedTime.toString()));
     $("#unseatPartyETA").html(get12hour(new Date(Date.now() + selectedTable.assignedParty.getEstimatedTimeUntilPartyFinishes())));
     // add 15 to top to account for tooltip
-    $("#unseatPopUp").slideDown("fast", "linear").css("top", tipPoint.y + 15).css("left", tipPoint.x - halfWidth);
+    $("#unseatPopUp").slideDown("fast", "linear");
+
+    //Move the unseat popup to the center of the table.
+    tipPoint = calculateCenterOfTable(tableView);
+    movePopup($("#unseatPopUp"), tipPoint);
+
+    // Associate the popup view with the table view.
+    $("#unseatPopUp").data("table-id", tableView.attr("id"));
+  }
+
+  function movePopup(popup, destinationTipPoint) {
+  	halfWidth = parseInt(popup.css("width"), 10) / 2.0;
+  	popupPosition = {top: destinationTipPoint.y + 15, left: destinationTipPoint.x - halfWidth}
+  	popup.css("top", popupPosition.top).css("left", popupPosition.left);
+  }
+
+  function getTipPointOfPopup(popup) {
+  	halfWidth = parseInt(popup.css("width"), 10) / 2.0;
+  	return {x: popup.offset().left + halfWidth, y: popup.offset().top - 15};
   }
 
   function selectSeatParty(partyID) {

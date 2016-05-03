@@ -165,3 +165,9 @@ function drawPartyOption(entry) {
 
     return partyOption;
 }
+
+function calculateCenterOfTable(tableView) {
+  boundingRect = tableView[0].getBoundingClientRect();
+  console.log(boundingRect)
+  return {x: tableView.offset().left + (boundingRect.width / 2.0), y: tableView.offset().top + (boundingRect.height / 2.0)};
+}
