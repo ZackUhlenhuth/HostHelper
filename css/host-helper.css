@@ -117,6 +117,16 @@ h3 {
   overflow-y:auto;
 }
 
+#extendedUpcomingListPopUp {
+	position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 25px;
+    margin-left: 5%;
+    margin-right: 5%;
+    width: 90%;
+}
+
 #shortUpcomingList > .distant-event, #extendedUpcomingList > .immediate-event {
 	display: none;
 }
