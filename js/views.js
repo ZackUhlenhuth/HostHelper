@@ -154,6 +154,17 @@ function drawUpcomingListEntry(entry) {
       }
     }
 
+    if (entry.time) {
+      if (entry.time > (new Date()).addHours(12)) {
+        // if the entry is more than 12 hours away, mark it as 'distant'
+        newEntry.addClass("distant-event");
+      }
+    }
+
+    if (!newEntry.hasClass("distant-event")) {
+      newEntry.addClass("immediate-event");
+    }
+
     return newEntry;
 }
 

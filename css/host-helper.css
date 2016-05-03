@@ -112,9 +112,13 @@ h3 {
   float:right;
   margin-right:5px;
 }
-#upcomingList, #extendedUpcomingList {
+#shortUpcomingList, #extendedUpcomingList {
   max-height:350px;
   overflow-y:auto;
+}
+
+#shortUpcomingList > .distant-event, #extendedUpcomingList > .immediate-event {
+	display: none;
 }
 #addWaitlist, #addReservation, #cancelWaitlist, #cancelReservation, 
 #editReservation, #cancelReservationEdit, #editWaitlist, #cancelWaitlistEdit {

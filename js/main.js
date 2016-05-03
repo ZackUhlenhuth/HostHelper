@@ -155,7 +155,6 @@ function checkUpcomingReservations (seatMap) {
 
 $(function() {
   var upcomingList = new UpcomingList();
-  var extendedUpcomingList = new UpcomingList(); //zack
   var seatMap = new SeatMap();
   var undoStack = new UndoStack();
 
@@ -169,40 +168,20 @@ $(function() {
 
   //http://stackoverflow.com/questions/1050720/adding-hours-to-javascript-date-object
   upcomingList.registerListener("add", function(event){
-    console.log(event.entry);
-    //don't draw entries that are 12 hours past current time
-    if (event.entry.time) {
-      if (event.entry.time > (new Date()).addHours(12)) {
-        //add the entry to the extended list
-        extendedUpcomingList.addEntry(event.entry);//zack
-        $("#extendedUpcomingList").append(drawUpcomingListEntry(event.entry));
-        console.log(extendedUpcomingList);
-        return;
-      }
-    }
-
     upcomingListEntryView = drawUpcomingListEntry(event.entry);
 
-    if ($("#upcomingList").children().length == 0) {
-    	$("#upcomingList").append(upcomingListEntryView);	
+    if ($("#shortUpcomingList").children().length == 0) {
+    	$("#shortUpcomingList").append(upcomingListEntryView);
+      $("#extendedUpcomingList").append(upcomingListEntryView.clone())	
     } else {
-    	$("#upcomingList").children().eq(event.entry.position - 1).after(upcomingListEntryView);
+    	$("#shortUpcomingList").children().eq(event.entry.position - 1).after(upcomingListEntryView);
+      $("#extendedUpcomingList").children().eq(event.entry.position - 1).after(upcomingListEntryView.clone());
     }
 
   });
 
   upcomingList.registerListener("update", function(event) {
   	console.log("update", event);
-    if (event.entry.time) {
-      //if the time is within 12 hours of now, and list entry isn't drawn, draw it
-      if ($("#party" + event.entry.id).length == 0) {
-        if (event.entry.time <= (new Date()).addHours(12)) {
-          $("#upcomingList").append(drawUpcomingListEntry(event.entry));
-        }else{//zack extended list
-          $("#extendedUpcomingList").append(drawUpcomingListEntry(event.entry));
-        }
-      }
-    }
     $("#party" + event.entry.id).replaceWith(drawUpcomingListEntry(event.entry));
   })
 
@@ -585,7 +564,8 @@ $(function() {
   function hidePopupsAndReset() {
       hidePopups();
       resetTooltip();
-      $('#upcomingList').find("a").removeClass('active');
+      $('#shortUpcomingList').find("a").removeClass('active');
+      $('#extendedUpcomingList').find("a").removeClass('active');
       selectedParty = null;
   }
 
