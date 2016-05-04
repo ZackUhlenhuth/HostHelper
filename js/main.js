@@ -1,3 +1,8 @@
+var tableBackgroundColorOpen = "#32383e"
+var tableBackgroundColorFull = "#6a747d"
+var tableBackgroundHighlight = "#294d44"
+var tableBackgroundHighlightBright = "#2d734c"
+
 // Modified from "Cut & Paste Live Clock using forms" by George Chiang,
 // http://javascriptkit.com/script/cut2.shtml
 function get12hour(ds){
@@ -217,12 +222,12 @@ $(function() {
   	if (updatedTable.assignedParty) {
   		// A party was assigned to a table.
   		//tableView.after(drawPartyLabel(tableView, updatedTable));
-  		$("#table" + updatedTable.id).css("fill", "#cc9933");
+  		$("#table" + updatedTable.id).css("fill", tableBackgroundColorFull);
   		capacityText = capacityIcon + " " + updatedTable.assignedParty.partySize + " / " + updatedTable.capacity;
   		$("#table" + updatedTable.id + "Capacity").html(capacityText);
   	} else {
   		// A party was removed from a table.
-  		tableView.css("fill", "#cccccc");
+  		tableView.css("fill", tableBackgroundColorOpen);
   		//$("#table" + updatedTable.id + "PartyLabel").remove();
   		$("#table" + updatedTable.id + "Capacity").html(capacityIcon + " 0  / " + updatedTable.capacity);	
   	}
@@ -265,10 +270,10 @@ $(function() {
     upcomingList.addEntry(new Reservation("Sally", 6, null, roundedDate));
   }
 
-  mikeZone = new WaiterZone("Mike", 380, 348, 30, 40, "#cc6600");
-  sarahZone = new WaiterZone("Sarah", 380, 180, 400, 40, "#0052cc");
-  adamZone = new WaiterZone("Adam", 380, 300, 593, 40, "green");
-  donZone = new WaiterZone("Don", 125, 850, 30, 650, "red");
+  mikeZone = new WaiterZone("Mike", 380, 348, 30, 40, "#f2a230");
+  sarahZone = new WaiterZone("Sarah", 380, 180, 400, 40, "#30a2f2");
+  adamZone = new WaiterZone("Adam", 380, 300, 593, 40, "#30f241");
+  donZone = new WaiterZone("Don", 125, 850, 30, 650, "#f23030");
 
   var retrievedTables = localStorage.getItem('seatmapTables');
   if (retrievedTables !== null) {
@@ -648,7 +653,7 @@ $(function() {
 
   function applyFilters(targetElement) {
     if (targetElement == null) targetElement = 0;
-  	seatMap.getOpenTables().map(getViewForTable).map(function(element) {element.css("fill", "#cccccc")});
+  	seatMap.getOpenTables().map(getViewForTable).map(function(element) {element.css("fill", tableBackgroundColorOpen)});
 
     partySizeText = $("#filterSize").val();
     serverText = $("#filterServer").val();
@@ -668,7 +673,7 @@ $(function() {
     }
 
     matchingList = seatMap.getOpenTablesMatchingFilters(partySize, server, type);
-    matchingList.map(getViewForTable).map(function(element) {element.css("fill", "#ccffcc")});
+    matchingList.map(getViewForTable).map(function(element) {element.css("fill", tableBackgroundHighlight)});
     
   }
 
@@ -754,7 +759,7 @@ $(function() {
     if (selectedParty && selectedParty.id == thisParty.id) {
       selectedParty = null;
       resetTooltip();
-      $("#table" + String(seatMap.getTableBestFit(partySize).id)).css("fill", "#cccccc");      
+      $("#table" + String(seatMap.getTableBestFit(partySize).id)).css("fill", tableBackgroundColorOpen);      
     }
     //otherwise, select
     else {
@@ -765,7 +770,7 @@ $(function() {
       $("#filterType").change();
       selectedParty = thisParty;
       
-      $("#table" + String(seatMap.getTableBestFit(partySize).id)).css("fill", "#00cc00");
+      $("#table" + String(seatMap.getTableBestFit(partySize).id)).css("fill", tableBackgroundHighlightBright);
     }
   });
 
