@@ -273,7 +273,7 @@ $(function() {
   mikeZone = new WaiterZone("Mike", 380, 348, 30, 40, "#f2a230");
   sarahZone = new WaiterZone("Sarah", 380, 180, 400, 40, "#30a2f2");
   adamZone = new WaiterZone("Adam", 380, 300, 593, 40, "#30f241");
-  donZone = new WaiterZone("Don", 125, 850, 30, 650, "#f23030");
+  donZone = new WaiterZone("Don", 125, 850, 30, 560, "#f23030");
 
   var retrievedTables = localStorage.getItem('seatmapTables');
   if (retrievedTables !== null) {
@@ -312,13 +312,13 @@ $(function() {
     seatMap.addTable(new Table(14, 4, 760, 200, "rect", "horizontal", ["inside", "table", "handicap-accessible"]));
     seatMap.addTable(new Table(15, 4, 760, 320, "rect", "horizontal", ["inside", "table", "handicap-accessible"]));
 
-    seatMap.addTable(new Table(16, 2, 100, 710, "ellipse", "horizontal", ["outside", "table"]));
-    seatMap.addTable(new Table(17, 2, 220, 710, "ellipse", "horizontal", ["outside", "table"]));
-    seatMap.addTable(new Table(18, 2, 340, 710, "ellipse", "horizontal", ["outside", "table"]));
-    seatMap.addTable(new Table(19, 2, 460, 710, "ellipse", "horizontal", ["outside", "table"]));
-    seatMap.addTable(new Table(20, 2, 580, 710, "ellipse", "horizontal", ["outside", "table"]));
-    seatMap.addTable(new Table(21, 2, 700, 710, "ellipse", "horizontal", ["outside", "table"]));
-    seatMap.addTable(new Table(22, 2, 820, 710, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(16, 2, 100, 620, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(17, 2, 220, 620, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(18, 2, 340, 620, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(19, 2, 460, 620, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(20, 2, 580, 620, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(21, 2, 700, 620, "ellipse", "horizontal", ["outside", "table"]));
+    seatMap.addTable(new Table(22, 2, 820, 620, "ellipse", "horizontal", ["outside", "table"]));
   }
   seatMap.addWaiterZone(mikeZone);
   seatMap.addWaiterZone(sarahZone);
@@ -846,6 +846,10 @@ $(function() {
   }
   $(window).resize(setMinScale);
   setMinScale()
+
+  minScale = $(".parent").width() / $(".panzoom").width();
+  // Zoom all the way out on page load.
+  $panzoom.panzoom("zoom", minScale)
 
    $panzoom.panzoom('option', 'maxScale', 3.0);
 
