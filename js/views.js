@@ -197,3 +197,11 @@ function getLabelForUndoActionType(undoActionType) {
       return "Unseat Party"
   }
 }
+
+function getRedoIcon() {
+  return "<span class='glyphicon glyphicon-repeat' aria-hidden='true'></span>";
+}
+
+function getUndoIcon() {
+  return "<span class='glyphicon glyphicon-repeat' style='transform: scaleX(-1);' aria-hidden='true'></span>";
+}

@@ -343,11 +343,11 @@ $(function() {
     $("#redoButton").toggle(undoStack.canRedo());
 
     if (undoStack.canUndo()) {
-      $("#undoButton").html("Undo " + getLabelForUndoActionType(undoStack.peekUndo().type))
+      $("#undoButton").html(getUndoIcon() + " Undo " + getLabelForUndoActionType(undoStack.peekUndo().type))
     }
 
     if (undoStack.canRedo()) {
-      $("#redoButton").html("Redo " + getLabelForUndoActionType(undoStack.peekRedo().type));
+      $("#redoButton").html(getRedoIcon() + " Redo " + getLabelForUndoActionType(undoStack.peekRedo().type));
     }
 
     $("#undoRedoMenu").toggle(undoStack.canUndo() || undoStack.canRedo());
