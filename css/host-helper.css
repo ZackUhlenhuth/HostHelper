@@ -74,7 +74,7 @@ h3 {
 }
 .floorplan-tooltip:before {
 	border-color:rgba(0, 0, 0, 0);
-	border-bottom-color:#32383e;
+	border-bottom-color:#000000;
 	border-width:11px;
 	margin-left:-11px;
 }
