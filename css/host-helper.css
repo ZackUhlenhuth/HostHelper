@@ -46,6 +46,10 @@ h3 {
 	z-index: 2;
 }
 
+select {
+	color: black;
+}
+
 /* Floorplan */
 /* Used http://www.cssarrowplease.com/ */
 .floorplan-tooltip {
