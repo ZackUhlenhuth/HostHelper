@@ -165,10 +165,13 @@ h3 {
 
 .restaurantWall {
 	stroke-width: 3;
-	stroke: #666666;
+	stroke: #000000;
 	fill: #545a66;
 }
 
+.restaurantDoor {
+	fill: #545a66;
+}
 .waiterZone {
 	stroke-width: 2;
 	fill: none;
