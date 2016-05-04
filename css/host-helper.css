@@ -13,8 +13,8 @@ h3 {
 
 /* Clock */
 #clock {
-  background:#fff;
-  border:1px solid #dcdcdc;
+  background:#32383e;
+  border:1px solid #000000;
   border-radius:4px;
   font-size:2em;
   padding:5px;
@@ -52,8 +52,8 @@ h3 {
 	width:150px;
 	position:absolute;
 	display:none; 
-	background:#efeff5;
-	border:1px solid #c2e1f5;
+	background:#32383e;
+	border:1px solid #000000;
 	padding:10px;
 }
 .floorplan-tooltip:after, .floorplan-tooltip:before {
@@ -67,14 +67,14 @@ h3 {
 	pointer-events:none;
 }
 .floorplan-tooltip:after {
-	border-color:rgba(239, 239, 245, 0);
-	border-bottom-color:#efeff5;
+	border-color:rgba(0, 0, 0, 0);
+	border-bottom-color:#32383e;
 	border-width:10px;
 	margin-left:-10px;
 }
 .floorplan-tooltip:before {
-	border-color:rgba(194, 225, 245, 0);
-	border-bottom-color:#c2e1f5;
+	border-color:rgba(0, 0, 0, 0);
+	border-bottom-color:#32383e;
 	border-width:11px;
 	margin-left:-11px;
 }
@@ -160,13 +160,13 @@ h3 {
 .restaurantTable {
 	stroke-width: 1;
 	stroke: #000;
-	fill: #cccccc;
+	fill: #646464;
 }
 
 .restaurantWall {
 	stroke-width: 3;
-	stroke: #382F2B;
-	fill: #2C3539;
+	stroke: #666666;
+	fill: #545a66;
 }
 
 .waiterZone {
@@ -183,14 +183,14 @@ h3 {
 }
 
 .capacityLabel {
-	fill: black;
+	fill: #e5e5e5;
 	font-size: 18px;
 	font-family: FontAwesome;
 	pointer-events: none;
 }
 
 .idLabel {
-	fill: #7a7a52;
+	fill: #e5e5e5;
 	font-size: 15px;
 	font-family: Verdana;
 	pointer-events: none;
@@ -203,7 +203,7 @@ h3 {
 	pointer-events: none;
 }
 .parent {
-  border:1px solid #dcdcdc;
+  border:1px solid #000000;
 }
 
 #unseatPartyInfo {
